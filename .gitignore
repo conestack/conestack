@@ -1,10 +1,10 @@
 /.installed.cfg
 /.mr.developer.cfg
-
 /bin/
 /develop-eggs/
+/devsrc/
+/docs/html/
 /lib/
 /lib64
 /pyvenv.cfg
 /share/
-/devsrc/

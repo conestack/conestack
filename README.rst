@@ -1,19 +1,19 @@
-Conestack Development
-=====================
+Conestack
+=========
 
-This package contains a zc.buildout configuration for working on packages in
-the conestack organization.
+This package contains the constack organization docs and a buildout
+configuration for working on packages of this organization.
 
-Install
-=======
+Install:
 
-Install virtualenv::
+.. code-block::sh
 
-    python3 -m venv .
+    ./scripts/buildout.sh
 
-Install and run buildout::
+Build docs:
 
-    ./bin/pip install zc.buildout
-    ./bin/buildout
+.. code-block::sh
+
+    ./scripts/docs.sh
 
 **Happy hacking!**
