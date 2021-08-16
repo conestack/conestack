@@ -1,6 +1,7 @@
 /.installed.cfg
 /.mr.developer.cfg
 /bin/
+/coverage/
 /develop-eggs/
 /devsrc/
 /docs/html/
