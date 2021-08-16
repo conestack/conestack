@@ -6,13 +6,13 @@ configuration for working on packages of this organization.
 
 Install:
 
-.. code-block::sh
+.. code-block:: sh
 
     ./scripts/buildout.sh
 
 Build docs:
 
-.. code-block::sh
+.. code-block:: sh
 
     ./scripts/docs.sh
 
