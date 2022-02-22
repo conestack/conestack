@@ -1,12 +1,10 @@
-/.installed.cfg
-/.mr.developer.cfg
 /bin/
-/coverage/
-/develop-eggs/
-/devsrc/
+/constraints-mxdev.txt
 /docs/html/
-/eggs/
+/include/
 /lib/
 /lib64
 /pyvenv.cfg
+/requirements-mxdev.txt
 /share/
+/sources/
