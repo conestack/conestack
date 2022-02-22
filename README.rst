@@ -8,7 +8,7 @@ Install:
 
 .. code-block:: sh
 
-    ./scripts/buildout.sh
+    ./scripts/install.sh
 
 Build docs:
 
