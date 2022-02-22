@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# Run tests.
 
 # --test-path=sources/node.ext.ldap/src \
 # --test-path=sources/yafowil.widget.recaptcha/src \
@@ -43,6 +45,7 @@ export TESTRUN_MARKER=1
     --test-path=sources/cone.tile/src \
     --test-path=sources/cone.ugm/src \
     --test-path=sources/cone.zodb/src \
-    --test-path=sources/webresource/src
+    --test-path=sources/webresource/src \
+    --module=$1
 
 unset TESTRUN_MARKER

@@ -4,6 +4,8 @@
 
 ./scripts/clean.sh
 
+# apt-get build-dep python-ldap
+
 touch requirements.txt
 
 python3 -m venv .

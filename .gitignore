@@ -4,6 +4,7 @@
 /include/
 /lib/
 /lib64
+/openldap/
 /pyvenv.cfg
 /requirements-mxdev.txt
 /requirements.txt
