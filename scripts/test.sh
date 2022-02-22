@@ -2,15 +2,19 @@
 #
 # Run tests.
 
-# --test-path=sources/node.ext.ldap/src \
 # --test-path=sources/yafowil.widget.recaptcha/src \
-# --test-path=sources/cone.ldap/src \
 
 export TESTRUN_MARKER=1
+export LDAP_ADD_BIN="openldap/bin/ldapadd"
+export LDAP_DELETE_BIN="openldap/bin/ldapdelete"
+export SLAPD_BIN="openldap/libexec/slapd"
+export SLAPD_URIS="ldap://127.0.0.1:12345"
+export ADDITIONAL_LDIF_LAYERS=""
 
 ./bin/zope-testrunner --auto-color --auto-progress \
     --test-path=sources/node/src \
     --test-path=sources/node.ext.directory/src \
+    --test-path=sources/node.ext.ldap/src \
     --test-path=sources/node.ext.ugm/src \
     --test-path=sources/node.ext.yaml/src \
     --test-path=sources/node.ext.zodb/src \
@@ -40,6 +44,7 @@ export TESTRUN_MARKER=1
     --test-path=sources/cone.calendar/src \
     --test-path=sources/cone.fileupload/src \
     --test-path=sources/cone.firebase/src \
+    --test-path=sources/cone.ldap/src \
     --test-path=sources/cone.maps/src \
     --test-path=sources/cone.sql/src \
     --test-path=sources/cone.tile/src \
@@ -49,3 +54,10 @@ export TESTRUN_MARKER=1
     --module=$1
 
 unset TESTRUN_MARKER
+unset LDAP_ADD_BIN
+unset LDAP_DELETE_BIN
+unset SLAPD_BIN
+unset SLAPD_URIS
+unset ADDITIONAL_LDIF_LAYERS
+
+exit 0
