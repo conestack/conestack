@@ -2,8 +2,6 @@
 #
 # Run tests.
 
-# --test-path=sources/yafowil.widget.recaptcha/src \
-
 export TESTRUN_MARKER=1
 export LDAP_ADD_BIN="openldap/bin/ldapadd"
 export LDAP_DELETE_BIN="openldap/bin/ldapdelete"

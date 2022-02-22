@@ -8,7 +8,13 @@ OPENLDAP="$(realpath openldap)"
 
 function create_venv {
     python3 -m venv .
-    ./bin/pip install -U pip setuptools wheel mxdev
+    ./bin/pip install -U \
+        pip \
+        setuptools \
+        wheel \
+        mxdev \
+        zope.testrunner \
+        plone.testing
 }
 
 function install_python_ldap {
