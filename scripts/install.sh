@@ -18,8 +18,8 @@ function create_venv {
 }
 
 function install_python_ldap {
-    sudo apt-get build-dep python-ldap
     ./bin/pip install \
+        --no-use-pep517 \
         --global-option=build_ext \
         --global-option="-I$OPENLDAP/include" \
         --global-option="-L$OPENLDAP/lib" \
