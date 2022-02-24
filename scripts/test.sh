@@ -57,5 +57,3 @@ unset LDAP_DELETE_BIN
 unset SLAPD_BIN
 unset SLAPD_URIS
 unset ADDITIONAL_LDIF_LAYERS
-
-exit 0

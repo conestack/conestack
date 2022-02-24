@@ -2,8 +2,6 @@
 #
 # Clean development environment.
 
-set -e
-
 to_remove=(
     .coverage
     bin
@@ -13,6 +11,7 @@ to_remove=(
     include
     lib64
     lib
+    openldap
     pyvenv.cfg
     requirements-mxdev.txt
     share

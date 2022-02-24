@@ -7,16 +7,6 @@ set -e
 VERSION="2.4.59"
 URL="https://www.openldap.org/software/download/OpenLDAP/openldap-release/"
 
-function install_dependencies {
-    sudo apt-get install -y \
-        build-essential \
-        curl \
-        libsasl2-dev \
-        libssl-dev \
-        libdb-dev \
-        libltdl-dev
-}
-
 function get_openldap {
     rm -rf openldap
     curl -o openldap-$VERSION.tgz $URL/openldap-$VERSION.tgz
@@ -39,7 +29,6 @@ function build_openldap {
     popd >/dev/null 2>&1
 }
 
-install_dependencies
 get_openldap
 build_openldap
 
