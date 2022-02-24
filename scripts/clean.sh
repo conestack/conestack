@@ -19,6 +19,6 @@ to_remove=(
 
 for item in "${to_remove[@]}"; do
     if [ -e "$item" ]; then
-        rm -r "$item"
+        rm -rf "$item"
     fi
 done
