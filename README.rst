@@ -1,19 +1,31 @@
 Conestack
 =========
 
-This package contains the constack organization docs and a buildout
-configuration for working on packages of this organization.
+This package contains the constack organization docs and a setup for working on
+packages of this organization.
 
-Install:
+Install System dependencies (Debian/Ubuntu):
 
 .. code-block:: sh
 
-    ./scripts/buildout.sh
+    ./scripts/deps.sh
+
+Install development environment:
+
+.. code-block:: sh
+
+    ./scripts/install.sh
 
 Build docs:
 
 .. code-block:: sh
 
     ./scripts/docs.sh
+
+Cleanup development environment:
+
+.. code-block:: sh
+
+    ./scripts/clean.sh
 
 **Happy hacking!**
