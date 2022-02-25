@@ -101,3 +101,6 @@ unset LDAP_DELETE_BIN
 unset SLAPD_BIN
 unset SLAPD_URIS
 unset ADDITIONAL_LDIF_LAYERS
+
+./bin/coverage report
+./bin/coverage html
