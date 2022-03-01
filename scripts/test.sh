@@ -10,6 +10,7 @@ export LDAP_DELETE_BIN="openldap/bin/ldapdelete"
 export SLAPD_BIN="openldap/libexec/slapd"
 export SLAPD_URIS="ldap://127.0.0.1:12345"
 export ADDITIONAL_LDIF_LAYERS=""
+
 ./bin/zope-testrunner --auto-color --auto-progress \
     --test-path=sources/node/src \
     --test-path=sources/node.ext.directory/src \
