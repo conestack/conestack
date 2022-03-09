@@ -1,5 +1,9 @@
 /.coverage
+/.installed.txt
+/.sentinels/
 /bin/
+/config/custom-clean.conf
+/config/system-dependencies.conf
 /constraints-mxdev.txt
 /docs/html/
 /htmlcov/
@@ -9,6 +13,8 @@
 /openldap/
 /pyvenv.cfg
 /requirements-mxdev.txt
-/requirements.txt
+/scripts/custom-pip.sh
+/scripts/run-coverage.sh
+/scripts/run-tests.sh
 /share/
 /sources/
