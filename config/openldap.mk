@@ -11,7 +11,7 @@ OPENLDAP_SENTINEL:=$(SENTINEL_FOLDER)/openldap.sentinel
 .PHONY: openldap
 openldap: $(OPENLDAP_SENTINEL)
 
-$(OPENLDAP_SENTINEL):
+$(OPENLDAP_SENTINEL): $(SENTINEL)
 	@echo "$(OK_COLOR)Building openldap server in $(OPENLDAP_DIR) $(NO_COLOR)"
 	@rm -rf openldap
 	@curl -o openldap-$(OPENLDAP_VERSION).tgz $(OPENLDAP_URL)/openldap-$(OPENLDAP_VERSION).tgz
