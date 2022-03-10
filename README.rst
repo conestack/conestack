@@ -8,24 +8,30 @@ Install System dependencies (Debian/Ubuntu):
 
 .. code-block:: sh
 
-    ./scripts/deps.sh
+    $ make dependencies
 
 Install development environment:
 
 .. code-block:: sh
 
-    ./scripts/install.sh
+    $ make full-install
 
 Build docs:
 
 .. code-block:: sh
 
-    ./scripts/docs.sh
+    $ make docs
+
+Run tests:
+
+.. code-block:: sh
+
+    $ make test
 
 Cleanup development environment:
 
 .. code-block:: sh
 
-    ./scripts/clean.sh
+    $ make clean
 
 **Happy hacking!**
