@@ -40,13 +40,17 @@ $(VENV_SENTINEL): $(SENTINEL)
 	@echo "Setup Python Virtual Environment under '$(VENV_FOLDER)'"
 	@$(PYTHON) -m venv $(VENV_FOLDER)
 	@$(PIP_BIN) install -U pip setuptools wheel
-	@$(PIP_BIN) install $(MXDEV)
-	@$(PIP_BIN) install $(MVENV)
+	@$(PIP_BIN) install -U $(MXDEV)
+	@$(PIP_BIN) install -U $(MVENV)
 	@touch $(VENV_SENTINEL)
 
 .PHONY: venv-dirty
 venv-dirty:
 	@rm -f $(VENV_SENTINEL)
+
+.PHONY: venv-clean
+venv-clean: venv-dirty
+	@rm -f $(VENV_FOLDER) pyvenv.cfg
 
 ###############################################################################
 # files
@@ -71,6 +75,11 @@ $(FILES_SENTINEL): $(PROJECT_CONFIG) $(VENV_SENTINEL)
 .PHONY: files-dirty
 files-dirty:
 	@rm -f $(FILES_SENTINEL)
+
+.PHONY: files-clean
+files-clean:
+	@rm -f $(TEST_SCRIPT) $(COVERAGE_SCRIPT) \
+		constraints-mxdev.txt requirements-mxdev.txt
 
 ###############################################################################
 # sources
@@ -140,9 +149,12 @@ DOCS_TARGET?=docs/html
 .PHONY: docs
 docs:
 	@echo "Build sphinx docs"
-	@test -d $(DOCS_TARGET) && rm -rf $(DOCS_TARGET)
 	@test -e $(DOCS_BIN) && $(DOCS_BIN) $(DOCS_SOURCE) $(DOCS_TARGET)
 	@test -e $(DOCS_BIN) || echo "Sphinx binary not exists"
+
+.PHONY: docs-clean
+docs-clean:
+	@test -d $(DOCS_TARGET) && rm -rf $(DOCS_TARGET)
 
 ###############################################################################
 # test
@@ -151,7 +163,7 @@ docs:
 TEST_SCRIPT=$(SCRIPTS_FOLDER)/run-tests.sh
 
 .PHONY: test
-test: $(PIP_PACKAGES)
+test: $(FILES_SENTINEL) $(SOURCES_SENTINEL) $(INSTALL_SENTINEL)
 	@echo "Run tests"
 	@test -e $(TEST_SCRIPT) && $(TEST_SCRIPT)
 	@test -e $(TEST_SCRIPT) || echo "Test script not exists"
@@ -163,23 +175,24 @@ test: $(PIP_PACKAGES)
 COVERAGE_SCRIPT=$(SCRIPTS_FOLDER)/run-coverage.sh
 
 .PHONY: coverage
-coverage: $(PIP_PACKAGES)
+coverage: $(FILES_SENTINEL) $(SOURCES_SENTINEL) $(INSTALL_SENTINEL)
 	@echo "Run coverage"
 	@test -e $(COVERAGE_SCRIPT) && $(COVERAGE_SCRIPT)
 	@test -e $(COVERAGE_SCRIPT) || echo "Coverage script not exists"
+
+.PHONY: coverage-clean
+coverage-clean:
+	@rm -rf .coverage htmlcov
 
 ###############################################################################
 # clean
 ###############################################################################
 
-CLEAN_TARGETS?=\
-	.coverage .installed.txt .sentinels constraints-mxdev.txt \
-	docs/html htmlcov pyvenv.cfg requirements-mxdev.txt venv
+CLEAN_TARGETS?=
 
 .PHONY: clean
-clean:
-	@echo "Clean environment"
-	@rm -rf $(CLEAN_TARGETS)
+clean: venv-clean files-clean docs-clean coverage-clean
+	@rm -rf $(CLEAN_TARGETS) .sentinels .installed.txt
 
 .PHONY: full-clean
 full-clean: clean sources-clean
