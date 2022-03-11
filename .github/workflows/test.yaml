@@ -1,7 +1,5 @@
 name: Test conestack
 on:
-  push
-
   workflow_dispatch:
     branches:
       - master
