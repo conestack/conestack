@@ -8,9 +8,6 @@ on:
     branches:
       - master
 
-env:
-  FORCE_COLOR: "1"
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,12 +29,12 @@ jobs:
       - name: Install project
         run: make project-install
 
-      - name: Run tests
+      - name: Run tests an collect code coverage
         run: make coverage
 
-      - name: Upload HTML coverage report if check failed.
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report-${{ matrix.python }}
-          path: htmlcov
-          if-no-files-found: ignore
+#      - name: Upload HTML coverage report
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: coverage-report-${{ matrix.python }}
+#          path: htmlcov
+#          if-no-files-found: ignore
