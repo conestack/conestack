@@ -1,0 +1,24 @@
+name: Test conestack
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install system dependencies
+        run: make system-dependencies
+
+      - name: Install project
+        run: make project-install
+
+      - name: Run tests
+        run: make test
