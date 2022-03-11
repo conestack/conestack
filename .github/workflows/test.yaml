@@ -5,10 +5,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
+      fail-fast: false
       matrix:
         python:
           - "3.7"
+
     steps:
       - uses: actions/checkout@v2
 
@@ -16,10 +19,7 @@ jobs:
         run: make system-dependencies
 
       - name: Install project
-        run: |
-          make openldap
-          make python-ldap
-          make project-install
+        run: make project-install
 
       - name: Run tests
         run: make test
