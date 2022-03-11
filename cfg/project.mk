@@ -27,4 +27,4 @@ project-install: python-ldap
 project-clean: clean openldap-clean
 
 .PHONY: project-full-clean
-project-clean: full-clean openldap-clean
+project-full-clean: full-clean openldap-clean
