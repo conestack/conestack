@@ -3,5 +3,5 @@
 ###############################################################################
 
 .PHONY: full-install
-full-install: openldap
+full-install: python-ldap
 	@make install
