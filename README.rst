@@ -14,7 +14,7 @@ Install development environment:
 
 .. code-block:: sh
 
-    $ make full-install
+    $ make project-install
 
 Build docs:
 
@@ -32,6 +32,12 @@ Cleanup development environment:
 
 .. code-block:: sh
 
-    $ make clean
+    $ make project-clean
+
+Cleanup development environment including sources directory:
+
+.. code-block:: sh
+
+    $ make project-full-clean
 
 **Happy hacking!**
