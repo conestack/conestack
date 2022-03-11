@@ -3,9 +3,10 @@
 ###############################################################################
 
 SYSTEM_DEPENDENCIES=\
-    build-essential \
+	build-essential \
 	curl \
-    libsasl2-dev \
-    libssl-dev \
-    libdb-dev \
-    libltdl-dev
+	libsasl2-dev \
+	libssl-dev \
+	libdb-dev \
+	libltdl-dev
+
