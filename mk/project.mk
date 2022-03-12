@@ -9,7 +9,7 @@ include $(INCLUDE_FOLDER)/python-ldap.mk
 ###############################################################################
 
 #MXDEV=-e sources/mxdev
-#MVENV=-e sources/mxenv
+#MXENV=-e sources/mxenv
 
 SYSTEM_DEPENDENCIES=\
 	build-essential \

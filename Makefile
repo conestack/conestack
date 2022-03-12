@@ -26,10 +26,16 @@ $(SENTINEL):
 PYTHON?=python3
 VENV_FOLDER?=venv
 PIP_BIN:=$(VENV_FOLDER)/bin/pip
+
+# This setting is for customizing the installation of mxdev. Normally only
+# needed if working on mxdev development.
 #MXDEV?=mxdev
 MXDEV?=https://github.com/bluedynamics/mxdev/archive/master.zip
-#MVENV?=mxenv
-MVENV?=https://github.com/conestack/mxenv/archive/master.zip
+
+# This setting is for customizing the installation of mxenv. Normally only
+# needed if working on mxenv development
+#MXENV?=mxenv
+MXENV?=https://github.com/conestack/mxenv/archive/master.zip
 
 VENV_SENTINEL:=$(SENTINEL_FOLDER)/venv.sentinel
 $(VENV_SENTINEL): $(SENTINEL)
@@ -37,7 +43,7 @@ $(VENV_SENTINEL): $(SENTINEL)
 	@$(PYTHON) -m venv $(VENV_FOLDER)
 	@$(PIP_BIN) install -U pip setuptools wheel
 	@$(PIP_BIN) install -U $(MXDEV)
-	@$(PIP_BIN) install -U $(MVENV)
+	@$(PIP_BIN) install -U $(MXENV)
 	@touch $(VENV_SENTINEL)
 
 .PHONY: venv
@@ -91,7 +97,7 @@ files-dirty:
 .PHONY: files-clean
 files-clean: files-dirty
 	$(call set_files_env,$(VENV_FOLDER),$(SCRIPTS_FOLDER),$(CONFIG_FOLDER))
-	@test -e $(VENV_FOLDER)/bin/mxenv &&
+	@test -e $(VENV_FOLDER)/bin/mxenv && \
 		$(VENV_FOLDER)/bin/mxenv -c $(PROJECT_CONFIG) --clean
 	$(call unset_files_env,$(VENV_FOLDER),$(SCRIPTS_FOLDER),$(CONFIG_FOLDER))
 	@rm -f constraints-mxdev.txt requirements-mxdev.txt
@@ -177,8 +183,8 @@ TEST_COMMAND?=$(SCRIPTS_FOLDER)/run-tests.sh
 .PHONY: test
 test: $(FILES_SENTINEL) $(SOURCES_SENTINEL) $(INSTALL_SENTINEL)
 	@echo "Run tests"
-	@test -e $(TEST_COMMAND) && $(TEST_COMMAND)
-	@test -e $(TEST_COMMAND) || echo "Test script not exists"
+	@test -z "$(TEST_COMMAND)" && echo "No test command defined"
+	@test -z "$(TEST_COMMAND)" || bash -c "$(TEST_COMMAND)"
 
 ###############################################################################
 # coverage
@@ -189,8 +195,8 @@ COVERAGE_COMMAND?=$(SCRIPTS_FOLDER)/run-coverage.sh
 .PHONY: coverage
 coverage: $(FILES_SENTINEL) $(SOURCES_SENTINEL) $(INSTALL_SENTINEL)
 	@echo "Run coverage"
-	@test -e $(COVERAGE_COMMAND) && $(COVERAGE_COMMAND)
-	@test -e $(COVERAGE_COMMAND) || echo "Coverage script not exists"
+	@test -z "$(COVERAGE_COMMAND)" && echo "No coverage command defined"
+	@test -z "$(COVERAGE_COMMAND)" || bash -c "$(COVERAGE_COMMAND)"
 
 .PHONY: coverage-clean
 coverage-clean:
