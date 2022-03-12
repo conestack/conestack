@@ -8,8 +8,8 @@ include $(INCLUDE_FOLDER)/python-ldap.mk
 # project settings
 ###############################################################################
 
-MXDEV=-e sources/mxdev
-MVENV=-e sources/mxenv
+#MXDEV=-e sources/mxdev
+#MVENV=-e sources/mxenv
 
 SYSTEM_DEPENDENCIES=\
 	build-essential \
