@@ -12,7 +12,7 @@
 - [ ] mxenv
 - [x] node - coverage report without -m
 - [ ] node.ext.directory
-- [ ] node.ext.ldap
+- [/] node.ext.ldap
 - [ ] node.ext.ugm
 - [ ] node.ext.yaml
 - [ ] node.ext.zodb
