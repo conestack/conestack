@@ -10,14 +10,14 @@
 - [ ] cone.zodb
 - [ ] mxdev
 - [ ] mxenv
-- [x] node - coverage report without -m
+- [x] node
 - [ ] node.ext.directory
 - [ ] node.ext.ldap
-- [ ] node.ext.ugm
+- [X] node.ext.ugm
 - [ ] node.ext.yaml
 - [ ] node.ext.zodb
-- [x] odict - coverage report without -m
-- [x] plumber - coverage report without -m
+- [x] odict
+- [x] plumber
 - [ ] sphinx-conestack-theme
 - [ ] treibstoff
 - [ ] webresource
