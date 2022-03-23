@@ -11,11 +11,11 @@
 - [ ] mxdev
 - [ ] mxenv
 - [x] node
-- [ ] node.ext.directory
-- [ ] node.ext.ldap
-- [X] node.ext.ugm
+- [x] node.ext.directory
+- [x] node.ext.ldap
+- [x] node.ext.ugm
 - [ ] node.ext.yaml
-- [ ] node.ext.zodb
+- [x] node.ext.zodb
 - [x] odict
 - [x] plumber
 - [ ] sphinx-conestack-theme
@@ -46,3 +46,7 @@
 - [ ] yafowil.widget.tiptap
 - [ ] yafowil.widget.wysihtml5
 - [ ] yafowil.yaml
+
+- [ ] mxenv -> adopt venv related changes from node.ext.ldap
+- [ ] expectError, expect_error -> with self.assertRaises
+- [ ] check_output -> checkOutput
