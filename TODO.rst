@@ -10,14 +10,14 @@
 - [ ] cone.zodb
 - [ ] mxdev
 - [ ] mxenv
-- [x] node - coverage report without -m
-- [ ] node.ext.directory
-- [/] node.ext.ldap
-- [ ] node.ext.ugm
+- [x] node
+- [x] node.ext.directory
+- [x] node.ext.ldap
+- [x] node.ext.ugm
 - [ ] node.ext.yaml
-- [ ] node.ext.zodb
-- [x] odict - coverage report without -m
-- [x] plumber - coverage report without -m
+- [x] node.ext.zodb
+- [x] odict
+- [x] plumber
 - [ ] sphinx-conestack-theme
 - [ ] treibstoff
 - [ ] webresource
@@ -46,3 +46,7 @@
 - [ ] yafowil.widget.tiptap
 - [ ] yafowil.widget.wysihtml5
 - [ ] yafowil.yaml
+
+- [ ] mxenv -> adopt venv related changes from node.ext.ldap
+- [ ] expectError, expect_error -> with self.assertRaises
+- [ ] check_output -> checkOutput
