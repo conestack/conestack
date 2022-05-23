@@ -1,6 +1,7 @@
 /.coverage
 /.installed.txt
 /.sentinels/
+/.vscode/
 /constraints-mxdev.txt
 /docs/html/
 /htmlcov/
