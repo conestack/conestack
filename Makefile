@@ -5,27 +5,21 @@
 #:[contents]
 #:makefiles =
 #:    core.base
-#:    core.system-dependencies
 #:    core.venv
-#:    core.docs
 #:    core.files
 #:    core.sources
 #:    core.install
 #:    core.test
 #:    core.coverage
 #:    core.clean
+#:    core.docs
 #:    ldap.openldap
 #:    ldap.python-ldap
+#:    core.system-dependencies
 
 ################################################################################
 # SETTINGS
 ################################################################################
-
-## core.system-dependencies
-
-# Space separated system package names.
-# default: 
-SYSTEM_DEPENDENCIES?=
 
 ## core.venv
 
@@ -44,20 +38,6 @@ MXDEV?=https://github.com/mxstack/mxdev/archive/main.zip
 # mxmake to install in virtual environment.
 # default: https://github.com/mxstack/mxmake/archive/inquirer-sandbox.zip
 MXMAKE?=https://github.com/mxstack/mxmake/archive/inquirer-sandbox.zip
-
-## core.docs
-
-# The Sphinx build executable.
-# default: $(VENV_FOLDER)/bin/sphinx-build
-DOCS_BIN?=$(VENV_FOLDER)/bin/sphinx-build
-
-# Documentation source folder.
-# default: docs/source
-DOCS_SOURCE?=docs/source
-
-# Documentation generation target folder.
-# default: docs/html
-DOCS_TARGET?=docs/html
 
 ## core.files
 
@@ -79,6 +59,10 @@ CONFIG_FOLDER?=cfg
 # default: $(SCRIPTS_FOLDER)/run-tests.sh
 TEST_COMMAND?=$(SCRIPTS_FOLDER)/run-tests.sh
 
+# Additional make targets the test target depends on.
+# default: 
+TEST_DEPENDENCY_TARGETS?=python-ldap
+
 ## core.coverage
 
 # The command which gets executed. Defaults to the location the :ref:`run-coverage` template gets rendered to if configured.
@@ -90,6 +74,20 @@ COVERAGE_COMMAND?=$(SCRIPTS_FOLDER)/run-coverage.sh
 # Space separated list of files and folders to remove.
 # default: 
 CLEAN_TARGETS?=
+
+## core.docs
+
+# The Sphinx build executable.
+# default: $(VENV_FOLDER)/bin/sphinx-build
+DOCS_BIN?=$(VENV_FOLDER)/bin/sphinx-build
+
+# Documentation source folder.
+# default: docs/source
+DOCS_SOURCE?=docs/source
+
+# Documentation generation target folder.
+# default: docs/html
+DOCS_TARGET?=docs/html
 
 ## ldap.openldap
 
@@ -108,6 +106,12 @@ OPENLDAP_DIR?=$(shell echo $(realpath .))/openldap
 # Build environment for OpenLDAP
 # default: PATH=/usr/local/bin:/usr/bin:/bin
 OPENLDAP_ENV?=PATH=/usr/local/bin:/usr/bin:/bin
+
+## core.system-dependencies
+
+# Space separated system package names.
+# default: 
+SYSTEM_DEPENDENCIES?=
 
 ###############################################################################
 # Makefile for mxmake projects.
@@ -129,17 +133,6 @@ SENTINEL?=$(SENTINEL_FOLDER)/about.txt
 $(SENTINEL):
 	@mkdir -p $(SENTINEL_FOLDER)
 	@echo "Sentinels for the Makefile process." > $(SENTINEL)
-
-###############################################################################
-# system dependencies
-###############################################################################
-
-.PHONY: system-dependencies
-system-dependencies:
-	@echo "Install system dependencies"
-	@test -z "$(SYSTEM_DEPENDENCIES)" && echo "No System dependencies defined"
-	@test -z "$(SYSTEM_DEPENDENCIES)" \
-		|| sudo apt-get install -y $(SYSTEM_DEPENDENCIES)
 
 ###############################################################################
 # venv
@@ -164,20 +157,6 @@ venv-dirty:
 .PHONY: venv-clean
 venv-clean: venv-dirty
 	@rm -rf $(VENV_FOLDER)
-
-###############################################################################
-# docs
-###############################################################################
-
-.PHONY: docs
-docs:
-	@echo "Build sphinx docs"
-	@test -e $(DOCS_BIN) && $(DOCS_BIN) $(DOCS_SOURCE) $(DOCS_TARGET)
-	@test -e $(DOCS_BIN) || echo "Sphinx binary not exists"
-
-.PHONY: docs-clean
-docs-clean:
-	@rm -rf $(DOCS_TARGET)
 
 ###############################################################################
 # files
@@ -266,7 +245,7 @@ install-dirty:
 ###############################################################################
 
 .PHONY: test
-test: $(FILES_SENTINEL) $(SOURCES_SENTINEL) $(INSTALL_SENTINEL)
+test: $(FILES_SENTINEL) $(SOURCES_SENTINEL) $(INSTALL_SENTINEL) $(TEST_DEPENDENCY_TARGETS)
 	@echo "Run tests"
 	@test -z "$(TEST_COMMAND)" && echo "No test command defined"
 	@test -z "$(TEST_COMMAND)" || bash -c "$(TEST_COMMAND)"
@@ -302,6 +281,20 @@ runtime-clean:
 	@find . -name '*.py[c|o]' -delete
 	@find . -name '*~' -exec rm -f {} +
 	@find . -name '__pycache__' -exec rm -fr {} +
+
+###############################################################################
+# docs
+###############################################################################
+
+.PHONY: docs
+docs:
+	@echo "Build sphinx docs"
+	@test -e $(DOCS_BIN) && $(DOCS_BIN) $(DOCS_SOURCE) $(DOCS_TARGET)
+	@test -e $(DOCS_BIN) || echo "Sphinx binary not exists"
+
+.PHONY: docs-clean
+docs-clean:
+	@rm -rf $(DOCS_TARGET)
 
 ###############################################################################
 # openldap
@@ -366,4 +359,15 @@ python-ldap-dirty:
 .PHONY: python-ldap-clean
 python-ldap-clean: python-ldap-dirty
 	@test -e $(PIP_BIN) && $(PIP_BIN) uninstall -y python-ldap
+
+###############################################################################
+# system dependencies
+###############################################################################
+
+.PHONY: system-dependencies
+system-dependencies:
+	@echo "Install system dependencies"
+	@test -z "$(SYSTEM_DEPENDENCIES)" && echo "No System dependencies defined"
+	@test -z "$(SYSTEM_DEPENDENCIES)" \
+		|| sudo apt-get install -y $(SYSTEM_DEPENDENCIES)
 
