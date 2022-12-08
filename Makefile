@@ -5,6 +5,9 @@
 #:[contents]
 #:makefiles =
 #:    core.base
+#:    core.system-dependencies
+#:    ldap.openldap
+#:    ldap.python-ldap
 #:    core.venv
 #:    core.files
 #:    core.sources
@@ -13,13 +16,34 @@
 #:    core.coverage
 #:    core.clean
 #:    core.docs
-#:    ldap.openldap
-#:    ldap.python-ldap
-#:    core.system-dependencies
 
 ################################################################################
 # SETTINGS
 ################################################################################
+
+## core.system-dependencies
+
+# Space separated system package names.
+# default: 
+SYSTEM_DEPENDENCIES?=
+
+## ldap.openldap
+
+# OpenLDAP version to download
+# default: 2.4.59
+OPENLDAP_VERSION?=2.4.59
+
+# OpenLDAP base download URL
+# default: https://www.openldap.org/software/download/OpenLDAP/openldap-release/
+OPENLDAP_URL?=https://www.openldap.org/software/download/OpenLDAP/openldap-release/
+
+# Build directory for OpenLDAP
+# default: $(shell echo $(realpath .))/openldap
+OPENLDAP_DIR?=$(shell echo $(realpath .))/openldap
+
+# Build environment for OpenLDAP
+# default: PATH=/usr/local/bin:/usr/bin:/bin
+OPENLDAP_ENV?=PATH=/usr/local/bin:/usr/bin:/bin
 
 ## core.venv
 
@@ -89,30 +113,6 @@ DOCS_SOURCE?=docs/source
 # default: docs/html
 DOCS_TARGET?=docs/html
 
-## ldap.openldap
-
-# OpenLDAP version to download
-# default: 2.4.59
-OPENLDAP_VERSION?=2.4.59
-
-# OpenLDAP base download URL
-# default: https://www.openldap.org/software/download/OpenLDAP/openldap-release/
-OPENLDAP_URL?=https://www.openldap.org/software/download/OpenLDAP/openldap-release/
-
-# Build directory for OpenLDAP
-# default: $(shell echo $(realpath .))/openldap
-OPENLDAP_DIR?=$(shell echo $(realpath .))/openldap
-
-# Build environment for OpenLDAP
-# default: PATH=/usr/local/bin:/usr/bin:/bin
-OPENLDAP_ENV?=PATH=/usr/local/bin:/usr/bin:/bin
-
-## core.system-dependencies
-
-# Space separated system package names.
-# default: 
-SYSTEM_DEPENDENCIES?=
-
 ###############################################################################
 # Makefile for mxmake projects.
 ###############################################################################
@@ -133,6 +133,81 @@ SENTINEL?=$(SENTINEL_FOLDER)/about.txt
 $(SENTINEL):
 	@mkdir -p $(SENTINEL_FOLDER)
 	@echo "Sentinels for the Makefile process." > $(SENTINEL)
+
+###############################################################################
+# system dependencies
+###############################################################################
+
+.PHONY: system-dependencies
+system-dependencies:
+	@echo "Install system dependencies"
+	@test -z "$(SYSTEM_DEPENDENCIES)" && echo "No System dependencies defined"
+	@test -z "$(SYSTEM_DEPENDENCIES)" \
+		|| sudo apt-get install -y $(SYSTEM_DEPENDENCIES)
+
+###############################################################################
+# openldap
+###############################################################################
+
+OPENLDAP_SENTINEL:=$(SENTINEL_FOLDER)/openldap.sentinel
+$(OPENLDAP_SENTINEL): $(SENTINEL)
+	@echo "Building openldap server in '$(OPENLDAP_DIR)'"
+	@test -d $(OPENLDAP_DIR) || curl -o openldap-$(OPENLDAP_VERSION).tgz \
+		$(OPENLDAP_URL)/openldap-$(OPENLDAP_VERSION).tgz
+	@test -d $(OPENLDAP_DIR) || tar xf openldap-$(OPENLDAP_VERSION).tgz
+	@test -d $(OPENLDAP_DIR) || rm openldap-$(OPENLDAP_VERSION).tgz
+	@test -d $(OPENLDAP_DIR) || mv openldap-$(OPENLDAP_VERSION) $(OPENLDAP_DIR)
+	@env -i -C $(OPENLDAP_DIR) $(OPENLDAP_ENV) bash -c \
+		'./configure \
+			--with-tls \
+			--enable-slapd=yes \
+			--enable-overlays \
+			--prefix=$(OPENLDAP_DIR) \
+		&& make depend \
+		&& make -j4 \
+		&& make install'
+	@touch $(OPENLDAP_SENTINEL)
+
+.PHONY: openldap
+openldap: $(OPENLDAP_SENTINEL)
+
+.PHONY: openldap-dirty
+openldap-dirty:
+	@test -d $(OPENLDAP_DIR) \
+		&& env -i -C $(OPENLDAP_DIR) $(OPENLDAP_ENV) bash -c 'make clean'
+	@rm -f $(OPENLDAP_SENTINEL)
+
+.PHONY: openldap-clean
+openldap-clean:
+	@rm -f $(OPENLDAP_SENTINEL)
+	@rm -rf $(OPENLDAP_DIR)
+
+###############################################################################
+# python-ldap
+###############################################################################
+
+PYTHON_LDAP_SENTINEL:=$(SENTINEL_FOLDER)/python-ldap.sentinel
+$(PYTHON_LDAP_SENTINEL): $(VENV_SENTINEL) $(OPENLDAP_SENTINEL)
+	@$(VENV_FOLDER)/bin/pip install \
+		--force-reinstall \
+		--no-use-pep517 \
+		--global-option=build_ext \
+		--global-option="-I$(OPENLDAP_DIR)/include" \
+		--global-option="-L$(OPENLDAP_DIR)/lib" \
+		--global-option="-R$(OPENLDAP_DIR)/lib" \
+		python-ldap
+	@touch $(PYTHON_LDAP_SENTINEL)
+
+.PHONY: python-ldap
+python-ldap: $(PYTHON_LDAP_SENTINEL)
+
+.PHONY: python-ldap-dirty
+python-ldap-dirty:
+	@rm -f $(PYTHON_LDAP_SENTINEL)
+
+.PHONY: python-ldap-clean
+python-ldap-clean: python-ldap-dirty
+	@test -e $(VENV_FOLDER)/bin/pip && $(VENV_FOLDER)/bin/pip uninstall -y python-ldap
 
 ###############################################################################
 # venv
@@ -295,79 +370,4 @@ docs:
 .PHONY: docs-clean
 docs-clean:
 	@rm -rf $(DOCS_TARGET)
-
-###############################################################################
-# openldap
-###############################################################################
-
-OPENLDAP_SENTINEL:=$(SENTINEL_FOLDER)/openldap.sentinel
-$(OPENLDAP_SENTINEL): $(SENTINEL)
-	@echo "Building openldap server in '$(OPENLDAP_DIR)'"
-	@test -d $(OPENLDAP_DIR) || curl -o openldap-$(OPENLDAP_VERSION).tgz \
-		$(OPENLDAP_URL)/openldap-$(OPENLDAP_VERSION).tgz
-	@test -d $(OPENLDAP_DIR) || tar xf openldap-$(OPENLDAP_VERSION).tgz
-	@test -d $(OPENLDAP_DIR) || rm openldap-$(OPENLDAP_VERSION).tgz
-	@test -d $(OPENLDAP_DIR) || mv openldap-$(OPENLDAP_VERSION) $(OPENLDAP_DIR)
-	@env -i -C $(OPENLDAP_DIR) $(OPENLDAP_ENV) bash -c \
-		'./configure \
-			--with-tls \
-			--enable-slapd=yes \
-			--enable-overlays \
-			--prefix=$(OPENLDAP_DIR) \
-		&& make depend \
-		&& make -j4 \
-		&& make install'
-	@touch $(OPENLDAP_SENTINEL)
-
-.PHONY: openldap
-openldap: $(OPENLDAP_SENTINEL)
-
-.PHONY: openldap-dirty
-openldap-dirty:
-	@test -d $(OPENLDAP_DIR) \
-		&& env -i -C $(OPENLDAP_DIR) $(OPENLDAP_ENV) bash -c 'make clean'
-	@rm -f $(OPENLDAP_SENTINEL)
-
-.PHONY: openldap-clean
-openldap-clean:
-	@rm -f $(OPENLDAP_SENTINEL)
-	@rm -rf $(OPENLDAP_DIR)
-
-###############################################################################
-# python-ldap
-###############################################################################
-
-PYTHON_LDAP_SENTINEL:=$(SENTINEL_FOLDER)/python-ldap.sentinel
-$(PYTHON_LDAP_SENTINEL): $(VENV_SENTINEL) $(OPENLDAP_SENTINEL)
-	@$(PIP_BIN) install \
-		--force-reinstall \
-		--no-use-pep517 \
-		--global-option=build_ext \
-		--global-option="-I$(OPENLDAP_DIR)/include" \
-		--global-option="-L$(OPENLDAP_DIR)/lib" \
-		--global-option="-R$(OPENLDAP_DIR)/lib" \
-		python-ldap
-	@touch $(PYTHON_LDAP_SENTINEL)
-
-.PHONY: python-ldap
-python-ldap: $(PYTHON_LDAP_SENTINEL)
-
-.PHONY: python-ldap-dirty
-python-ldap-dirty:
-	@rm -f $(PYTHON_LDAP_SENTINEL)
-
-.PHONY: python-ldap-clean
-python-ldap-clean: python-ldap-dirty
-	@test -e $(PIP_BIN) && $(PIP_BIN) uninstall -y python-ldap
-
-###############################################################################
-# system dependencies
-###############################################################################
-
-.PHONY: system-dependencies
-system-dependencies:
-	@echo "Install system dependencies"
-	@test -z "$(SYSTEM_DEPENDENCIES)" && echo "No System dependencies defined"
-	@test -z "$(SYSTEM_DEPENDENCIES)" \
-		|| sudo apt-get install -y $(SYSTEM_DEPENDENCIES)
 
