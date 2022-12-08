@@ -5,7 +5,6 @@
 #:[contents]
 #:makefiles =
 #:    core.base
-#:    core.system-dependencies
 #:    ldap.openldap
 #:    ldap.python-ldap
 #:    core.venv
@@ -16,16 +15,11 @@
 #:    core.coverage
 #:    core.clean
 #:    core.docs
+#:    core.system-dependencies
 
 ################################################################################
 # SETTINGS
 ################################################################################
-
-## core.system-dependencies
-
-# Space separated system package names.
-# default: 
-SYSTEM_DEPENDENCIES?=
 
 ## ldap.openldap
 
@@ -113,6 +107,12 @@ DOCS_SOURCE?=docs/source
 # default: docs/html
 DOCS_TARGET?=docs/html
 
+## core.system-dependencies
+
+# Space separated system package names.
+# default: 
+SYSTEM_DEPENDENCIES?=
+
 ###############################################################################
 # Makefile for mxmake projects.
 ###############################################################################
@@ -133,17 +133,6 @@ SENTINEL?=$(SENTINEL_FOLDER)/about.txt
 $(SENTINEL):
 	@mkdir -p $(SENTINEL_FOLDER)
 	@echo "Sentinels for the Makefile process." > $(SENTINEL)
-
-###############################################################################
-# system dependencies
-###############################################################################
-
-.PHONY: system-dependencies
-system-dependencies:
-	@echo "Install system dependencies"
-	@test -z "$(SYSTEM_DEPENDENCIES)" && echo "No System dependencies defined"
-	@test -z "$(SYSTEM_DEPENDENCIES)" \
-		|| sudo apt-get install -y $(SYSTEM_DEPENDENCIES)
 
 ###############################################################################
 # openldap
@@ -370,4 +359,15 @@ docs:
 .PHONY: docs-clean
 docs-clean:
 	@rm -rf $(DOCS_TARGET)
+
+###############################################################################
+# system dependencies
+###############################################################################
+
+.PHONY: system-dependencies
+system-dependencies:
+	@echo "Install system dependencies"
+	@test -z "$(SYSTEM_DEPENDENCIES)" && echo "No System dependencies defined"
+	@test -z "$(SYSTEM_DEPENDENCIES)" \
+		|| sudo apt-get install -y $(SYSTEM_DEPENDENCIES)
 
