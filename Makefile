@@ -104,8 +104,8 @@ PROJECT_CONFIG?=mx.ini
 
 # The command which gets executed. Defaults to the location the
 # :ref:`run-tests` template gets rendered to if configured.
-# Default: $(SCRIPTS_FOLDER)/run-tests.sh
-TEST_COMMAND?=$(SCRIPTS_FOLDER)/run-tests.sh
+# Default: .mxmake/files/run-tests.sh
+TEST_COMMAND?=.mxmake/files/run-tests.sh
 
 # Additional make targets the test target depends on.
 # No default value.
@@ -115,8 +115,8 @@ TEST_DEPENDENCY_TARGETS?=python-ldap
 
 # The command which gets executed. Defaults to the location the
 # :ref:`run-coverage` template gets rendered to if configured.
-# Default: $(SCRIPTS_FOLDER)/run-coverage.sh
-COVERAGE_COMMAND?=$(SCRIPTS_FOLDER)/run-coverage.sh
+# Default: .mxmake/files/run-coverage.sh
+COVERAGE_COMMAND?=.mxmake/files/run-coverage.sh
 
 ##############################################################################
 # END SETTINGS - DO NOT EDIT BELOW THIS LINE
