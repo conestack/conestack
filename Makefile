@@ -23,6 +23,10 @@
 # No default value.
 DEPLOY_TARGETS?=
 
+# Additional files and folders to remove when running clean target
+# No default value.
+CLEAN_FS?=
+
 ## system.dependencies
 
 # Space separated system package names.
@@ -57,8 +61,8 @@ PYTHON_BIN?=python3
 # Default: 3.7
 PYTHON_MIN_VERSION?=3.7
 
-# Flag whether to use virtual environment. If `false`, the global
-# interpreter is used.
+# Flag whether to use virtual environment.
+# If `false`, the interpreter according to `PYTHON_BIN` found in `PATH` is used.
 # Default: true
 VENV_ENABLED?=true
 
@@ -69,6 +73,9 @@ VENV_ENABLED?=true
 VENV_CREATE?=true
 
 # The folder of the virtual environment.
+# If `VENV_ENABLED` is `true` and `VENV_CREATE` is true it is used as the target folder for the virtual environment.
+# If `VENV_ENABLED` is `true` and `VENV_CREATE` is false it is expected to point to an existing virtual environment.
+# If `VENV_ENABLED` is `false` it is ignored.
 # Default: venv
 VENV_FOLDER?=venv
 
@@ -294,6 +301,9 @@ CLEAN_TARGETS+=python-ldap-clean
 # sphinx
 ##############################################################################
 
+# additional targets required for building docs.
+DOCS_TARGETS+=
+
 SPHINX_BIN=$(MXENV_PATH)sphinx-build
 SPHINX_AUTOBUILD_BIN=$(MXENV_PATH)sphinx-autobuild
 
@@ -304,12 +314,12 @@ $(DOCS_TARGET): $(MXENV_TARGET)
 	@touch $(DOCS_TARGET)
 
 .PHONY: docs
-docs: $(DOCS_TARGET)
+docs: $(DOCS_TARGET) $(DOCS_TARGETS)
 	@echo "Build sphinx docs"
 	@$(SPHINX_BIN) $(DOCS_SOURCE_FOLDER) $(DOCS_TARGET_FOLDER)
 
 .PHONY: docs-live
-docs-live: $(DOCS_TARGET)
+docs-live: $(DOCS_TARGET) $(DOCS_TARGETS)
 	@echo "Rebuild Sphinx documentation on changes, with live-reload in the browser"
 	@$(SPHINX_AUTOBUILD_BIN) $(DOCS_SOURCE_FOLDER) $(DOCS_TARGET_FOLDER)
 
@@ -344,9 +354,28 @@ define unset_mxfiles_env
 	@unset MXMAKE_FILES
 endef
 
-FILES_TARGET:=$(SENTINEL_FOLDER)/mxfiles.sentinel
-$(FILES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET)
+$(PROJECT_CONFIG):
+ifneq ("$(wildcard $(PROJECT_CONFIG))","")
+	@touch $(PROJECT_CONFIG)
+else
+	@echo "[settings]" > $(PROJECT_CONFIG)
+endif
+
+LOCAL_PACKAGE_FILES:=
+ifneq ("$(wildcard pyproject.toml)","")
+	LOCAL_PACKAGE_FILES+=pyproject.toml
+endif
+ifneq ("$(wildcard setup.cfg)","")
+	LOCAL_PACKAGE_FILES+=setup.cfg
+endif
+ifneq ("$(wildcard setup.py)","")
+	LOCAL_PACKAGE_FILES+=setup.py
+endif
+
+FILES_TARGET:=requirements-mxdev.txt
+$(FILES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET) $(LOCAL_PACKAGE_FILES)
 	@echo "Create project files"
+	@mkdir -p $(MXMAKE_FILES)
 	$(call set_mxfiles_env,$(MXENV_PATH),$(MXMAKE_FILES))
 	@$(MXENV_PATH)mxdev -n -c $(PROJECT_CONFIG)
 	$(call unset_mxfiles_env,$(MXENV_PATH),$(MXMAKE_FILES))
@@ -357,11 +386,11 @@ mxfiles: $(FILES_TARGET)
 
 .PHONY: mxfiles-dirty
 mxfiles-dirty:
-	@rm -f $(FILES_TARGET)
+	@touch $(PROJECT_CONFIG)
 
 .PHONY: mxfiles-clean
 mxfiles-clean: mxfiles-dirty
-	@rm -f constraints-mxdev.txt requirements-mxdev.txt $(MXMAKE_FILES)
+	@rm -rf constraints-mxdev.txt requirements-mxdev.txt $(MXMAKE_FILES)
 
 INSTALL_TARGETS+=mxfiles
 DIRTY_TARGETS+=mxfiles-dirty
@@ -396,15 +425,19 @@ PURGE_TARGETS+=sources-purge
 # packages
 ##############################################################################
 
+# case `core.sources` domain not included
+SOURCES_TARGET?=
+
+# additional sources targets which requires package re-install on change
 -include $(MXMAKE_FILES)/additional_sources_targets.mk
 ADDITIONAL_SOURCES_TARGETS?=
 
-INSTALLED_PACKAGES=.installed.txt
+INSTALLED_PACKAGES=$(MXMAKE_FILES)/installed.txt
 
-PACKAGES_TARGET:=$(SENTINEL_FOLDER)/packages.sentinel
-$(PACKAGES_TARGET): $(SOURCES_TARGET) $(ADDITIONAL_SOURCES_TARGETS)
+PACKAGES_TARGET:=$(INSTALLED_PACKAGES)
+$(PACKAGES_TARGET): $(FILES_TARGET) $(SOURCES_TARGET) $(ADDITIONAL_SOURCES_TARGETS)
 	@echo "Install python packages"
-	@$(MXENV_PATH)pip install -r requirements-mxdev.txt
+	@$(MXENV_PATH)pip install -r $(FILES_TARGET)
 	@$(MXENV_PATH)pip freeze > $(INSTALLED_PACKAGES)
 	@touch $(PACKAGES_TARGET)
 
@@ -415,8 +448,14 @@ packages: $(PACKAGES_TARGET)
 packages-dirty:
 	@rm -f $(PACKAGES_TARGET)
 
+.PHONY: packages-clean
+packages-clean:
+	@test -e $(FILES_TARGET) && pip uninstall -y -r $(FILES_TARGET)
+	@rm -f $(PACKAGES_TARGET)
+
 INSTALL_TARGETS+=packages
 DIRTY_TARGETS+=packages-dirty
+CLEAN_TARGETS+=packages-clean
 
 ##############################################################################
 # test
@@ -452,6 +491,7 @@ coverage-dirty:
 .PHONY: coverage-clean
 coverage-clean: coverage-dirty
 	@rm -rf .coverage htmlcov
+	@$(MXENV_PATH)pip uninstall coverage
 
 INSTALL_TARGETS+=$(COVERAGE_TARGET)
 DIRTY_TARGETS+=coverage-dirty
@@ -478,7 +518,7 @@ dirty: $(DIRTY_TARGETS)
 
 .PHONY: clean
 clean: dirty $(CLEAN_TARGETS)
-	@rm -rf $(CLEAN_TARGETS) $(MXMAKE_FOLDER)
+	@rm -rf $(CLEAN_TARGETS) $(MXMAKE_FOLDER) $(CLEAN_FS)
 
 .PHONY: purge
 purge: clean $(PURGE_TARGETS)
