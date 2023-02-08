@@ -1,6 +1,6 @@
 /.coverage
 /.installed.txt
-/.sentinels/
+/.mxmake/
 /.vscode/
 /constraints-mxdev.txt
 /docs/html/
