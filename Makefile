@@ -7,7 +7,6 @@
 #: core.mxfiles
 #: core.packages
 #: core.sources
-#: docs.sphinx
 #: ldap.openldap
 #: ldap.python-ldap
 #: qa.coverage
@@ -86,20 +85,6 @@ MXDEV?=https://github.com/mxstack/mxdev/archive/main.zip
 # mxmake to install in virtual environment.
 # Default: https://github.com/mxstack/mxmake/archive/develop.zip
 MXMAKE?=https://github.com/mxstack/mxmake/archive/develop.zip
-
-## docs.sphinx
-
-# Documentation source folder.
-# Default: docs/source
-DOCS_SOURCE_FOLDER?=docs/source
-
-# Documentation generation target folder.
-# Default: docs/html
-DOCS_TARGET_FOLDER?=docs/html
-
-# Documentation Python requirements to be installed (via pip).
-# No default value.
-DOCS_REQUIREMENTS?=
 
 ## core.mxfiles
 
@@ -291,53 +276,43 @@ python-ldap-dirty:
 
 .PHONY: python-ldap-clean
 python-ldap-clean: python-ldap-dirty
-	@test -e $(MXENV_PATH)pip && $(MXENV_PATH)pip uninstall -y python-ldap
+	@test -e $(MXENV_PATH)pip && $(MXENV_PATH)pip uninstall -y python-ldap || :
 
 INSTALL_TARGETS+=python-ldap
 DIRTY_TARGETS+=python-ldap-dirty
 CLEAN_TARGETS+=python-ldap-clean
 
 ##############################################################################
-# sphinx
+# sources
 ##############################################################################
 
-# additional targets required for building docs.
-DOCS_TARGETS+=
+SOURCES_TARGET:=$(SENTINEL_FOLDER)/sources.sentinel
+$(SOURCES_TARGET): $(MXENV_TARGET)
+	@echo "Checkout project sources"
+	@$(MXENV_PATH)mxdev -o -c $(PROJECT_CONFIG)
+	@touch $(SOURCES_TARGET)
 
-SPHINX_BIN=$(MXENV_PATH)sphinx-build
-SPHINX_AUTOBUILD_BIN=$(MXENV_PATH)sphinx-autobuild
+.PHONY: sources
+sources: $(SOURCES_TARGET)
 
-DOCS_TARGET:=$(SENTINEL_FOLDER)/sphinx.sentinel
-$(DOCS_TARGET): $(MXENV_TARGET)
-	@echo "Install Sphinx"
-	@$(MXENV_PATH)pip install -U sphinx sphinx-autobuild $(DOCS_REQUIREMENTS)
-	@touch $(DOCS_TARGET)
+.PHONY: sources-dirty
+sources-dirty:
+	@rm -f $(SOURCES_TARGET)
 
-.PHONY: docs
-docs: $(DOCS_TARGET) $(DOCS_TARGETS)
-	@echo "Build sphinx docs"
-	@$(SPHINX_BIN) $(DOCS_SOURCE_FOLDER) $(DOCS_TARGET_FOLDER)
+.PHONY: sources-purge
+sources-purge: sources-dirty
+	@rm -rf sources
 
-.PHONY: docs-live
-docs-live: $(DOCS_TARGET) $(DOCS_TARGETS)
-	@echo "Rebuild Sphinx documentation on changes, with live-reload in the browser"
-	@$(SPHINX_AUTOBUILD_BIN) $(DOCS_SOURCE_FOLDER) $(DOCS_TARGET_FOLDER)
-
-.PHONY: docs-dirty
-docs-dirty:
-	@rm -f $(DOCS_TARGET)
-
-.PHONY: docs-clean
-docs-clean: docs-dirty
-	@rm -rf $(DOCS_TARGET_FOLDER)
-
-INSTALL_TARGETS+=$(DOCS_TARGET)
-DIRTY_TARGETS+=docs-dirty
-CLEAN_TARGETS+=docs-clean
+INSTALL_TARGETS+=sources
+DIRTY_TARGETS+=sources-dirty
+PURGE_TARGETS+=sources-purge
 
 ##############################################################################
 # mxfiles
 ##############################################################################
+
+# case `core.sources` domain not included
+SOURCES_TARGET?=
 
 # File generation target
 MXMAKE_FILES?=$(MXMAKE_FOLDER)/files
@@ -373,7 +348,7 @@ ifneq ("$(wildcard setup.py)","")
 endif
 
 FILES_TARGET:=requirements-mxdev.txt
-$(FILES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET) $(LOCAL_PACKAGE_FILES)
+$(FILES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET) $(SOURCES_TARGET) $(LOCAL_PACKAGE_FILES)
 	@echo "Create project files"
 	@mkdir -p $(MXMAKE_FILES)
 	$(call set_mxfiles_env,$(MXENV_PATH),$(MXMAKE_FILES))
@@ -397,36 +372,8 @@ DIRTY_TARGETS+=mxfiles-dirty
 CLEAN_TARGETS+=mxfiles-clean
 
 ##############################################################################
-# sources
-##############################################################################
-
-SOURCES_TARGET:=$(SENTINEL_FOLDER)/sources.sentinel
-$(SOURCES_TARGET): $(FILES_TARGET)
-	@echo "Checkout project sources"
-	@$(MXENV_PATH)mxdev -o -c $(PROJECT_CONFIG)
-	@touch $(SOURCES_TARGET)
-
-.PHONY: sources
-sources: $(SOURCES_TARGET)
-
-.PHONY: sources-dirty
-sources-dirty:
-	@rm -f $(SOURCES_TARGET)
-
-.PHONY: sources-purge
-sources-purge: sources-dirty
-	@rm -rf sources
-
-INSTALL_TARGETS+=sources
-DIRTY_TARGETS+=sources-dirty
-PURGE_TARGETS+=sources-purge
-
-##############################################################################
 # packages
 ##############################################################################
-
-# case `core.sources` domain not included
-SOURCES_TARGET?=
 
 # additional sources targets which requires package re-install on change
 -include $(MXMAKE_FILES)/additional_sources_targets.mk
@@ -435,7 +382,7 @@ ADDITIONAL_SOURCES_TARGETS?=
 INSTALLED_PACKAGES=$(MXMAKE_FILES)/installed.txt
 
 PACKAGES_TARGET:=$(INSTALLED_PACKAGES)
-$(PACKAGES_TARGET): $(FILES_TARGET) $(SOURCES_TARGET) $(ADDITIONAL_SOURCES_TARGETS)
+$(PACKAGES_TARGET): $(FILES_TARGET) $(ADDITIONAL_SOURCES_TARGETS)
 	@echo "Install python packages"
 	@$(MXENV_PATH)pip install -r $(FILES_TARGET)
 	@$(MXENV_PATH)pip freeze > $(INSTALLED_PACKAGES)
@@ -450,7 +397,10 @@ packages-dirty:
 
 .PHONY: packages-clean
 packages-clean:
-	@test -e $(FILES_TARGET) && pip uninstall -y -r $(FILES_TARGET)
+	@test -e $(FILES_TARGET) \
+		&& test -e $(MXENV_PATH)pip \
+		&& $(MXENV_PATH)pip uninstall -y -r $(FILES_TARGET) \
+		|| :
 	@rm -f $(PACKAGES_TARGET)
 
 INSTALL_TARGETS+=packages
@@ -490,8 +440,8 @@ coverage-dirty:
 
 .PHONY: coverage-clean
 coverage-clean: coverage-dirty
+	@test -e $(MXENV_PATH)pip && $(MXENV_PATH)pip uninstall -y coverage || :
 	@rm -rf .coverage htmlcov
-	@$(MXENV_PATH)pip uninstall coverage
 
 INSTALL_TARGETS+=$(COVERAGE_TARGET)
 DIRTY_TARGETS+=coverage-dirty
