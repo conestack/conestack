@@ -22,6 +22,10 @@
 # No default value.
 DEPLOY_TARGETS?=
 
+# target to be executed when calling `make run`
+# No default value.
+RUN_TARGET?=
+
 # Additional files and folders to remove when running clean target
 # No default value.
 CLEAN_FS?=
@@ -60,8 +64,8 @@ PYTHON_BIN?=python3
 # Default: 3.7
 PYTHON_MIN_VERSION?=3.7
 
-# Flag whether to use virtual environment.
-# If `false`, the interpreter according to `PYTHON_BIN` found in `PATH` is used.
+# Flag whether to use virtual environment. If `false`, the
+# interpreter according to `PYTHON_BIN` found in `PATH` is used.
 # Default: true
 VENV_ENABLED?=true
 
@@ -72,9 +76,10 @@ VENV_ENABLED?=true
 VENV_CREATE?=true
 
 # The folder of the virtual environment.
-# If `VENV_ENABLED` is `true` and `VENV_CREATE` is true it is used as the target folder for the virtual environment.
-# If `VENV_ENABLED` is `true` and `VENV_CREATE` is false it is expected to point to an existing virtual environment.
-# If `VENV_ENABLED` is `false` it is ignored.
+# If `VENV_ENABLED` is `true` and `VENV_CREATE` is true it is used as the
+# target folder for the virtual environment. If `VENV_ENABLED` is `true` and
+# `VENV_CREATE` is false it is expected to point to an existing virtual
+# environment. If `VENV_ENABLED` is `false` it is ignored.
 # Default: venv
 VENV_FOLDER?=venv
 
@@ -98,6 +103,11 @@ PROJECT_CONFIG?=mx.ini
 # :ref:`run-tests` template gets rendered to if configured.
 # Default: .mxmake/files/run-tests.sh
 TEST_COMMAND?=.mxmake/files/run-tests.sh
+
+# Additional Python requirements for running tests to be
+# installed (via pip).
+# Default: pytest
+TEST_REQUIREMENTS?=zope.testrunner
 
 # Additional make targets the test target depends on.
 # No default value.
@@ -402,12 +412,30 @@ CLEAN_TARGETS+=packages-clean
 # test
 ##############################################################################
 
+TEST_TARGET:=$(SENTINEL_FOLDER)/test.sentinel
+$(TEST_TARGET): $(MXENV_TARGET)
+	@echo "Install $(TEST_REQUIREMENTS)"
+	@$(MXENV_PATH)pip install $(TEST_REQUIREMENTS)
+	@touch $(TEST_TARGET)
+
 .PHONY: test
-test: $(FILES_TARGET) $(SOURCES_TARGET) $(PACKAGES_TARGET) $(TEST_DEPENDENCY_TARGETS)
+test: $(FILES_TARGET) $(SOURCES_TARGET) $(PACKAGES_TARGET) $(TEST_TARGET) $(TEST_DEPENDENCY_TARGETS)
 	@echo "Run tests"
 	@test -z "$(TEST_COMMAND)" && echo "No test command defined"
 	@test -z "$(TEST_COMMAND)" || bash -c "$(TEST_COMMAND)"
 
+.PHONY: test-dirty
+test-dirty:
+	@rm -f $(TEST_TARGET)
+
+.PHONY: test-clean
+test-clean: test-dirty
+	@test -e $(MXENV_PATH)pip && $(MXENV_PATH)pip uninstall -y $(TEST_REQUIREMENTS) || :
+	@rm -rf .pytest_cache
+
+INSTALL_TARGETS+=$(TEST_TARGET)
+CLEAN_TARGETS+=test-clean
+DIRTY_TARGETS+=test-dirty
 
 ##############################################################################
 # coverage
@@ -449,6 +477,9 @@ $(INSTALL_TARGET): $(INSTALL_TARGETS)
 .PHONY: install
 install: $(INSTALL_TARGET)
 	@touch $(INSTALL_TARGET)
+
+.PHONY: run
+run: $(RUN_TARGET)
 
 .PHONY: deploy
 deploy: $(DEPLOY_TARGETS)
