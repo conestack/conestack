@@ -30,6 +30,11 @@ RUN_TARGET?=
 # No default value.
 CLEAN_FS?=
 
+# Optional makefile to include before default targets. This can
+# be used to provide custom targets or hook up to existing targets.
+# Default: include.mk
+INCLUDE_MAKEFILE?=include.mk
+
 ## system.dependencies
 
 # Space separated system package names.
@@ -166,6 +171,9 @@ system-dependencies:
 # openldap
 ##############################################################################
 
+# case `system.dependencies` domain is included
+SYSTEM_DEPENDENCIES+=libdb-dev libsasl2-dev
+
 OPENLDAP_TARGET:=$(SENTINEL_FOLDER)/openldap.sentinel
 $(OPENLDAP_TARGET): $(SENTINEL)
 	@echo "Building openldap server in '$(OPENLDAP_DIR)'"
@@ -269,7 +277,6 @@ PYTHON_LDAP_TARGET:=$(SENTINEL_FOLDER)/python-ldap.sentinel
 $(PYTHON_LDAP_TARGET): $(MXENV_TARGET) $(OPENLDAP_TARGET)
 	@$(MXENV_PATH)pip install \
 		--force-reinstall \
-		--no-use-pep517 \
 		--global-option=build_ext \
 		--global-option="-I$(OPENLDAP_DIR)/include" \
 		--global-option="-L$(OPENLDAP_DIR)/lib" \
@@ -442,7 +449,7 @@ DIRTY_TARGETS+=test-dirty
 ##############################################################################
 
 COVERAGE_TARGET:=$(SENTINEL_FOLDER)/coverage.sentinel
-$(COVERAGE_TARGET): $(MXENV_TARGET)
+$(COVERAGE_TARGET): $(TEST_TARGET)
 	@echo "Install Coverage"
 	@$(MXENV_PATH)pip install -U coverage
 	@touch $(COVERAGE_TARGET)
@@ -465,6 +472,8 @@ coverage-clean: coverage-dirty
 INSTALL_TARGETS+=$(COVERAGE_TARGET)
 DIRTY_TARGETS+=coverage-dirty
 CLEAN_TARGETS+=coverage-clean
+
+-include $(INCLUDE_MAKEFILE)
 
 ##############################################################################
 # Default targets
