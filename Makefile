@@ -90,11 +90,11 @@ VENV_FOLDER?=venv
 
 # mxdev to install in virtual environment.
 # Default: mxdev
-MXDEV?=mxdev==3.0.0b3
+MXDEV?=mxdev
 
 # mxmake to install in virtual environment.
 # Default: mxmake
-MXMAKE?=mxmake==1.0a1
+MXMAKE?=mxmake
 
 ## core.mxfiles
 
@@ -277,11 +277,10 @@ PYTHON_LDAP_TARGET:=$(SENTINEL_FOLDER)/python-ldap.sentinel
 $(PYTHON_LDAP_TARGET): $(MXENV_TARGET) $(OPENLDAP_TARGET)
 	@$(MXENV_PATH)pip install \
 		--force-reinstall \
-		--no-use-pep517 \
-		--global-option=build_ext \
-		--global-option="-I$(OPENLDAP_DIR)/include" \
-		--global-option="-L$(OPENLDAP_DIR)/lib" \
-		--global-option="-R$(OPENLDAP_DIR)/lib" \
+		--no-binary=:all: \
+		--config-setting="CFLAGS=-I$(OPENLDAP_DIR)/include" \
+		--config-setting="CFLAGS=-L$(OPENLDAP_DIR)/lib" \
+		--config-setting="CFLAGS=-R$(OPENLDAP_DIR)/lib" \
 		python-ldap
 	@touch $(PYTHON_LDAP_TARGET)
 
