@@ -278,9 +278,9 @@ $(PYTHON_LDAP_TARGET): $(MXENV_TARGET) $(OPENLDAP_TARGET)
 	@$(MXENV_PATH)pip install \
 		--force-reinstall \
 		--no-binary=:all: \
-		--config-settings="CFLAGS+=-I$(OPENLDAP_DIR)/include" \
-		--config-settings="CFLAGS+=-L$(OPENLDAP_DIR)/lib" \
-		--config-settings="CFLAGS+=-R$(OPENLDAP_DIR)/lib" \
+		--config-settings="CFLAGS=-I$(OPENLDAP_DIR)/include" \
+		--config-settings="CFLAGS=-L$(OPENLDAP_DIR)/lib" \
+		--config-settings="CFLAGS=-R$(OPENLDAP_DIR)/lib" \
 		python-ldap
 	@touch $(PYTHON_LDAP_TARGET)
 
