@@ -241,8 +241,10 @@ endif
 MXENV_TARGET:=$(SENTINEL_FOLDER)/mxenv.sentinel
 $(MXENV_TARGET): $(SENTINEL)
 ifeq ("$(VENV_ENABLED)", "true")
+ifeq ("$(VENV_CREATE)", "true")
 	@echo "Setup Python Virtual Environment under '$(VENV_FOLDER)'"
 	@$(PYTHON_BIN) -m venv $(VENV_FOLDER)
+endif
 endif
 	@$(MXENV_PATH)pip install -U pip setuptools wheel
 	@$(MXENV_PATH)pip install -U $(MXDEV)
@@ -259,7 +261,9 @@ mxenv-dirty:
 .PHONY: mxenv-clean
 mxenv-clean: mxenv-dirty
 ifeq ("$(VENV_ENABLED)", "true")
+ifeq ("$(VENV_CREATE)", "true")
 	@rm -rf $(VENV_FOLDER)
+endif
 else
 	@$(MXENV_PATH)pip uninstall -y $(MXDEV)
 	@$(MXENV_PATH)pip uninstall -y $(MXMAKE)
@@ -277,10 +281,10 @@ PYTHON_LDAP_TARGET:=$(SENTINEL_FOLDER)/python-ldap.sentinel
 $(PYTHON_LDAP_TARGET): $(MXENV_TARGET) $(OPENLDAP_TARGET)
 	@$(MXENV_PATH)pip install \
 		--force-reinstall \
-		--no-binary=:all: \
-		--config-settings="CFLAGS=-I$(OPENLDAP_DIR)/include" \
-		--config-settings="CFLAGS=-L$(OPENLDAP_DIR)/lib" \
-		--config-settings="CFLAGS=-R$(OPENLDAP_DIR)/lib" \
+		--global-option=build_ext \
+		--global-option="-I$(OPENLDAP_DIR)/include" \
+		--global-option="-L$(OPENLDAP_DIR)/lib" \
+		--global-option="-R$(OPENLDAP_DIR)/lib" \
 		python-ldap
 	@touch $(PYTHON_LDAP_TARGET)
 
@@ -304,7 +308,7 @@ CLEAN_TARGETS+=python-ldap-clean
 ##############################################################################
 
 SOURCES_TARGET:=$(SENTINEL_FOLDER)/sources.sentinel
-$(SOURCES_TARGET): $(MXENV_TARGET)
+$(SOURCES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET)
 	@echo "Checkout project sources"
 	@$(MXENV_PATH)mxdev -o -c $(PROJECT_CONFIG)
 	@touch $(SOURCES_TARGET)
@@ -362,6 +366,7 @@ $(FILES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET) $(SOURCES_TARGET) $(LOCAL_PAC
 	$(call set_mxfiles_env,$(MXENV_PATH),$(MXMAKE_FILES))
 	@$(MXENV_PATH)mxdev -n -c $(PROJECT_CONFIG)
 	$(call unset_mxfiles_env,$(MXENV_PATH),$(MXMAKE_FILES))
+	@test -e $(MXMAKE_FILES)/pip.conf && cp $(MXMAKE_FILES)/pip.conf $(VENV_FOLDER)/pip.conf || :
 	@touch $(FILES_TARGET)
 
 .PHONY: mxfiles
