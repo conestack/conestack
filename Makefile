@@ -134,6 +134,7 @@ DIRTY_TARGETS?=
 CLEAN_TARGETS?=
 PURGE_TARGETS?=
 CHECK_TARGETS?=
+TYPECHECK_TARGETS?=
 FORMAT_TARGETS?=
 
 # Defensive settings for make: https://tech.davis-hansson.com/p/make/
@@ -277,14 +278,13 @@ CLEAN_TARGETS+=mxenv-clean
 # python-ldap
 ##############################################################################
 
+# case `system.dependencies` domain is included
+SYSTEM_DEPENDENCIES+=python3-dev libldap2-dev libssl-dev libsasl2-dev
+
 PYTHON_LDAP_TARGET:=$(SENTINEL_FOLDER)/python-ldap.sentinel
 $(PYTHON_LDAP_TARGET): $(MXENV_TARGET) $(OPENLDAP_TARGET)
 	@$(MXENV_PATH)pip install \
 		--force-reinstall \
-		--global-option=build_ext \
-		--global-option="-I$(OPENLDAP_DIR)/include" \
-		--global-option="-L$(OPENLDAP_DIR)/lib" \
-		--global-option="-R$(OPENLDAP_DIR)/lib" \
 		python-ldap
 	@touch $(PYTHON_LDAP_TARGET)
 
@@ -518,6 +518,9 @@ runtime-clean:
 
 .PHONY: check
 check: $(CHECK_TARGETS)
+
+.PHONY: typecheck
+typecheck: $(TYPECHECK_TARGETS)
 
 .PHONY: format
 format: $(FORMAT_TARGETS)
