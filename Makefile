@@ -83,7 +83,7 @@ PYTHON_MIN_VERSION?=3.7
 # `VENV_ENABLED` and uv is selected, uv is used to create the virtual
 # environment.
 # Default: pip
-PYTHON_PACKAGE_INSTALLER?=pip
+PYTHON_PACKAGE_INSTALLER?=uv
 
 # Flag whether to use a global installed 'uv' or install
 # it in the virtual environment.
@@ -106,7 +106,7 @@ VENV_CREATE?=true
 # target folder for the virtual environment. If `VENV_ENABLED` is `true` and
 # `VENV_CREATE` is false it is expected to point to an existing virtual
 # environment. If `VENV_ENABLED` is `false` it is ignored.
-# Default: venv
+# Default: .venv
 VENV_FOLDER?=venv
 
 # mxdev to install in virtual environment.
@@ -122,6 +122,13 @@ MXMAKE?=mxmake
 # The config file to use.
 # Default: mx.ini
 PROJECT_CONFIG?=mx.ini
+
+## core.packages
+
+# Allow prerelease and development versions.
+# By default, the package installer only finds stable versions.
+# Default: false
+PACKAGES_ALLOW_PRERELEASES?=false
 
 ## qa.test
 
@@ -176,7 +183,7 @@ MXMAKE_FOLDER?=.mxmake
 # Sentinel files
 SENTINEL_FOLDER?=$(MXMAKE_FOLDER)/sentinels
 SENTINEL?=$(SENTINEL_FOLDER)/about.txt
-$(SENTINEL):
+$(SENTINEL): $(firstword $(MAKEFILE_LIST))
 	@mkdir -p $(SENTINEL_FOLDER)
 	@echo "Sentinels for the Makefile process." > $(SENTINEL)
 
@@ -239,26 +246,15 @@ CLEAN_TARGETS+=openldap-clean
 # mxenv
 ##############################################################################
 
-# Check if given Python is installed
-ifeq (,$(shell which $(PRIMARY_PYTHON)))
-$(error "PYTHON=$(PRIMARY_PYTHON) not found in $(PATH)")
-endif
-
-# Check if given Python version is ok
-PYTHON_VERSION_OK=$(shell $(PRIMARY_PYTHON) -c "import sys; print((int(sys.version_info[0]), int(sys.version_info[1])) >= tuple(map(int, '$(PYTHON_MIN_VERSION)'.split('.'))))")
-ifeq ($(PYTHON_VERSION_OK),0)
-$(error "Need Python >= $(PYTHON_MIN_VERSION)")
-endif
-
-# Check if venv folder is configured if venv is enabled
-ifeq ($(shell [[ "$(VENV_ENABLED)" == "true" && "$(VENV_FOLDER)" == "" ]] && echo "true"),"true")
-$(error "VENV_FOLDER must be configured if VENV_ENABLED is true")
-endif
-
 # Determine the executable path
 ifeq ("$(VENV_ENABLED)", "true")
-export PATH:=$(shell pwd)/$(VENV_FOLDER)/bin:$(PATH)
-export VIRTUAL_ENV=$(VENV_FOLDER)
+export VIRTUAL_ENV=$(abspath $(VENV_FOLDER))
+ifeq ("$(OS)", "Windows_NT")
+VENV_EXECUTABLE_FOLDER=$(VIRTUAL_ENV)/Scripts
+else
+VENV_EXECUTABLE_FOLDER=$(VIRTUAL_ENV)/bin
+endif
+export PATH:=$(VENV_EXECUTABLE_FOLDER):$(PATH)
 MXENV_PYTHON=python
 else
 MXENV_PYTHON=$(PRIMARY_PYTHON)
@@ -273,6 +269,12 @@ endif
 
 MXENV_TARGET:=$(SENTINEL_FOLDER)/mxenv.sentinel
 $(MXENV_TARGET): $(SENTINEL)
+	@$(PRIMARY_PYTHON) -c "import sys; vi = sys.version_info; sys.exit(1 if (int(vi[0]), int(vi[1])) >= tuple(map(int, '$(PYTHON_MIN_VERSION)'.split('.'))) else 0)" \
+		&& echo "Need Python >= $(PYTHON_MIN_VERSION)" && exit 1 || :
+	@[[ "$(VENV_ENABLED)" == "true" && "$(VENV_FOLDER)" == "" ]] \
+		&& echo "VENV_FOLDER must be configured if VENV_ENABLED is true" && exit 1 || :
+	@[[ "$(VENV_ENABLED)$(PYTHON_PACKAGE_INSTALLER)" == "falseuv" ]] \
+		&& echo "Package installer uv does not work with a global Python interpreter." && exit 1 || :
 ifeq ("$(VENV_ENABLED)", "true")
 ifeq ("$(VENV_CREATE)", "true")
 ifeq ("$(PYTHON_PACKAGE_INSTALLER)$(MXENV_UV_GLOBAL)","uvtrue")
@@ -283,15 +285,15 @@ else
 	@$(PRIMARY_PYTHON) -m venv $(VENV_FOLDER)
 	@$(MXENV_PYTHON) -m ensurepip -U
 endif
+endif
+else
+	@echo "Using system Python interpreter"
+endif
 ifeq ("$(PYTHON_PACKAGE_INSTALLER)$(MXENV_UV_GLOBAL)","uvfalse")
 	@echo "Install uv"
 	@$(MXENV_PYTHON) -m pip install uv
 endif
 	@$(PYTHON_PACKAGE_COMMAND) install -U pip setuptools wheel
-endif
-else
-	@echo "Using system Python interpreter"
-endif
 	@echo "Install/Update MXStack Python packages"
 	@$(PYTHON_PACKAGE_COMMAND) install -U $(MXDEV) $(MXMAKE)
 	@touch $(MXENV_TARGET)
@@ -436,10 +438,20 @@ ADDITIONAL_SOURCES_TARGETS?=
 
 INSTALLED_PACKAGES=$(MXMAKE_FILES)/installed.txt
 
+ifeq ("$(PACKAGES_ALLOW_PRERELEASES)","true")
+ifeq ("$(PYTHON_PACKAGE_INSTALLER)","uv")
+PACKAGES_PRERELEASES=--prerelease=allow
+else
+PACKAGES_PRERELEASES=--pre
+endif
+else
+PACKAGES_PRERELEASES=
+endif
+
 PACKAGES_TARGET:=$(INSTALLED_PACKAGES)
 $(PACKAGES_TARGET): $(FILES_TARGET) $(ADDITIONAL_SOURCES_TARGETS)
 	@echo "Install python packages"
-	@$(PYTHON_PACKAGE_COMMAND) install -r $(FILES_TARGET)
+	@$(PYTHON_PACKAGE_COMMAND) install $(PACKAGES_PRERELEASES) -r $(FILES_TARGET)
 	@$(PYTHON_PACKAGE_COMMAND) freeze > $(INSTALLED_PACKAGES)
 	@touch $(PACKAGES_TARGET)
 
@@ -503,9 +515,9 @@ $(COVERAGE_TARGET): $(TEST_TARGET)
 
 .PHONY: coverage
 coverage: $(FILES_TARGET) $(SOURCES_TARGET) $(PACKAGES_TARGET) $(COVERAGE_TARGET)
-	@echo "Run coverage"
-	@test -z "$(COVERAGE_COMMAND)" && echo "No coverage command defined"
-	@test -z "$(COVERAGE_COMMAND)" || bash -c "$(COVERAGE_COMMAND)"
+	@test -z "$(COVERAGE_COMMAND)" && echo "No coverage command defined" && exit 1 || :
+	@echo "Run coverage using $(COVERAGE_COMMAND)"
+	@/usr/bin/env bash -c "$(COVERAGE_COMMAND)"
 
 .PHONY: coverage-dirty
 coverage-dirty:
