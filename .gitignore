@@ -1,6 +1,7 @@
 /.coverage
 /.installed.txt
 /.mxmake/
+/.python-version
 /.vscode/
 /constraints-mxdev.txt
 /docs/html/
