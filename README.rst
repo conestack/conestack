@@ -8,13 +8,13 @@ Install System dependencies (Debian/Ubuntu):
 
 .. code-block:: sh
 
-    $ make dependencies
+    $ make system-dependencies
 
 Install development environment:
 
 .. code-block:: sh
 
-    $ make project-install
+    $ make install
 
 Build docs:
 
@@ -32,12 +32,12 @@ Cleanup development environment:
 
 .. code-block:: sh
 
-    $ make project-clean
+    $ make clean
 
 Cleanup development environment including sources directory:
 
 .. code-block:: sh
 
-    $ make project-full-clean
+    $ make purge
 
 **Happy hacking!**
