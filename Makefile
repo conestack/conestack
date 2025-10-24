@@ -69,12 +69,15 @@ OPENLDAP_ENV?=PATH=/usr/local/bin:/usr/bin:/bin
 
 # Primary Python interpreter to use. It is used to create the
 # virtual environment if `VENV_ENABLED` and `VENV_CREATE` are set to `true`.
+# If global `uv` is used, this value is passed as `--python VALUE` to the venv creation.
+# uv then downloads the Python interpreter if it is not available.
+# for more on this feature read the [uv python documentation](https://docs.astral.sh/uv/concepts/python-versions/)
 # Default: python3
 PRIMARY_PYTHON?=python3
 
 # Minimum required Python version.
-# Default: 3.7
-PYTHON_MIN_VERSION?=3.7
+# Default: 3.9
+PYTHON_MIN_VERSION?=3.9
 
 # Install packages using the given package installer method.
 # Supported are `pip` and `uv`. If uv is used, its global availability is
@@ -111,11 +114,11 @@ VENV_FOLDER?=venv
 
 # mxdev to install in virtual environment.
 # Default: mxdev
-MXDEV?=mxdev
+MXDEV?=mxdev==4.1.0
 
 # mxmake to install in virtual environment.
 # Default: mxmake
-MXMAKE?=mxmake
+MXMAKE?=mxmake==1.3.0
 
 ## core.mxfiles
 
@@ -246,7 +249,7 @@ CLEAN_TARGETS+=openldap-clean
 # mxenv
 ##############################################################################
 
-export OS:=$(OS)
+OS?=
 
 # Determine the executable path
 ifeq ("$(VENV_ENABLED)", "true")
@@ -271,8 +274,12 @@ endif
 
 MXENV_TARGET:=$(SENTINEL_FOLDER)/mxenv.sentinel
 $(MXENV_TARGET): $(SENTINEL)
+ifneq ("$(PYTHON_PACKAGE_INSTALLER)$(MXENV_UV_GLOBAL)","uvfalse")
 	@$(PRIMARY_PYTHON) -c "import sys; vi = sys.version_info; sys.exit(1 if (int(vi[0]), int(vi[1])) >= tuple(map(int, '$(PYTHON_MIN_VERSION)'.split('.'))) else 0)" \
 		&& echo "Need Python >= $(PYTHON_MIN_VERSION)" && exit 1 || :
+else
+	@echo "Use Python $(PYTHON_MIN_VERSION) over uv"
+endif
 	@[[ "$(VENV_ENABLED)" == "true" && "$(VENV_FOLDER)" == "" ]] \
 		&& echo "VENV_FOLDER must be configured if VENV_ENABLED is true" && exit 1 || :
 	@[[ "$(VENV_ENABLED)$(PYTHON_PACKAGE_INSTALLER)" == "falseuv" ]] \
@@ -533,6 +540,10 @@ coverage-clean: coverage-dirty
 INSTALL_TARGETS+=$(COVERAGE_TARGET)
 DIRTY_TARGETS+=coverage-dirty
 CLEAN_TARGETS+=coverage-clean
+
+##############################################################################
+# Custom includes
+##############################################################################
 
 -include $(INCLUDE_MAKEFILE)
 

@@ -9,35 +9,22 @@ on:
       - 2.0
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         python:
-          - "3.7"
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
-          - "3.12"
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install system dependencies
-        run: make system-dependencies
 
       - name: Install environment
         run: make install
 
       - name: Run tests an collect code coverage
         run: make coverage
-
-#      - name: Upload HTML coverage report
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: coverage-report-${{ matrix.python }}
-#          path: htmlcov
-#          if-no-files-found: ignore
