@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        run: make system-dependencies
+
       - name: Install environment
         run: make install
 
