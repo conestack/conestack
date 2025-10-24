@@ -9,7 +9,7 @@ on:
       - 2.0
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -33,10 +33,3 @@ jobs:
 
       - name: Run tests an collect code coverage
         run: make coverage
-
-#      - name: Upload HTML coverage report
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: coverage-report-${{ matrix.python }}
-#          path: htmlcov
-#          if-no-files-found: ignore
