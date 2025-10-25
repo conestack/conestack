@@ -27,12 +27,14 @@ ROADMAP
   - [ ] node.ext.yaml - 0.4.x
   - [ ] node.ext.zodb - 1.7.x
   - [ ] node - 1.2.x
-  - [ ] odict - 1.9.x
-  - [ ] plumber - 1.7.x
+  - [x] odict - 1.9.x
+  - [x] plumber - 1.x
   - [x] treibstoff - UNSUPPORTED
   - [x] webresource - UNSUPPORTED
   - [ ] yafowil.bootstrap - 1.3.x
   - [ ] yafowil - 3.1.x
+  - [ ] yafowil.demo - 1.x
+  - [ ] yafowil.documentation - 2.x
   - [ ] yafowil.lingua - 1.0.x
   - [ ] yafowil.webob - 1.5.x
   - [ ] yafowil.werkzeug - 0.2.x
@@ -77,11 +79,11 @@ ROADMAP
   - [ ] node.ext.yaml
   - [ ] node.ext.zodb
   - [ ] node
-  - [ ] odict
-  - [ ] plumber
   - [ ] sphinx-conestack-theme
   - [ ] yafowil.bootstrap
   - [ ] yafowil
+  - [ ] yafowil.demo
+  - [ ] yafowil.documentation
   - [ ] yafowil.lingua
   - [ ] yafowil.webob
   - [ ] yafowil.werkzeug
