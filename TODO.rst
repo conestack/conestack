@@ -8,16 +8,16 @@ ROADMAP
   - [x] cone.calendar - 0.4.x
   - [x] cone.charts - UNSUPPORTED
   - [x] cone.fileupload - 0.8.x
-  - [x] cone.firebase - AGNOSTIC
+  - [x] cone.firebase - 0.x
   - [x] cone.ldap - 0.3.x
   - [x] cone.maps - 0.2.x
   - [x] cone.mdb - ARCHIVED
-  - [x] cone.sql - AGNOSTIC
+  - [x] cone.sql - 0.9.x
   - [x] cone.three - UNSUPPORTED
   - [x] cone.tile - 1.x
   - [x] cone.tokens - UNSUPPORTED
-  - [ ] cone.ugm - 1.0.x
-  - [ ] cone.zodb - 1.0.x
+  - [x] cone.ugm - 1.0.x
+  - [x] cone.zodb - 1.0.x
   - [x] cookiecutter-cone - UNSUPPORTED
   - [ ] node.ext.directory - 0.8.x
   - [ ] node.ext.fs = 1.2.x
@@ -64,7 +64,7 @@ ROADMAP
   - [x] cone.calendar
   - [ ] cone.charts
   - [x] cone.fileupload
-  - [ ] cone.firebase
+  - [x] cone.firebase
   - [x] cone.ldap
   - [x] cone.maps
   - [ ] cone.sql
@@ -72,8 +72,8 @@ ROADMAP
   - [ ] cone.three
   - [x] cone.tile
   - [ ] cone.tokens
-  - [ ] cone.ugm
-  - [ ] cone.zodb
+  - [x] cone.ugm
+  - [x] cone.zodb
   - [ ] cookiecutter-cone
   - [ ] mxenv
   - [ ] node.ext.directory
