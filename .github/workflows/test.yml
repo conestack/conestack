@@ -9,7 +9,7 @@ on:
       - 2.0
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,7 +21,7 @@ jobs:
           - "3.11"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
       - name: Install system dependencies
         run: make system-dependencies
