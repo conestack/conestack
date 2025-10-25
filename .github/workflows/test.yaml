@@ -9,33 +9,32 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: false
       matrix:
-        python:
-          - "3.7"
-          - "3.8"
+        python-version:
           - "3.9"
           - "3.10"
+          - "3.11"
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
 
       - name: Install system dependencies
         run: make system-dependencies
 
-      - name: Install project
-        run: make project-install
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Show Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Install environment
+        run: make install
 
       - name: Run tests an collect code coverage
         run: make coverage
-
-#      - name: Upload HTML coverage report
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: coverage-report-${{ matrix.python }}
-#          path: htmlcov
-#          if-no-files-found: ignore

@@ -22,9 +22,24 @@
 # No default value.
 DEPLOY_TARGETS?=
 
+# target to be executed when calling `make run`
+# No default value.
+RUN_TARGET?=
+
 # Additional files and folders to remove when running clean target
 # No default value.
 CLEAN_FS?=
+
+# Optional makefile to include before default targets. This can
+# be used to provide custom targets or hook up to existing targets.
+# Default: include.mk
+INCLUDE_MAKEFILE?=include.mk
+
+# Optional additional directories to be added to PATH in format
+# `/path/to/dir/:/path/to/other/dir`. Gets inserted first, thus gets searched
+# first.
+# No default value.
+EXTRA_PATH?=
 
 ## system.dependencies
 
@@ -52,16 +67,34 @@ OPENLDAP_ENV?=PATH=/usr/local/bin:/usr/bin:/bin
 
 ## core.mxenv
 
-# Python interpreter to use.
+# Primary Python interpreter to use. It is used to create the
+# virtual environment if `VENV_ENABLED` and `VENV_CREATE` are set to `true`.
+# If global `uv` is used, this value is passed as `--python VALUE` to the venv creation.
+# uv then downloads the Python interpreter if it is not available.
+# for more on this feature read the [uv python documentation](https://docs.astral.sh/uv/concepts/python-versions/)
 # Default: python3
-PYTHON_BIN?=python3
+PRIMARY_PYTHON?=python3
 
 # Minimum required Python version.
-# Default: 3.7
-PYTHON_MIN_VERSION?=3.7
+# Default: 3.9
+PYTHON_MIN_VERSION?=3.9
 
-# Flag whether to use virtual environment.
-# If `false`, the interpreter according to `PYTHON_BIN` found in `PATH` is used.
+# Install packages using the given package installer method.
+# Supported are `pip` and `uv`. If uv is used, its global availability is
+# checked. Otherwise, it is installed, either in the virtual environment or
+# using the `PRIMARY_PYTHON`, dependent on the `VENV_ENABLED` setting. If
+# `VENV_ENABLED` and uv is selected, uv is used to create the virtual
+# environment.
+# Default: pip
+PYTHON_PACKAGE_INSTALLER?=uv
+
+# Flag whether to use a global installed 'uv' or install
+# it in the virtual environment.
+# Default: false
+MXENV_UV_GLOBAL?=false
+
+# Flag whether to use virtual environment. If `false`, the
+# interpreter according to `PRIMARY_PYTHON` found in `PATH` is used.
 # Default: true
 VENV_ENABLED?=true
 
@@ -72,19 +105,20 @@ VENV_ENABLED?=true
 VENV_CREATE?=true
 
 # The folder of the virtual environment.
-# If `VENV_ENABLED` is `true` and `VENV_CREATE` is true it is used as the target folder for the virtual environment.
-# If `VENV_ENABLED` is `true` and `VENV_CREATE` is false it is expected to point to an existing virtual environment.
-# If `VENV_ENABLED` is `false` it is ignored.
-# Default: venv
+# If `VENV_ENABLED` is `true` and `VENV_CREATE` is true it is used as the
+# target folder for the virtual environment. If `VENV_ENABLED` is `true` and
+# `VENV_CREATE` is false it is expected to point to an existing virtual
+# environment. If `VENV_ENABLED` is `false` it is ignored.
+# Default: .venv
 VENV_FOLDER?=venv
 
 # mxdev to install in virtual environment.
-# Default: https://github.com/mxstack/mxdev/archive/main.zip
-MXDEV?=https://github.com/mxstack/mxdev/archive/main.zip
+# Default: mxdev
+MXDEV?=mxdev==4.1.0
 
 # mxmake to install in virtual environment.
-# Default: https://github.com/mxstack/mxmake/archive/develop.zip
-MXMAKE?=https://github.com/mxstack/mxmake/archive/develop.zip
+# Default: mxmake
+MXMAKE?=mxmake==1.3.0
 
 ## core.mxfiles
 
@@ -92,12 +126,24 @@ MXMAKE?=https://github.com/mxstack/mxmake/archive/develop.zip
 # Default: mx.ini
 PROJECT_CONFIG?=mx.ini
 
+## core.packages
+
+# Allow prerelease and development versions.
+# By default, the package installer only finds stable versions.
+# Default: false
+PACKAGES_ALLOW_PRERELEASES?=false
+
 ## qa.test
 
 # The command which gets executed. Defaults to the location the
 # :ref:`run-tests` template gets rendered to if configured.
 # Default: .mxmake/files/run-tests.sh
 TEST_COMMAND?=.mxmake/files/run-tests.sh
+
+# Additional Python requirements for running tests to be
+# installed (via pip).
+# Default: pytest
+TEST_REQUIREMENTS?=pytest
 
 # Additional make targets the test target depends on.
 # No default value.
@@ -119,7 +165,10 @@ DIRTY_TARGETS?=
 CLEAN_TARGETS?=
 PURGE_TARGETS?=
 CHECK_TARGETS?=
+TYPECHECK_TARGETS?=
 FORMAT_TARGETS?=
+
+export PATH:=$(if $(EXTRA_PATH),$(EXTRA_PATH):,)$(PATH)
 
 # Defensive settings for make: https://tech.davis-hansson.com/p/make/
 SHELL:=bash
@@ -137,7 +186,7 @@ MXMAKE_FOLDER?=.mxmake
 # Sentinel files
 SENTINEL_FOLDER?=$(MXMAKE_FOLDER)/sentinels
 SENTINEL?=$(SENTINEL_FOLDER)/about.txt
-$(SENTINEL):
+$(SENTINEL): $(firstword $(MAKEFILE_LIST))
 	@mkdir -p $(SENTINEL_FOLDER)
 	@echo "Sentinels for the Makefile process." > $(SENTINEL)
 
@@ -155,6 +204,9 @@ system-dependencies:
 ##############################################################################
 # openldap
 ##############################################################################
+
+# case `system.dependencies` domain is included
+SYSTEM_DEPENDENCIES+=libdb-dev libsasl2-dev
 
 OPENLDAP_TARGET:=$(SENTINEL_FOLDER)/openldap.sentinel
 $(OPENLDAP_TARGET): $(SENTINEL)
@@ -197,38 +249,62 @@ CLEAN_TARGETS+=openldap-clean
 # mxenv
 ##############################################################################
 
-# Check if given Python is installed
-ifeq (,$(shell which $(PYTHON_BIN)))
-$(error "PYTHON=$(PYTHON_BIN) not found in $(PATH)")
-endif
+OS?=
 
-# Check if given Python version is ok
-PYTHON_VERSION_OK=$(shell $(PYTHON_BIN) -c "import sys; print((int(sys.version_info[0]), int(sys.version_info[1])) >= tuple(map(int, '$(PYTHON_MIN_VERSION)'.split('.'))))")
-ifeq ($(PYTHON_VERSION_OK),0)
-$(error "Need Python >= $(PYTHON_MIN_VERSION)")
-endif
-
-# Check if venv folder is configured if venv is enabled
-ifeq ($(shell [[ "$(VENV_ENABLED)" == "true" && "$(VENV_FOLDER)" == "" ]] && echo "true"),"true")
-$(error "VENV_FOLDER must be configured if VENV_ENABLED is true")
-endif
-
-# determine the executable path
+# Determine the executable path
 ifeq ("$(VENV_ENABLED)", "true")
-MXENV_PATH=$(VENV_FOLDER)/bin/
+export VIRTUAL_ENV=$(abspath $(VENV_FOLDER))
+ifeq ("$(OS)", "Windows_NT")
+VENV_EXECUTABLE_FOLDER=$(VIRTUAL_ENV)/Scripts
 else
-MXENV_PATH=
+VENV_EXECUTABLE_FOLDER=$(VIRTUAL_ENV)/bin
+endif
+export PATH:=$(VENV_EXECUTABLE_FOLDER):$(PATH)
+MXENV_PYTHON=python
+else
+MXENV_PYTHON=$(PRIMARY_PYTHON)
+endif
+
+# Determine the package installer
+ifeq ("$(PYTHON_PACKAGE_INSTALLER)","uv")
+PYTHON_PACKAGE_COMMAND=uv pip
+else
+PYTHON_PACKAGE_COMMAND=$(MXENV_PYTHON) -m pip
 endif
 
 MXENV_TARGET:=$(SENTINEL_FOLDER)/mxenv.sentinel
 $(MXENV_TARGET): $(SENTINEL)
-ifeq ("$(VENV_ENABLED)", "true")
-	@echo "Setup Python Virtual Environment under '$(VENV_FOLDER)'"
-	@$(PYTHON_BIN) -m venv $(VENV_FOLDER)
+ifneq ("$(PYTHON_PACKAGE_INSTALLER)$(MXENV_UV_GLOBAL)","uvfalse")
+	@$(PRIMARY_PYTHON) -c "import sys; vi = sys.version_info; sys.exit(1 if (int(vi[0]), int(vi[1])) >= tuple(map(int, '$(PYTHON_MIN_VERSION)'.split('.'))) else 0)" \
+		&& echo "Need Python >= $(PYTHON_MIN_VERSION)" && exit 1 || :
+else
+	@echo "Use Python $(PYTHON_MIN_VERSION) over uv"
 endif
-	@$(MXENV_PATH)pip install -U pip setuptools wheel
-	@$(MXENV_PATH)pip install -U $(MXDEV)
-	@$(MXENV_PATH)pip install -U $(MXMAKE)
+	@[[ "$(VENV_ENABLED)" == "true" && "$(VENV_FOLDER)" == "" ]] \
+		&& echo "VENV_FOLDER must be configured if VENV_ENABLED is true" && exit 1 || :
+	@[[ "$(VENV_ENABLED)$(PYTHON_PACKAGE_INSTALLER)" == "falseuv" ]] \
+		&& echo "Package installer uv does not work with a global Python interpreter." && exit 1 || :
+ifeq ("$(VENV_ENABLED)", "true")
+ifeq ("$(VENV_CREATE)", "true")
+ifeq ("$(PYTHON_PACKAGE_INSTALLER)$(MXENV_UV_GLOBAL)","uvtrue")
+	@echo "Setup Python Virtual Environment using package 'uv' at '$(VENV_FOLDER)'"
+	@uv venv -p $(PRIMARY_PYTHON) --seed $(VENV_FOLDER)
+else
+	@echo "Setup Python Virtual Environment using module 'venv' at '$(VENV_FOLDER)'"
+	@$(PRIMARY_PYTHON) -m venv $(VENV_FOLDER)
+	@$(MXENV_PYTHON) -m ensurepip -U
+endif
+endif
+else
+	@echo "Using system Python interpreter"
+endif
+ifeq ("$(PYTHON_PACKAGE_INSTALLER)$(MXENV_UV_GLOBAL)","uvfalse")
+	@echo "Install uv"
+	@$(MXENV_PYTHON) -m pip install uv
+endif
+	@$(PYTHON_PACKAGE_COMMAND) install -U pip setuptools wheel
+	@echo "Install/Update MXStack Python packages"
+	@$(PYTHON_PACKAGE_COMMAND) install -U $(MXDEV) $(MXMAKE)
 	@touch $(MXENV_TARGET)
 
 .PHONY: mxenv
@@ -241,10 +317,12 @@ mxenv-dirty:
 .PHONY: mxenv-clean
 mxenv-clean: mxenv-dirty
 ifeq ("$(VENV_ENABLED)", "true")
+ifeq ("$(VENV_CREATE)", "true")
 	@rm -rf $(VENV_FOLDER)
+endif
 else
-	@$(MXENV_PATH)pip uninstall -y $(MXDEV)
-	@$(MXENV_PATH)pip uninstall -y $(MXMAKE)
+	@$(PYTHON_PACKAGE_COMMAND) uninstall -y $(MXDEV)
+	@$(PYTHON_PACKAGE_COMMAND) uninstall -y $(MXMAKE)
 endif
 
 INSTALL_TARGETS+=mxenv
@@ -255,15 +333,13 @@ CLEAN_TARGETS+=mxenv-clean
 # python-ldap
 ##############################################################################
 
+# case `system.dependencies` domain is included
+SYSTEM_DEPENDENCIES+=python3-dev libldap2-dev libssl-dev libsasl2-dev
+
 PYTHON_LDAP_TARGET:=$(SENTINEL_FOLDER)/python-ldap.sentinel
 $(PYTHON_LDAP_TARGET): $(MXENV_TARGET) $(OPENLDAP_TARGET)
-	@$(MXENV_PATH)pip install \
+	@$(PYTHON_PACKAGE_COMMAND) install \
 		--force-reinstall \
-		--no-use-pep517 \
-		--global-option=build_ext \
-		--global-option="-I$(OPENLDAP_DIR)/include" \
-		--global-option="-L$(OPENLDAP_DIR)/lib" \
-		--global-option="-R$(OPENLDAP_DIR)/lib" \
 		python-ldap
 	@touch $(PYTHON_LDAP_TARGET)
 
@@ -276,7 +352,7 @@ python-ldap-dirty:
 
 .PHONY: python-ldap-clean
 python-ldap-clean: python-ldap-dirty
-	@test -e $(MXENV_PATH)pip && $(MXENV_PATH)pip uninstall -y python-ldap || :
+	@test -e $(MXENV_PYTHON) && $(MXENV_PYTHON) -m pip uninstall -y python-ldap || :
 
 INSTALL_TARGETS+=python-ldap
 DIRTY_TARGETS+=python-ldap-dirty
@@ -287,9 +363,9 @@ CLEAN_TARGETS+=python-ldap-clean
 ##############################################################################
 
 SOURCES_TARGET:=$(SENTINEL_FOLDER)/sources.sentinel
-$(SOURCES_TARGET): $(MXENV_TARGET)
+$(SOURCES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET)
 	@echo "Checkout project sources"
-	@$(MXENV_PATH)mxdev -o -c $(PROJECT_CONFIG)
+	@mxdev -o -c $(PROJECT_CONFIG)
 	@touch $(SOURCES_TARGET)
 
 .PHONY: sources
@@ -319,13 +395,11 @@ MXMAKE_FILES?=$(MXMAKE_FOLDER)/files
 
 # set environment variables for mxmake
 define set_mxfiles_env
-	@export MXMAKE_MXENV_PATH=$(1)
-	@export MXMAKE_FILES=$(2)
+	@export MXMAKE_FILES=$(1)
 endef
 
 # unset environment variables for mxmake
 define unset_mxfiles_env
-	@unset MXMAKE_MXENV_PATH
 	@unset MXMAKE_FILES
 endef
 
@@ -336,24 +410,16 @@ else
 	@echo "[settings]" > $(PROJECT_CONFIG)
 endif
 
-LOCAL_PACKAGE_FILES:=
-ifneq ("$(wildcard pyproject.toml)","")
-	LOCAL_PACKAGE_FILES+=pyproject.toml
-endif
-ifneq ("$(wildcard setup.cfg)","")
-	LOCAL_PACKAGE_FILES+=setup.cfg
-endif
-ifneq ("$(wildcard setup.py)","")
-	LOCAL_PACKAGE_FILES+=setup.py
-endif
+LOCAL_PACKAGE_FILES:=$(wildcard pyproject.toml setup.cfg setup.py requirements.txt constraints.txt)
 
 FILES_TARGET:=requirements-mxdev.txt
 $(FILES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET) $(SOURCES_TARGET) $(LOCAL_PACKAGE_FILES)
 	@echo "Create project files"
 	@mkdir -p $(MXMAKE_FILES)
-	$(call set_mxfiles_env,$(MXENV_PATH),$(MXMAKE_FILES))
-	@$(MXENV_PATH)mxdev -n -c $(PROJECT_CONFIG)
-	$(call unset_mxfiles_env,$(MXENV_PATH),$(MXMAKE_FILES))
+	$(call set_mxfiles_env,$(MXMAKE_FILES))
+	@mxdev -n -c $(PROJECT_CONFIG)
+	$(call unset_mxfiles_env)
+	@test -e $(MXMAKE_FILES)/pip.conf && cp $(MXMAKE_FILES)/pip.conf $(VENV_FOLDER)/pip.conf || :
 	@touch $(FILES_TARGET)
 
 .PHONY: mxfiles
@@ -381,11 +447,21 @@ ADDITIONAL_SOURCES_TARGETS?=
 
 INSTALLED_PACKAGES=$(MXMAKE_FILES)/installed.txt
 
+ifeq ("$(PACKAGES_ALLOW_PRERELEASES)","true")
+ifeq ("$(PYTHON_PACKAGE_INSTALLER)","uv")
+PACKAGES_PRERELEASES=--prerelease=allow
+else
+PACKAGES_PRERELEASES=--pre
+endif
+else
+PACKAGES_PRERELEASES=
+endif
+
 PACKAGES_TARGET:=$(INSTALLED_PACKAGES)
 $(PACKAGES_TARGET): $(FILES_TARGET) $(ADDITIONAL_SOURCES_TARGETS)
 	@echo "Install python packages"
-	@$(MXENV_PATH)pip install -r $(FILES_TARGET)
-	@$(MXENV_PATH)pip freeze > $(INSTALLED_PACKAGES)
+	@$(PYTHON_PACKAGE_COMMAND) install $(PACKAGES_PRERELEASES) -r $(FILES_TARGET)
+	@$(PYTHON_PACKAGE_COMMAND) freeze > $(INSTALLED_PACKAGES)
 	@touch $(PACKAGES_TARGET)
 
 .PHONY: packages
@@ -398,8 +474,8 @@ packages-dirty:
 .PHONY: packages-clean
 packages-clean:
 	@test -e $(FILES_TARGET) \
-		&& test -e $(MXENV_PATH)pip \
-		&& $(MXENV_PATH)pip uninstall -y -r $(FILES_TARGET) \
+		&& test -e $(MXENV_PYTHON) \
+		&& $(MXENV_PYTHON) -m pip uninstall -y -r $(FILES_TARGET) \
 		|| :
 	@rm -f $(PACKAGES_TARGET)
 
@@ -411,28 +487,46 @@ CLEAN_TARGETS+=packages-clean
 # test
 ##############################################################################
 
-.PHONY: test
-test: $(FILES_TARGET) $(SOURCES_TARGET) $(PACKAGES_TARGET) $(TEST_DEPENDENCY_TARGETS)
-	@echo "Run tests"
-	@test -z "$(TEST_COMMAND)" && echo "No test command defined"
-	@test -z "$(TEST_COMMAND)" || bash -c "$(TEST_COMMAND)"
+TEST_TARGET:=$(SENTINEL_FOLDER)/test.sentinel
+$(TEST_TARGET): $(MXENV_TARGET)
+	@echo "Install $(TEST_REQUIREMENTS)"
+	@$(PYTHON_PACKAGE_COMMAND) install $(TEST_REQUIREMENTS)
+	@touch $(TEST_TARGET)
 
+.PHONY: test
+test: $(FILES_TARGET) $(SOURCES_TARGET) $(PACKAGES_TARGET) $(TEST_TARGET) $(TEST_DEPENDENCY_TARGETS)
+	@test -z "$(TEST_COMMAND)" && echo "No test command defined" && exit 1 || :
+	@echo "Run tests using $(TEST_COMMAND)"
+	@/usr/bin/env bash -c "$(TEST_COMMAND)"
+
+.PHONY: test-dirty
+test-dirty:
+	@rm -f $(TEST_TARGET)
+
+.PHONY: test-clean
+test-clean: test-dirty
+	@test -e $(MXENV_PYTHON) && $(MXENV_PYTHON) -m pip uninstall -y $(TEST_REQUIREMENTS) || :
+	@rm -rf .pytest_cache
+
+INSTALL_TARGETS+=$(TEST_TARGET)
+CLEAN_TARGETS+=test-clean
+DIRTY_TARGETS+=test-dirty
 
 ##############################################################################
 # coverage
 ##############################################################################
 
 COVERAGE_TARGET:=$(SENTINEL_FOLDER)/coverage.sentinel
-$(COVERAGE_TARGET): $(MXENV_TARGET)
+$(COVERAGE_TARGET): $(TEST_TARGET)
 	@echo "Install Coverage"
-	@$(MXENV_PATH)pip install -U coverage
+	@$(PYTHON_PACKAGE_COMMAND) install -U coverage
 	@touch $(COVERAGE_TARGET)
 
 .PHONY: coverage
 coverage: $(FILES_TARGET) $(SOURCES_TARGET) $(PACKAGES_TARGET) $(COVERAGE_TARGET)
-	@echo "Run coverage"
-	@test -z "$(COVERAGE_COMMAND)" && echo "No coverage command defined"
-	@test -z "$(COVERAGE_COMMAND)" || bash -c "$(COVERAGE_COMMAND)"
+	@test -z "$(COVERAGE_COMMAND)" && echo "No coverage command defined" && exit 1 || :
+	@echo "Run coverage using $(COVERAGE_COMMAND)"
+	@/usr/bin/env bash -c "$(COVERAGE_COMMAND)"
 
 .PHONY: coverage-dirty
 coverage-dirty:
@@ -440,12 +534,18 @@ coverage-dirty:
 
 .PHONY: coverage-clean
 coverage-clean: coverage-dirty
-	@test -e $(MXENV_PATH)pip && $(MXENV_PATH)pip uninstall -y coverage || :
+	@test -e $(MXENV_PYTHON) && $(MXENV_PYTHON) -m pip uninstall -y coverage || :
 	@rm -rf .coverage htmlcov
 
 INSTALL_TARGETS+=$(COVERAGE_TARGET)
 DIRTY_TARGETS+=coverage-dirty
 CLEAN_TARGETS+=coverage-clean
+
+##############################################################################
+# Custom includes
+##############################################################################
+
+-include $(INCLUDE_MAKEFILE)
 
 ##############################################################################
 # Default targets
@@ -458,6 +558,9 @@ $(INSTALL_TARGET): $(INSTALL_TARGETS)
 .PHONY: install
 install: $(INSTALL_TARGET)
 	@touch $(INSTALL_TARGET)
+
+.PHONY: run
+run: $(RUN_TARGET)
 
 .PHONY: deploy
 deploy: $(DEPLOY_TARGETS)
@@ -482,6 +585,9 @@ runtime-clean:
 
 .PHONY: check
 check: $(CHECK_TARGETS)
+
+.PHONY: typecheck
+typecheck: $(TYPECHECK_TARGETS)
 
 .PHONY: format
 format: $(FORMAT_TARGETS)
