@@ -7,10 +7,10 @@ ROADMAP
   - [x] cone.app - 1.0.x
   - [x] cone.calendar - 0.4.x
   - [x] cone.charts - UNSUPPORTED
-  - [ ] cone.fileupload - 0.8.x
+  - [x] cone.fileupload - 0.8.x
   - [x] cone.firebase - AGNOSTIC
-  - [ ] cone.ldap - 0.3.x
-  - [ ] cone.maps - 0.2.x
+  - [x] cone.ldap - 0.3.x
+  - [x] cone.maps - 0.2.x
   - [x] cone.mdb - ARCHIVED
   - [x] cone.sql - AGNOSTIC
   - [x] cone.three - UNSUPPORTED
@@ -63,10 +63,10 @@ ROADMAP
   - [x] cone.app
   - [x] cone.calendar
   - [ ] cone.charts
-  - [ ] cone.fileupload
+  - [x] cone.fileupload
   - [ ] cone.firebase
-  - [ ] cone.ldap
-  - [ ] cone.maps
+  - [x] cone.ldap
+  - [x] cone.maps
   - [ ] cone.sql
   - [ ] conestack
   - [ ] cone.three
