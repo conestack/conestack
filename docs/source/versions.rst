@@ -88,7 +88,7 @@ even work back to Python 2.7 represent the old stable conestack.
 - cone.maps = 1.1.0
 - cone.sql = 1.1.0
 - cone.three = 1.1.0
-- cone.tile = 1.1.0
+- cone.tile = 2.0.0
 - cone.tokens = 1.1.0
 - cone.ugm = 1.1.0
 - cone.zodb = 1.1.0

@@ -4,7 +4,7 @@ ROADMAP
 - [ ] Create branches for latest stable releases.
   - [x] bdajax - ARCHIVED
   - [x] cone.activities - ARCHIVED
-  - [ ] cone.app - 1.0.x
+  - [x] cone.app - 1.0.x
   - [ ] cone.calendar - 0.4.x
   - [x] cone.charts - UNSUPPORTED
   - [ ] cone.fileupload - 0.8.x
@@ -14,7 +14,7 @@ ROADMAP
   - [x] cone.mdb - ARCHIVED
   - [x] cone.sql - AGNOSTIC
   - [x] cone.three - UNSUPPORTED
-  - [ ] cone.tile - 1.2.x
+  - [x] cone.tile - 1.x
   - [x] cone.tokens - UNSUPPORTED
   - [ ] cone.ugm - 1.0.x
   - [ ] cone.zodb - 1.0.x
