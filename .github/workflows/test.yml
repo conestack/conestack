@@ -9,19 +9,18 @@ on:
       - 2.0
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: false
       matrix:
-        python:
+        python-config:
           - "3.9"
           - "3.10"
           - "3.11"
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
 
       - name: Install system dependencies
         run: make system-dependencies
