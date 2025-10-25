@@ -19,15 +19,15 @@ ROADMAP
   - [x] cone.ugm - 1.0.x
   - [x] cone.zodb - 1.0.x
   - [x] cookiecutter-cone - UNSUPPORTED
-  - [ ] node.ext.directory - 0.8.x
-  - [ ] node.ext.fs = 1.2.x
-  - [ ] node.ext.ldap = 1.3.x
+  - [x] node.ext.directory - 0.x
+  - [x] node.ext.fs = 1.x
+  - [x] node.ext.ldap = 1.x
   - [x] node.ext.mdb - ARCHIVED
-  - [ ] node.ext.ugm - 1.2.x
-  - [ ] node.ext.yaml - 0.4.x
-  - [ ] node.ext.zodb - 1.7.x
-  - [ ] node - 1.2.x
-  - [x] odict - 1.9.x
+  - [x] node.ext.ugm - 1.x
+  - [x] node.ext.yaml - 0.x
+  - [x] node.ext.zodb - 1.x
+  - [x] node - 1.x
+  - [x] odict - 1.x
   - [x] plumber - 1.x
   - [x] treibstoff - UNSUPPORTED
   - [x] webresource - UNSUPPORTED
@@ -72,14 +72,13 @@ ROADMAP
   - [x] cone.tile
   - [x] cone.ugm
   - [x] cone.zodb
-  - [ ] node.ext.directory
-  - [ ] node.ext.fs
-  - [ ] node.ext.ldap
-  - [ ] node.ext.ugm
-  - [ ] node.ext.yaml
-  - [ ] node.ext.zodb
-  - [ ] node
-  - [ ] sphinx-conestack-theme
+  - [x] node.ext.directory
+  - [x] node.ext.fs
+  - [x] node.ext.ldap
+  - [x] node.ext.ugm
+  - [x] node.ext.yaml
+  - [x] node.ext.zodb
+  - [x] node
   - [ ] yafowil.bootstrap
   - [ ] yafowil
   - [ ] yafowil.demo
