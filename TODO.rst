@@ -5,7 +5,7 @@ ROADMAP
   - [x] bdajax - ARCHIVED
   - [x] cone.activities - ARCHIVED
   - [x] cone.app - 1.0.x
-  - [ ] cone.calendar - 0.4.x
+  - [x] cone.calendar - 0.4.x
   - [x] cone.charts - UNSUPPORTED
   - [ ] cone.fileupload - 0.8.x
   - [x] cone.firebase - AGNOSTIC
@@ -60,8 +60,8 @@ ROADMAP
 
 - [ ] Restrict upper versions of dependencies of latest stable releases and
       release all packages.
-  - [ ] cone.app
-  - [ ] cone.calendar
+  - [x] cone.app
+  - [x] cone.calendar
   - [ ] cone.charts
   - [ ] cone.fileupload
   - [ ] cone.firebase
@@ -70,7 +70,7 @@ ROADMAP
   - [ ] cone.sql
   - [ ] conestack
   - [ ] cone.three
-  - [ ] cone.tile
+  - [x] cone.tile
   - [ ] cone.tokens
   - [ ] cone.ugm
   - [ ] cone.zodb
