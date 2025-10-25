@@ -2,291 +2,260 @@ ROADMAP
 -------
 
 - [ ] Create branches for latest stable releases.
-  - [ ] bdajax.git
-  - [ ] cone.activities.git
-  - [ ] cone.app.git
-  - [ ] cone.calendar.git
-  - [ ] cone.charts.git
-  - [ ] cone.fileupload.git
-  - [ ] cone.firebase.git
-  - [ ] cone.ldap.git
-  - [ ] cone.maps.git
-  - [ ] cone.mdb.git
-  - [ ] cone.sql.git
-  - [ ] conestack.git
-  - [ ] cone.three.git
-  - [ ] cone.tile.git
-  - [ ] cone.tokens.git
-  - [ ] cone.ugm.git
-  - [ ] cone.zodb.git
-  - [ ] cookiecutter-cone.git
-  - [ ] mxenv.git
-  - [ ] node.ext.directory.git
-  - [ ] node.ext.fs.git
-  - [ ] node.ext.ldap.git
-  - [ ] node.ext.mdb.git
-  - [ ] node.ext.ugm.git
-  - [ ] node.ext.yaml.git
-  - [ ] node.ext.zodb.git
-  - [ ] node.git
-  - [ ] odict.git
-  - [ ] plumber.git
-  - [ ] sphinx-conestack-theme.git
-  - [ ] treibstoff.git
-  - [ ] webresource.git
-  - [ ] yafowil.bootstrap.git
-  - [ ] yafowil.demo.git
-  - [ ] yafowil.documentation.git
-  - [ ] yafowil-example-helloworld.git
-  - [ ] yafowil.git
-  - [ ] yafowil.lingua.git
-  - [ ] yafowil.webob.git
-  - [ ] yafowil.werkzeug.git
-  - [ ] yafowil.widget.ace.git
-  - [ ] yafowil.widget.alohaeditor.git
-  - [ ] yafowil.widget.array.git
-  - [ ] yafowil.widget.autocomplete.git
-  - [ ] yafowil.widget.autosuggest.git
-  - [ ] yafowil.widget.chosen.git
-  - [ ] yafowil.widget.color.git
-  - [ ] yafowil.widget.cron.git
-  - [ ] yafowil.widget.datetime.git
-  - [ ] yafowil.widget.dict.git
-  - [ ] yafowil.widget.dynatree.git
-  - [ ] yafowil.widget.image.git
-  - [ ] yafowil.widget.location.git
-  - [ ] yafowil.widget.multiselect.git
-  - [ ] yafowil.widget.recaptcha.git
-  - [ ] yafowil.widget.richtext.git
-  - [ ] yafowil.widget.select2.git
-  - [ ] yafowil.widget.slider.git
-  - [ ] yafowil.widget.tiptap.git
-  - [ ] yafowil.widget.wysihtml5.git
-  - [ ] yafowil.yaml.git
+  - [x] bdajax - ARCHIVED
+  - [x] cone.activities - ARCHIVED
+  - [ ] cone.app - 1.0.x
+  - [ ] cone.calendar - 0.4.x
+  - [x] cone.charts - UNSUPPORTED
+  - [ ] cone.fileupload - 0.8.x
+  - [x] cone.firebase - AGNOSTIC
+  - [ ] cone.ldap - 0.3.x
+  - [ ] cone.maps - 0.2.x
+  - [x] cone.mdb - ARCHIVED
+  - [x] cone.sql - AGNOSTIC
+  - [x] cone.three - UNSUPPORTED
+  - [ ] cone.tile - 1.2.x
+  - [x] cone.tokens - UNSUPPORTED
+  - [ ] cone.ugm - 1.0.x
+  - [ ] cone.zodb - 1.0.x
+  - [x] cookiecutter-cone - UNSUPPORTED
+  - [ ] node.ext.directory - 0.8.x
+  - [ ] node.ext.fs = 1.2.x
+  - [ ] node.ext.ldap = 1.3.x
+  - [x] node.ext.mdb - ARCHIVED
+  - [ ] node.ext.ugm - 1.2.x
+  - [ ] node.ext.yaml - 0.4.x
+  - [ ] node.ext.zodb - 1.7.x
+  - [ ] node - 1.2.x
+  - [ ] odict - 1.9.x
+  - [ ] plumber - 1.7.x
+  - [x] treibstoff - UNSUPPORTED
+  - [x] webresource - UNSUPPORTED
+  - [ ] yafowil.bootstrap - 1.3.x
+  - [ ] yafowil - 3.1.x
+  - [ ] yafowil.lingua - 1.0.x
+  - [ ] yafowil.webob - 1.5.x
+  - [ ] yafowil.werkzeug - 0.2.x
+  - [x] yafowil.widget.ace - 1.x
+  - [x] yafowil.widget.alohaeditor - ARCHIVED
+  - [x] yafowil.widget.array - 1.x
+  - [x] yafowil.widget.autocomplete - 1.x
+  - [x] yafowil.widget.autosuggest - ARCHIVED
+  - [x] yafowil.widget.chosen - 1.x
+  - [x] yafowil.widget.color - UNSUPPORTED
+  - [x] yafowil.widget.cron - 1.x
+  - [x] yafowil.widget.datetime - 1.x
+  - [x] yafowil.widget.dict - 1.x
+  - [ ] yafowil.widget.dynatree - 1.x
+  - [x] yafowil.widget.image - 1.x
+  - [x] yafowil.widget.location - 1.x
+  - [x] yafowil.widget.multiselect - 1.x
+  - [x] yafowil.widget.recaptcha - ARCHIVED
+  - [x] yafowil.widget.richtext - 1.x
+  - [x] yafowil.widget.select2 - 1.x
+  - [x] yafowil.widget.slider - 1.x
+  - [x] yafowil.widget.tiptap - UNSUPPORTED
+  - [x] yafowil.widget.wysihtml5 - 1.x
+  - [x] yafowil.yaml - AGNOSTIC
 
 - [ ] Restrict upper versions of dependencies of latest stable releases and
       release all packages.
-  - [ ] bdajax.git
-  - [ ] cone.activities.git
-  - [ ] cone.app.git
-  - [ ] cone.calendar.git
-  - [ ] cone.charts.git
-  - [ ] cone.fileupload.git
-  - [ ] cone.firebase.git
-  - [ ] cone.ldap.git
-  - [ ] cone.maps.git
-  - [ ] cone.mdb.git
-  - [ ] cone.sql.git
-  - [ ] conestack.git
-  - [ ] cone.three.git
-  - [ ] cone.tile.git
-  - [ ] cone.tokens.git
-  - [ ] cone.ugm.git
-  - [ ] cone.zodb.git
-  - [ ] cookiecutter-cone.git
-  - [ ] mxenv.git
-  - [ ] node.ext.directory.git
-  - [ ] node.ext.fs.git
-  - [ ] node.ext.ldap.git
-  - [ ] node.ext.mdb.git
-  - [ ] node.ext.ugm.git
-  - [ ] node.ext.yaml.git
-  - [ ] node.ext.zodb.git
-  - [ ] node.git
-  - [ ] odict.git
-  - [ ] plumber.git
-  - [ ] sphinx-conestack-theme.git
-  - [ ] treibstoff.git
-  - [ ] webresource.git
-  - [ ] yafowil.bootstrap.git
-  - [ ] yafowil.demo.git
-  - [ ] yafowil.documentation.git
-  - [ ] yafowil-example-helloworld.git
-  - [ ] yafowil.git
-  - [ ] yafowil.lingua.git
-  - [ ] yafowil.webob.git
-  - [ ] yafowil.werkzeug.git
-  - [ ] yafowil.widget.ace.git
-  - [ ] yafowil.widget.alohaeditor.git
-  - [ ] yafowil.widget.array.git
-  - [ ] yafowil.widget.autocomplete.git
-  - [ ] yafowil.widget.autosuggest.git
-  - [ ] yafowil.widget.chosen.git
-  - [ ] yafowil.widget.color.git
-  - [ ] yafowil.widget.cron.git
-  - [ ] yafowil.widget.datetime.git
-  - [ ] yafowil.widget.dict.git
-  - [ ] yafowil.widget.dynatree.git
-  - [ ] yafowil.widget.image.git
-  - [ ] yafowil.widget.location.git
-  - [ ] yafowil.widget.multiselect.git
-  - [ ] yafowil.widget.recaptcha.git
-  - [ ] yafowil.widget.richtext.git
-  - [ ] yafowil.widget.select2.git
-  - [ ] yafowil.widget.slider.git
-  - [ ] yafowil.widget.tiptap.git
-  - [ ] yafowil.widget.wysihtml5.git
-  - [ ] yafowil.yaml.git
+  - [ ] cone.app
+  - [ ] cone.calendar
+  - [ ] cone.charts
+  - [ ] cone.fileupload
+  - [ ] cone.firebase
+  - [ ] cone.ldap
+  - [ ] cone.maps
+  - [ ] cone.sql
+  - [ ] conestack
+  - [ ] cone.three
+  - [ ] cone.tile
+  - [ ] cone.tokens
+  - [ ] cone.ugm
+  - [ ] cone.zodb
+  - [ ] cookiecutter-cone
+  - [ ] mxenv
+  - [ ] node.ext.directory
+  - [ ] node.ext.fs
+  - [ ] node.ext.ldap
+  - [ ] node.ext.ugm
+  - [ ] node.ext.yaml
+  - [ ] node.ext.zodb
+  - [ ] node
+  - [ ] odict
+  - [ ] plumber
+  - [ ] sphinx-conestack-theme
+  - [ ] treibstoff
+  - [ ] webresource
+  - [ ] yafowil.bootstrap
+  - [ ] yafowil.demo
+  - [ ] yafowil.documentation
+  - [ ] yafowil-example-helloworld
+  - [ ] yafowil
+  - [ ] yafowil.lingua
+  - [ ] yafowil.webob
+  - [ ] yafowil.werkzeug
+  - [ ] yafowil.widget.ace
+  - [ ] yafowil.widget.array
+  - [ ] yafowil.widget.autocomplete
+  - [ ] yafowil.widget.chosen
+  - [ ] yafowil.widget.color
+  - [ ] yafowil.widget.cron
+  - [ ] yafowil.widget.datetime
+  - [ ] yafowil.widget.dict
+  - [ ] yafowil.widget.dynatree
+  - [ ] yafowil.widget.image
+  - [ ] yafowil.widget.location
+  - [ ] yafowil.widget.multiselect
+  - [ ] yafowil.widget.richtext
+  - [ ] yafowil.widget.select2
+  - [ ] yafowil.widget.slider
+  - [ ] yafowil.widget.tiptap
+  - [ ] yafowil.widget.wysihtml5
+  - [ ] yafowil.yaml
 
 - [ ] Refactor package structure in dedicated feature branches.
-  - [ ] bdajax.git
-  - [ ] cone.activities.git
-  - [ ] cone.app.git
-  - [ ] cone.calendar.git
-  - [ ] cone.charts.git
-  - [ ] cone.fileupload.git
-  - [ ] cone.firebase.git
-  - [ ] cone.ldap.git
-  - [ ] cone.maps.git
-  - [ ] cone.mdb.git
-  - [ ] cone.sql.git
-  - [ ] conestack.git
-  - [ ] cone.three.git
-  - [ ] cone.tile.git
-  - [ ] cone.tokens.git
-  - [ ] cone.ugm.git
-  - [ ] cone.zodb.git
-  - [ ] cookiecutter-cone.git
-  - [ ] mxenv.git
-  - [ ] node.ext.directory.git
-  - [ ] node.ext.fs.git
-  - [ ] node.ext.ldap.git
-  - [ ] node.ext.mdb.git
-  - [ ] node.ext.ugm.git
-  - [ ] node.ext.yaml.git
-  - [ ] node.ext.zodb.git
-  - [ ] node.git
-  - [ ] odict.git
-  - [ ] plumber.git
-  - [ ] sphinx-conestack-theme.git
-  - [ ] treibstoff.git
-  - [ ] webresource.git
-  - [ ] yafowil.bootstrap.git
-  - [ ] yafowil.demo.git
-  - [ ] yafowil.documentation.git
-  - [ ] yafowil-example-helloworld.git
-  - [ ] yafowil.git
-  - [ ] yafowil.lingua.git
-  - [ ] yafowil.webob.git
-  - [ ] yafowil.werkzeug.git
-  - [ ] yafowil.widget.ace.git
-  - [ ] yafowil.widget.alohaeditor.git
-  - [ ] yafowil.widget.array.git
-  - [ ] yafowil.widget.autocomplete.git
-  - [ ] yafowil.widget.autosuggest.git
-  - [ ] yafowil.widget.chosen.git
-  - [ ] yafowil.widget.color.git
-  - [ ] yafowil.widget.cron.git
-  - [ ] yafowil.widget.datetime.git
-  - [ ] yafowil.widget.dict.git
-  - [ ] yafowil.widget.dynatree.git
-  - [ ] yafowil.widget.image.git
-  - [ ] yafowil.widget.location.git
-  - [ ] yafowil.widget.multiselect.git
-  - [ ] yafowil.widget.recaptcha.git
-  - [ ] yafowil.widget.richtext.git
-  - [ ] yafowil.widget.select2.git
-  - [ ] yafowil.widget.slider.git
-  - [ ] yafowil.widget.tiptap.git
-  - [ ] yafowil.widget.wysihtml5.git
-  - [ ] yafowil.yaml.git
+  - [ ] cone.app
+  - [ ] cone.calendar
+  - [ ] cone.charts
+  - [ ] cone.fileupload
+  - [ ] cone.firebase
+  - [ ] cone.ldap
+  - [ ] cone.maps
+  - [ ] cone.sql
+  - [ ] conestack
+  - [ ] cone.three
+  - [ ] cone.tile
+  - [ ] cone.tokens
+  - [ ] cone.ugm
+  - [ ] cone.zodb
+  - [ ] cookiecutter-cone
+  - [ ] mxenv
+  - [ ] node.ext.directory
+  - [ ] node.ext.fs
+  - [ ] node.ext.ldap
+  - [ ] node.ext.ugm
+  - [ ] node.ext.yaml
+  - [ ] node.ext.zodb
+  - [ ] node
+  - [ ] odict
+  - [ ] plumber
+  - [ ] sphinx-conestack-theme
+  - [ ] treibstoff
+  - [ ] webresource
+  - [ ] yafowil.bootstrap
+  - [ ] yafowil.demo
+  - [ ] yafowil.documentation
+  - [ ] yafowil-example-helloworld
+  - [ ] yafowil
+  - [ ] yafowil.lingua
+  - [ ] yafowil.webob
+  - [ ] yafowil.werkzeug
+  - [ ] yafowil.widget.ace
+  - [ ] yafowil.widget.array
+  - [ ] yafowil.widget.autocomplete
+  - [ ] yafowil.widget.chosen
+  - [ ] yafowil.widget.color
+  - [ ] yafowil.widget.cron
+  - [ ] yafowil.widget.datetime
+  - [ ] yafowil.widget.dict
+  - [ ] yafowil.widget.dynatree
+  - [ ] yafowil.widget.image
+  - [ ] yafowil.widget.location
+  - [ ] yafowil.widget.multiselect
+  - [ ] yafowil.widget.richtext
+  - [ ] yafowil.widget.select2
+  - [ ] yafowil.widget.slider
+  - [ ] yafowil.widget.tiptap
+  - [ ] yafowil.widget.wysihtml5
+  - [ ] yafowil.yaml
 
 - [ ] Restrict lower versions for next gen base and node.* release and release package
       structure refactoring.
-  - [ ] node.ext.directory.git
-  - [ ] node.ext.fs.git
-  - [ ] node.ext.ldap.git
-  - [ ] node.ext.mdb.git
-  - [ ] node.ext.ugm.git
-  - [ ] node.ext.yaml.git
-  - [ ] node.ext.zodb.git
-  - [ ] node.git
-  - [ ] odict.git
-  - [ ] plumber.git
+  - [ ] node.ext.directory
+  - [ ] node.ext.fs
+  - [ ] node.ext.ldap
+  - [ ] node.ext.ugm
+  - [ ] node.ext.yaml
+  - [ ] node.ext.zodb
+  - [ ] node
+  - [ ] odict
+  - [ ] plumber
 
 - [ ] Restrict lower versions for next gen yafowil.* release  and release package
       structure refactoring.
-  - [ ] webresource.git
-  - [ ] treibstoff.git
-  - [ ] yafowil.bootstrap.git
-  - [ ] yafowil.demo.git
-  - [ ] yafowil.documentation.git
-  - [ ] yafowil-example-helloworld.git
-  - [ ] yafowil.git
-  - [ ] yafowil.lingua.git
-  - [ ] yafowil.webob.git
-  - [ ] yafowil.werkzeug.git
-  - [ ] yafowil.widget.ace.git
-  - [ ] yafowil.widget.alohaeditor.git
-  - [ ] yafowil.widget.array.git
-  - [ ] yafowil.widget.autocomplete.git
-  - [ ] yafowil.widget.autosuggest.git
-  - [ ] yafowil.widget.chosen.git
-  - [ ] yafowil.widget.color.git
-  - [ ] yafowil.widget.cron.git
-  - [ ] yafowil.widget.datetime.git
-  - [ ] yafowil.widget.dict.git
-  - [ ] yafowil.widget.dynatree.git
-  - [ ] yafowil.widget.image.git
-  - [ ] yafowil.widget.location.git
-  - [ ] yafowil.widget.multiselect.git
-  - [ ] yafowil.widget.recaptcha.git
-  - [ ] yafowil.widget.richtext.git
-  - [ ] yafowil.widget.select2.git
-  - [ ] yafowil.widget.slider.git
-  - [ ] yafowil.widget.tiptap.git
-  - [ ] yafowil.widget.wysihtml5.git
-  - [ ] yafowil.yaml.git
+  - [ ] webresource
+  - [ ] treibstoff
+  - [ ] yafowil.bootstrap
+  - [ ] yafowil.demo
+  - [ ] yafowil.documentation
+  - [ ] yafowil-example-helloworld
+  - [ ] yafowil
+  - [ ] yafowil.lingua
+  - [ ] yafowil.webob
+  - [ ] yafowil.werkzeug
+  - [ ] yafowil.widget.ace
+  - [ ] yafowil.widget.array
+  - [ ] yafowil.widget.autocomplete
+  - [ ] yafowil.widget.chosen
+  - [ ] yafowil.widget.color
+  - [ ] yafowil.widget.cron
+  - [ ] yafowil.widget.datetime
+  - [ ] yafowil.widget.dict
+  - [ ] yafowil.widget.dynatree
+  - [ ] yafowil.widget.image
+  - [ ] yafowil.widget.location
+  - [ ] yafowil.widget.multiselect
+  - [ ] yafowil.widget.richtext
+  - [ ] yafowil.widget.select2
+  - [ ] yafowil.widget.slider
+  - [ ] yafowil.widget.tiptap
+  - [ ] yafowil.widget.wysihtml5
+  - [ ] yafowil.yaml
 
 - [ ] Merge webresource support for all cone.* packages. Restrict lower and
       upper versions and release all cone.* packages with package structure
       refactoring.
-  - [ ] cone.activities.git
-  - [ ] cone.app.git
-  - [ ] cone.calendar.git
-  - [ ] cone.charts.git
-  - [ ] cone.fileupload.git
-  - [ ] cone.firebase.git
-  - [ ] cone.ldap.git
-  - [ ] cone.maps.git
-  - [ ] cone.mdb.git
-  - [ ] cone.sql.git
-  - [ ] conestack.git
-  - [ ] cone.three.git
-  - [ ] cone.tile.git
-  - [ ] cone.tokens.git
-  - [ ] cone.ugm.git
-  - [ ] cone.zodb.git
-  - [ ] cookiecutter-cone.git
+  - [ ] cone.app
+  - [ ] cone.calendar
+  - [ ] cone.charts
+  - [ ] cone.fileupload
+  - [ ] cone.firebase
+  - [ ] cone.ldap
+  - [ ] cone.maps
+  - [ ] cone.sql
+  - [ ] conestack
+  - [ ] cone.three
+  - [ ] cone.tile
+  - [ ] cone.tokens
+  - [ ] cone.ugm
+  - [ ] cone.zodb
+  - [ ] cookiecutter-cone
 
 - [ ] Merge BS5 support for all cone.* packages. Restrict lower versions and
       release all cone.* packages.
-  - [ ] cone.activities.git
-  - [ ] cone.app.git
-  - [ ] cone.calendar.git
-  - [ ] cone.charts.git
-  - [ ] cone.fileupload.git
-  - [ ] cone.firebase.git
-  - [ ] cone.ldap.git
-  - [ ] cone.maps.git
-  - [ ] cone.mdb.git
-  - [ ] cone.sql.git
-  - [ ] conestack.git
-  - [ ] cone.three.git
-  - [ ] cone.tile.git
-  - [ ] cone.tokens.git
-  - [ ] cone.ugm.git
-  - [ ] cone.zodb.git
-  - [ ] cookiecutter-cone.git
-  - [ ] treibstoff.git
+  - [ ] cone.app
+  - [ ] cone.calendar
+  - [ ] cone.charts
+  - [ ] cone.fileupload
+  - [ ] cone.firebase
+  - [ ] cone.ldap
+  - [ ] cone.maps
+  - [ ] cone.sql
+  - [ ] conestack
+  - [ ] cone.three
+  - [ ] cone.tile
+  - [ ] cone.tokens
+  - [ ] cone.ugm
+  - [ ] cone.zodb
+  - [ ] cookiecutter-cone
+  - [ ] treibstoff
 
 Yafowil BS 5 Branches
 ---------------------
 
 - [ ] yafowil.werkzeug
-- [ ] yafowil.widget.alohaeditor
-- [ ] yafowil.widget.autosuggest
-- [ ] yafowil.widget.recaptcha
 - [x] yafowil
 - [x] yafowil-example-helloworld
 - [x] yafowil.bootstrap
