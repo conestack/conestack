@@ -62,20 +62,14 @@ ROADMAP
       release all packages.
   - [x] cone.app
   - [x] cone.calendar
-  - [ ] cone.charts
   - [x] cone.fileupload
   - [x] cone.firebase
   - [x] cone.ldap
   - [x] cone.maps
-  - [ ] cone.sql
-  - [ ] conestack
-  - [ ] cone.three
+  - [x] cone.sql
   - [x] cone.tile
-  - [ ] cone.tokens
   - [x] cone.ugm
   - [x] cone.zodb
-  - [ ] cookiecutter-cone
-  - [ ] mxenv
   - [ ] node.ext.directory
   - [ ] node.ext.fs
   - [ ] node.ext.ldap
@@ -86,12 +80,7 @@ ROADMAP
   - [ ] odict
   - [ ] plumber
   - [ ] sphinx-conestack-theme
-  - [ ] treibstoff
-  - [ ] webresource
   - [ ] yafowil.bootstrap
-  - [ ] yafowil.demo
-  - [ ] yafowil.documentation
-  - [ ] yafowil-example-helloworld
   - [ ] yafowil
   - [ ] yafowil.lingua
   - [ ] yafowil.webob
@@ -100,7 +89,6 @@ ROADMAP
   - [ ] yafowil.widget.array
   - [ ] yafowil.widget.autocomplete
   - [ ] yafowil.widget.chosen
-  - [ ] yafowil.widget.color
   - [ ] yafowil.widget.cron
   - [ ] yafowil.widget.datetime
   - [ ] yafowil.widget.dict
@@ -111,7 +99,6 @@ ROADMAP
   - [ ] yafowil.widget.richtext
   - [ ] yafowil.widget.select2
   - [ ] yafowil.widget.slider
-  - [ ] yafowil.widget.tiptap
   - [ ] yafowil.widget.wysihtml5
   - [ ] yafowil.yaml
 
