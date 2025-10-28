@@ -48,7 +48,7 @@ ROADMAP
   - [/] yafowil.widget.cron - 1.x
   - [/] yafowil.widget.datetime - 1.x
   - [/] yafowil.widget.dict - 1.x
-  - [ ] yafowil.widget.dynatree - 1.x
+  - [/] yafowil.widget.dynatree - 1.x
   - [/] yafowil.widget.image - 1.x
   - [/] yafowil.widget.location - 1.x
   - [/] yafowil.widget.multiselect - 1.x
@@ -86,21 +86,21 @@ ROADMAP
   - [x] yafowil.lingua
   - [x] yafowil.webob
   - [ ] yafowil.werkzeug
-  - [ ] yafowil.widget.ace
-  - [ ] yafowil.widget.array
-  - [ ] yafowil.widget.autocomplete
-  - [ ] yafowil.widget.chosen
-  - [ ] yafowil.widget.cron
-  - [ ] yafowil.widget.datetime
-  - [ ] yafowil.widget.dict
-  - [ ] yafowil.widget.dynatree
-  - [ ] yafowil.widget.image
-  - [ ] yafowil.widget.location
-  - [ ] yafowil.widget.multiselect
-  - [ ] yafowil.widget.richtext
-  - [ ] yafowil.widget.select2
+  - [/] yafowil.widget.ace
+  - [/] yafowil.widget.array
+  - [/] yafowil.widget.autocomplete
+  - [/] yafowil.widget.chosen
+  - [/] yafowil.widget.cron
+  - [/] yafowil.widget.datetime
+  - [/] yafowil.widget.dict
+  - [/] yafowil.widget.dynatree
+  - [/] yafowil.widget.image
+  - [/] yafowil.widget.location
+  - [/] yafowil.widget.multiselect
+  - [/] yafowil.widget.richtext
+  - [/] yafowil.widget.select2
   - [ ] yafowil.widget.slider
-  - [ ] yafowil.widget.wysihtml5
+  - [/] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
 
 - [ ] Refactor package structure in dedicated feature branches.
