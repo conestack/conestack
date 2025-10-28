@@ -37,27 +37,27 @@ ROADMAP
   - [ ] yafowil.documentation - 2.x
   - [x] yafowil.lingua - 1.x
   - [x] yafowil.webob - 1.x
-  - [ ] yafowil.werkzeug - 0.2.x
-  - [x] yafowil.widget.ace - 1.x
+  - [ ] yafowil.werkzeug - 0.x
+  - [/] yafowil.widget.ace - 1.x
   - [x] yafowil.widget.alohaeditor - ARCHIVED
-  - [x] yafowil.widget.array - 1.x
-  - [x] yafowil.widget.autocomplete - 1.x
+  - [/] yafowil.widget.array - 1.x
+  - [/] yafowil.widget.autocomplete - 1.x
   - [x] yafowil.widget.autosuggest - ARCHIVED
-  - [x] yafowil.widget.chosen - 1.x
+  - [/] yafowil.widget.chosen - 1.x
   - [x] yafowil.widget.color - UNSUPPORTED
-  - [x] yafowil.widget.cron - 1.x
-  - [x] yafowil.widget.datetime - 1.x
-  - [x] yafowil.widget.dict - 1.x
+  - [/] yafowil.widget.cron - 1.x
+  - [/] yafowil.widget.datetime - 1.x
+  - [/] yafowil.widget.dict - 1.x
   - [ ] yafowil.widget.dynatree - 1.x
-  - [x] yafowil.widget.image - 1.x
-  - [x] yafowil.widget.location - 1.x
-  - [x] yafowil.widget.multiselect - 1.x
+  - [/] yafowil.widget.image - 1.x
+  - [/] yafowil.widget.location - 1.x
+  - [/] yafowil.widget.multiselect - 1.x
   - [x] yafowil.widget.recaptcha - ARCHIVED
-  - [x] yafowil.widget.richtext - 1.x
-  - [x] yafowil.widget.select2 - 1.x
-  - [x] yafowil.widget.slider - 1.x
+  - [/] yafowil.widget.richtext - 1.x
+  - [/] yafowil.widget.select2 - 1.x
+  - [/] yafowil.widget.slider - 1.x
   - [x] yafowil.widget.tiptap - UNSUPPORTED
-  - [x] yafowil.widget.wysihtml5 - 1.x
+  - [/] yafowil.widget.wysihtml5 - 1.x
   - [x] yafowil.yaml - 2.x
 
 - [ ] Restrict upper versions of dependencies of latest stable releases and
