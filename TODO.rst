@@ -33,31 +33,31 @@ ROADMAP
   - [x] webresource - UNSUPPORTED
   - [x] yafowil.bootstrap - 1.x
   - [x] yafowil - 3.x
-  - [ ] yafowil.demo - 1.x
-  - [ ] yafowil.documentation - 2.x
+  - [x] yafowil.demo - 1.x
+  - [x] yafowil.documentation - 2.x
   - [x] yafowil.lingua - 1.x
   - [x] yafowil.webob - 1.x
   - [ ] yafowil.werkzeug - 0.x
-  - [/] yafowil.widget.ace - 1.x
+  - [x] yafowil.widget.ace - 1.x
   - [x] yafowil.widget.alohaeditor - ARCHIVED
-  - [/] yafowil.widget.array - 1.x
-  - [/] yafowil.widget.autocomplete - 1.x
+  - [x] yafowil.widget.array - 1.x
+  - [x] yafowil.widget.autocomplete - 1.x
   - [x] yafowil.widget.autosuggest - ARCHIVED
-  - [/] yafowil.widget.chosen - 1.x
+  - [x] yafowil.widget.chosen - 1.x
   - [x] yafowil.widget.color - UNSUPPORTED
-  - [/] yafowil.widget.cron - 1.x
-  - [/] yafowil.widget.datetime - 1.x
-  - [/] yafowil.widget.dict - 1.x
-  - [/] yafowil.widget.dynatree - 1.x
-  - [/] yafowil.widget.image - 1.x
-  - [/] yafowil.widget.location - 1.x
-  - [/] yafowil.widget.multiselect - 1.x
+  - [x] yafowil.widget.cron - 1.x
+  - [x] yafowil.widget.datetime - 1.x
+  - [x] yafowil.widget.dict - 1.x
+  - [x] yafowil.widget.dynatree - 1.x
+  - [x] yafowil.widget.image - 1.x
+  - [x] yafowil.widget.location - 1.x
+  - [x] yafowil.widget.multiselect - 1.x
   - [x] yafowil.widget.recaptcha - ARCHIVED
-  - [/] yafowil.widget.richtext - 1.x
-  - [/] yafowil.widget.select2 - 1.x
-  - [/] yafowil.widget.slider - 1.x
+  - [x] yafowil.widget.richtext - 1.x
+  - [x] yafowil.widget.select2 - 1.x
+  - [x] yafowil.widget.slider - 1.x
   - [x] yafowil.widget.tiptap - UNSUPPORTED
-  - [/] yafowil.widget.wysihtml5 - 1.x
+  - [x] yafowil.widget.wysihtml5 - 1.x
   - [x] yafowil.yaml - 2.x
 
 - [ ] Restrict upper versions of dependencies of latest stable releases and
@@ -81,8 +81,8 @@ ROADMAP
   - [x] node
   - [x] yafowil.bootstrap
   - [x] yafowil
-  - [ ] yafowil.demo
-  - [ ] yafowil.documentation
+  - [/] yafowil.demo
+  - [/] yafowil.documentation
   - [x] yafowil.lingua
   - [x] yafowil.webob
   - [ ] yafowil.werkzeug
@@ -99,7 +99,7 @@ ROADMAP
   - [/] yafowil.widget.multiselect
   - [/] yafowil.widget.richtext
   - [/] yafowil.widget.select2
-  - [ ] yafowil.widget.slider
+  - [/] yafowil.widget.slider
   - [/] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
 
