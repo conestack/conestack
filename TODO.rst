@@ -31,12 +31,12 @@ ROADMAP
   - [x] plumber - 1.x
   - [x] treibstoff - UNSUPPORTED
   - [x] webresource - UNSUPPORTED
-  - [ ] yafowil.bootstrap - 1.3.x
-  - [ ] yafowil - 3.1.x
+  - [x] yafowil.bootstrap - 1.x
+  - [x] yafowil - 3.x
   - [ ] yafowil.demo - 1.x
   - [ ] yafowil.documentation - 2.x
-  - [ ] yafowil.lingua - 1.0.x
-  - [ ] yafowil.webob - 1.5.x
+  - [x] yafowil.lingua - 1.x
+  - [x] yafowil.webob - 1.x
   - [ ] yafowil.werkzeug - 0.2.x
   - [x] yafowil.widget.ace - 1.x
   - [x] yafowil.widget.alohaeditor - ARCHIVED
@@ -58,7 +58,7 @@ ROADMAP
   - [x] yafowil.widget.slider - 1.x
   - [x] yafowil.widget.tiptap - UNSUPPORTED
   - [x] yafowil.widget.wysihtml5 - 1.x
-  - [x] yafowil.yaml - AGNOSTIC
+  - [x] yafowil.yaml - 2.x
 
 - [ ] Restrict upper versions of dependencies of latest stable releases and
       release all packages.
@@ -79,12 +79,12 @@ ROADMAP
   - [x] node.ext.yaml
   - [x] node.ext.zodb
   - [x] node
-  - [ ] yafowil.bootstrap
-  - [ ] yafowil
+  - [x] yafowil.bootstrap
+  - [x] yafowil
   - [ ] yafowil.demo
   - [ ] yafowil.documentation
-  - [ ] yafowil.lingua
-  - [ ] yafowil.webob
+  - [x] yafowil.lingua
+  - [x] yafowil.webob
   - [ ] yafowil.werkzeug
   - [ ] yafowil.widget.ace
   - [ ] yafowil.widget.array
@@ -101,7 +101,7 @@ ROADMAP
   - [ ] yafowil.widget.select2
   - [ ] yafowil.widget.slider
   - [ ] yafowil.widget.wysihtml5
-  - [ ] yafowil.yaml
+  - [x] yafowil.yaml
 
 - [ ] Refactor package structure in dedicated feature branches.
   - [ ] cone.app

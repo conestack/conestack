@@ -64,7 +64,7 @@ work from with Python 2.7 and Python 3.7 up to Python 3.11.
 - yafowil.widget.select2 = 1.5
 - yafowil.widget.slider = 1.3.2
 - yafowil.widget.wysihtml5 = 1.5
-- yafowil.yaml = 2.0
+- yafowil.yaml = 2.1
 
 The following packages are dedicated to newer versions of the conestack and are
 not working with the old stable versions.
