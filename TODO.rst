@@ -1,41 +1,43 @@
-ROADMAP
--------
+TODO
+----
 
-- [ ] Create branches for latest stable releases.
+- [x] Create branches for latest stable releases.
   - [x] bdajax - ARCHIVED
   - [x] cone.activities - ARCHIVED
-  - [ ] cone.app - 1.0.x
-  - [ ] cone.calendar - 0.4.x
+  - [x] cone.app - 1.0.x
+  - [x] cone.calendar - 0.4.x
   - [x] cone.charts - UNSUPPORTED
-  - [ ] cone.fileupload - 0.8.x
-  - [x] cone.firebase - AGNOSTIC
-  - [ ] cone.ldap - 0.3.x
-  - [ ] cone.maps - 0.2.x
+  - [x] cone.fileupload - 0.8.x
+  - [x] cone.firebase - 0.x
+  - [x] cone.ldap - 0.3.x
+  - [x] cone.maps - 0.2.x
   - [x] cone.mdb - ARCHIVED
-  - [x] cone.sql - AGNOSTIC
+  - [x] cone.sql - 0.9.x
   - [x] cone.three - UNSUPPORTED
-  - [ ] cone.tile - 1.2.x
+  - [x] cone.tile - 1.x
   - [x] cone.tokens - UNSUPPORTED
-  - [ ] cone.ugm - 1.0.x
-  - [ ] cone.zodb - 1.0.x
+  - [x] cone.ugm - 1.0.x
+  - [x] cone.zodb - 1.0.x
   - [x] cookiecutter-cone - UNSUPPORTED
-  - [ ] node.ext.directory - 0.8.x
-  - [ ] node.ext.fs = 1.2.x
-  - [ ] node.ext.ldap = 1.3.x
+  - [x] node.ext.directory - 0.x
+  - [x] node.ext.fs = 1.x
+  - [x] node.ext.ldap = 1.x
   - [x] node.ext.mdb - ARCHIVED
-  - [ ] node.ext.ugm - 1.2.x
-  - [ ] node.ext.yaml - 0.4.x
-  - [ ] node.ext.zodb - 1.7.x
-  - [ ] node - 1.2.x
-  - [ ] odict - 1.9.x
-  - [ ] plumber - 1.7.x
+  - [x] node.ext.ugm - 1.x
+  - [x] node.ext.yaml - 0.x
+  - [x] node.ext.zodb - 1.x
+  - [x] node - 1.x
+  - [x] odict - 1.x
+  - [x] plumber - 1.x
   - [x] treibstoff - UNSUPPORTED
   - [x] webresource - UNSUPPORTED
-  - [ ] yafowil.bootstrap - 1.3.x
-  - [ ] yafowil - 3.1.x
-  - [ ] yafowil.lingua - 1.0.x
-  - [ ] yafowil.webob - 1.5.x
-  - [ ] yafowil.werkzeug - 0.2.x
+  - [x] yafowil.bootstrap - 1.x
+  - [x] yafowil - 3.x
+  - [x] yafowil.demo - 1.x
+  - [x] yafowil.documentation - 2.x
+  - [x] yafowil.lingua - 1.x
+  - [x] yafowil.webob - 1.x
+  - [x] yafowil.werkzeug - ARCHIVED
   - [x] yafowil.widget.ace - 1.x
   - [x] yafowil.widget.alohaeditor - ARCHIVED
   - [x] yafowil.widget.array - 1.x
@@ -46,7 +48,7 @@ ROADMAP
   - [x] yafowil.widget.cron - 1.x
   - [x] yafowil.widget.datetime - 1.x
   - [x] yafowil.widget.dict - 1.x
-  - [ ] yafowil.widget.dynatree - 1.x
+  - [x] yafowil.widget.dynatree - 1.x
   - [x] yafowil.widget.image - 1.x
   - [x] yafowil.widget.location - 1.x
   - [x] yafowil.widget.multiselect - 1.x
@@ -56,64 +58,47 @@ ROADMAP
   - [x] yafowil.widget.slider - 1.x
   - [x] yafowil.widget.tiptap - UNSUPPORTED
   - [x] yafowil.widget.wysihtml5 - 1.x
-  - [x] yafowil.yaml - AGNOSTIC
+  - [x] yafowil.yaml - 2.x
 
-- [ ] Restrict upper versions of dependencies of latest stable releases and
+- [x] Restrict upper versions of dependencies of latest stable releases and
       release all packages.
-  - [ ] cone.app
-  - [ ] cone.calendar
-  - [ ] cone.charts
-  - [ ] cone.fileupload
-  - [ ] cone.firebase
-  - [ ] cone.ldap
-  - [ ] cone.maps
-  - [ ] cone.sql
-  - [ ] conestack
-  - [ ] cone.three
-  - [ ] cone.tile
-  - [ ] cone.tokens
-  - [ ] cone.ugm
-  - [ ] cone.zodb
-  - [ ] cookiecutter-cone
-  - [ ] mxenv
-  - [ ] node.ext.directory
-  - [ ] node.ext.fs
-  - [ ] node.ext.ldap
-  - [ ] node.ext.ugm
-  - [ ] node.ext.yaml
-  - [ ] node.ext.zodb
-  - [ ] node
-  - [ ] odict
-  - [ ] plumber
-  - [ ] sphinx-conestack-theme
-  - [ ] treibstoff
-  - [ ] webresource
-  - [ ] yafowil.bootstrap
-  - [ ] yafowil.demo
-  - [ ] yafowil.documentation
-  - [ ] yafowil-example-helloworld
-  - [ ] yafowil
-  - [ ] yafowil.lingua
-  - [ ] yafowil.webob
-  - [ ] yafowil.werkzeug
-  - [ ] yafowil.widget.ace
-  - [ ] yafowil.widget.array
-  - [ ] yafowil.widget.autocomplete
-  - [ ] yafowil.widget.chosen
-  - [ ] yafowil.widget.color
-  - [ ] yafowil.widget.cron
-  - [ ] yafowil.widget.datetime
-  - [ ] yafowil.widget.dict
-  - [ ] yafowil.widget.dynatree
-  - [ ] yafowil.widget.image
-  - [ ] yafowil.widget.location
-  - [ ] yafowil.widget.multiselect
-  - [ ] yafowil.widget.richtext
-  - [ ] yafowil.widget.select2
-  - [ ] yafowil.widget.slider
-  - [ ] yafowil.widget.tiptap
-  - [ ] yafowil.widget.wysihtml5
-  - [ ] yafowil.yaml
+  - [x] cone.app
+  - [x] cone.calendar
+  - [x] cone.fileupload
+  - [x] cone.firebase
+  - [x] cone.ldap
+  - [x] cone.maps
+  - [x] cone.sql
+  - [x] cone.tile
+  - [x] cone.ugm
+  - [x] cone.zodb
+  - [x] node.ext.directory
+  - [x] node.ext.fs
+  - [x] node.ext.ldap
+  - [x] node.ext.ugm
+  - [x] node.ext.yaml
+  - [x] node.ext.zodb
+  - [x] node
+  - [x] yafowil.bootstrap
+  - [x] yafowil
+  - [x] yafowil.lingua
+  - [x] yafowil.webob
+  - [x] yafowil.widget.ace
+  - [x] yafowil.widget.array
+  - [x] yafowil.widget.autocomplete
+  - [x] yafowil.widget.chosen
+  - [x] yafowil.widget.cron
+  - [x] yafowil.widget.datetime
+  - [x] yafowil.widget.dict
+  - [x] yafowil.widget.dynatree
+  - [x] yafowil.widget.image
+  - [x] yafowil.widget.location
+  - [x] yafowil.widget.multiselect
+  - [x] yafowil.widget.richtext
+  - [x] yafowil.widget.select2
+  - [x] yafowil.widget.slider
+  - [x] yafowil.widget.wysihtml5
+  - [x] yafowil.yaml
 
 - [ ] Refactor package structure in dedicated feature branches.
   - [ ] cone.app
@@ -255,7 +240,6 @@ ROADMAP
 Yafowil BS 5 Branches
 ---------------------
 
-- [ ] yafowil.werkzeug
 - [x] yafowil
 - [x] yafowil-example-helloworld
 - [x] yafowil.bootstrap

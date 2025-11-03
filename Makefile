@@ -7,6 +7,7 @@
 #: core.mxfiles
 #: core.packages
 #: core.sources
+#: docs.sphinx
 #: ldap.openldap
 #: ldap.python-ldap
 #: qa.coverage
@@ -77,7 +78,7 @@ PRIMARY_PYTHON?=python3
 
 # Minimum required Python version.
 # Default: 3.9
-PYTHON_MIN_VERSION?=3.9
+PYTHON_MIN_VERSION?=3.10
 
 # Install packages using the given package installer method.
 # Supported are `pip` and `uv`. If uv is used, its global availability is
@@ -114,11 +115,25 @@ VENV_FOLDER?=venv
 
 # mxdev to install in virtual environment.
 # Default: mxdev
-MXDEV?=mxdev==4.1.0
+MXDEV?=mxdev
 
 # mxmake to install in virtual environment.
 # Default: mxmake
-MXMAKE?=mxmake==1.3.0
+MXMAKE?=mxmake
+
+## docs.sphinx
+
+# Documentation source folder.
+# Default: docs/source
+DOCS_SOURCE_FOLDER?=docs/source
+
+# Documentation generation target folder.
+# Default: docs/html
+DOCS_TARGET_FOLDER?=docs/html
+
+# Documentation Python requirements to be installed (via pip).
+# No default value.
+DOCS_REQUIREMENTS?=
 
 ## core.mxfiles
 
@@ -143,7 +158,7 @@ TEST_COMMAND?=.mxmake/files/run-tests.sh
 # Additional Python requirements for running tests to be
 # installed (via pip).
 # Default: pytest
-TEST_REQUIREMENTS?=zope.testrunner
+TEST_REQUIREMENTS?=pytest
 
 # Additional make targets the test target depends on.
 # No default value.
@@ -357,6 +372,46 @@ python-ldap-clean: python-ldap-dirty
 INSTALL_TARGETS+=python-ldap
 DIRTY_TARGETS+=python-ldap-dirty
 CLEAN_TARGETS+=python-ldap-clean
+
+##############################################################################
+# sphinx
+##############################################################################
+
+# additional targets required for building docs.
+DOCS_TARGETS+=
+
+SPHINX_BIN=sphinx-build
+SPHINX_AUTOBUILD_BIN=sphinx-autobuild
+
+DOCS_TARGET:=$(SENTINEL_FOLDER)/sphinx.sentinel
+$(DOCS_TARGET): $(MXENV_TARGET)
+	@echo "Install Sphinx"
+	@$(PYTHON_PACKAGE_COMMAND) install -U sphinx sphinx-autobuild $(DOCS_REQUIREMENTS)
+	@touch $(DOCS_TARGET)
+
+.PHONY: docs
+docs: $(DOCS_TARGET) $(DOCS_TARGETS)
+	@echo "Build sphinx docs"
+	@$(SPHINX_BIN) $(DOCS_SOURCE_FOLDER) $(DOCS_TARGET_FOLDER)
+
+.PHONY: docs-live
+docs-live: $(DOCS_TARGET) $(DOCS_TARGETS)
+	@echo "Rebuild Sphinx documentation on changes, with live-reload in the browser"
+	@$(SPHINX_AUTOBUILD_BIN) $(DOCS_SOURCE_FOLDER) $(DOCS_TARGET_FOLDER)
+
+.PHONY: docs-dirty
+docs-dirty:
+	@rm -f $(DOCS_TARGET)
+
+.PHONY: docs-clean
+docs-clean: docs-dirty
+	@test -e $(MXENV_PYTHON) && $(MXENV_PYTHON) -m pip uninstall -y \
+		sphinx sphinx-autobuild $(DOCS_REQUIREMENTS) || :
+	@rm -rf $(DOCS_TARGET_FOLDER)
+
+INSTALL_TARGETS+=$(DOCS_TARGET)
+DIRTY_TARGETS+=docs-dirty
+CLEAN_TARGETS+=docs-clean
 
 ##############################################################################
 # sources
