@@ -10,6 +10,7 @@ Welcome to conestack's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   Versions <versions>
 
 
 Indices and tables
