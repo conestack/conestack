@@ -10,9 +10,11 @@ longer working.
 - cone.activities (ARCHIVED)
 - cone.mdb (ARCHIVED)
 - node.ext.mdb (ARCHIVED)
+- yafowil.werkzeug (ARCHIVED)
 - yafowil.widget.alohaeditor (ARCHIVED)
 - yafowil.widget.autosuggest (ARCHIVED)
 - yafowil.widget.recaptcha (ARCHIVED)
+
 
 Conestack 1.0
 -------------
@@ -62,7 +64,7 @@ work from with Python 2.7 and Python 3.7 up to Python 3.11.
 - yafowil.widget.multiselect = 1.4
 - yafowil.widget.richtext = 1.6
 - yafowil.widget.select2 = 1.5
-- yafowil.widget.slider = 1.3.2
+- yafowil.widget.slider = 1.4
 - yafowil.widget.wysihtml5 = 1.5
 - yafowil.yaml = 2.1
 

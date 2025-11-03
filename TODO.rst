@@ -1,7 +1,7 @@
 ROADMAP
 -------
 
-- [ ] Create branches for latest stable releases.
+- [x] Create branches for latest stable releases.
   - [x] bdajax - ARCHIVED
   - [x] cone.activities - ARCHIVED
   - [x] cone.app - 1.0.x
@@ -37,7 +37,7 @@ ROADMAP
   - [x] yafowil.documentation - 2.x
   - [x] yafowil.lingua - 1.x
   - [x] yafowil.webob - 1.x
-  - [ ] yafowil.werkzeug - 0.x
+  - [x] yafowil.werkzeug - ARCHIVED
   - [x] yafowil.widget.ace - 1.x
   - [x] yafowil.widget.alohaeditor - ARCHIVED
   - [x] yafowil.widget.array - 1.x
@@ -85,22 +85,21 @@ ROADMAP
   - [/] yafowil.documentation
   - [x] yafowil.lingua
   - [x] yafowil.webob
-  - [ ] yafowil.werkzeug
-  - [/] yafowil.widget.ace
-  - [/] yafowil.widget.array
-  - [/] yafowil.widget.autocomplete
-  - [/] yafowil.widget.chosen
-  - [/] yafowil.widget.cron
-  - [/] yafowil.widget.datetime
-  - [/] yafowil.widget.dict
-  - [/] yafowil.widget.dynatree
-  - [/] yafowil.widget.image
-  - [/] yafowil.widget.location
-  - [/] yafowil.widget.multiselect
-  - [/] yafowil.widget.richtext
-  - [/] yafowil.widget.select2
-  - [/] yafowil.widget.slider
-  - [/] yafowil.widget.wysihtml5
+  - [x] yafowil.widget.ace
+  - [x] yafowil.widget.array
+  - [x] yafowil.widget.autocomplete
+  - [x] yafowil.widget.chosen
+  - [x] yafowil.widget.cron
+  - [x] yafowil.widget.datetime
+  - [x] yafowil.widget.dict
+  - [x] yafowil.widget.dynatree
+  - [x] yafowil.widget.image
+  - [x] yafowil.widget.location
+  - [x] yafowil.widget.multiselect
+  - [x] yafowil.widget.richtext
+  - [x] yafowil.widget.select2
+  - [x] yafowil.widget.slider
+  - [x] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
 
 - [ ] Refactor package structure in dedicated feature branches.
