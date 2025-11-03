@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'conestack'
-copyright = '2021, Conestack Contributors'
+copyright = '2021-2025, Conestack Contributors'
 author = 'Conestack Contributors'
 
 # The full version, including alpha/beta/rc tags
