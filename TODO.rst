@@ -1,5 +1,5 @@
-ROADMAP
--------
+TODO
+----
 
 - [x] Create branches for latest stable releases.
   - [x] bdajax - ARCHIVED
@@ -60,7 +60,7 @@ ROADMAP
   - [x] yafowil.widget.wysihtml5 - 1.x
   - [x] yafowil.yaml - 2.x
 
-- [ ] Restrict upper versions of dependencies of latest stable releases and
+- [x] Restrict upper versions of dependencies of latest stable releases and
       release all packages.
   - [x] cone.app
   - [x] cone.calendar
@@ -81,8 +81,6 @@ ROADMAP
   - [x] node
   - [x] yafowil.bootstrap
   - [x] yafowil
-  - [/] yafowil.demo
-  - [/] yafowil.documentation
   - [x] yafowil.lingua
   - [x] yafowil.webob
   - [x] yafowil.widget.ace
@@ -242,7 +240,6 @@ ROADMAP
 Yafowil BS 5 Branches
 ---------------------
 
-- [ ] yafowil.werkzeug
 - [x] yafowil
 - [x] yafowil-example-helloworld
 - [x] yafowil.bootstrap

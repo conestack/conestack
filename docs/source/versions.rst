@@ -22,7 +22,7 @@ Conestack 1.0
 This is the legacy version set.
 
 The following packages are a known good set of interoperability. They should
-work from with Python 2.7 and Python 3.7 up to Python 3.11.
+work with Python 2.7 and from Python 3.7 up to Python 3.11.
 
 - bdajax = 1.14 (ARCHIVED)
 - cone.app = 1.0.8
@@ -80,13 +80,18 @@ not working with the old stable versions.
 - yafowil.widget.color (requires cone.app >= 1.1)
 - yafowil.widget.tiptap (requires cone.app >= 1.1)
 
+
 Conestack 1.1
 -------------
 
 This is the 1.1 version set.
 
-The following packages are a known good set of interoperability. They should
-work from with from Python 3.10 up to Python 3.14.
+The following packages are a known good set of interoperability.
+They work from Python 3.10 up to Python 3.14.
+
+``cone.*`` packages uses bootstrap 3 for theming.
+
+``yafowil.*`` packages support themes for bootsptrap 3, 4 and 5.
 
 - cone.app = 1.1.0
 - cone.calendar = 1.1.0
@@ -143,8 +148,8 @@ Conestack 1.2
 
 This is the 1.2 version set.
 
-The following packages are a known good set of interoperability. They should
-work from with from Python 3.10 up to Python 3.14.
+The following packages are a known good set of interoperability.
+They work from Python 3.10 up to Python 3.14.
 
 - cone.app = 2.0.0
 - cone.calendar = 2.0.0
