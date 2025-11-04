@@ -42,6 +42,13 @@ INCLUDE_MAKEFILE?=include.mk
 # No default value.
 EXTRA_PATH?=
 
+# Path to Python project relative to Makefile (repository root).
+# Leave empty if Python project is in the same directory as Makefile.
+# For monorepo setups, set to subdirectory name (e.g., `backend`).
+# Future-proofed for multi-language monorepos (e.g., PROJECT_PATH_NODEJS).
+# No default value.
+PROJECT_PATH_PYTHON?=
+
 ## system.dependencies
 
 # Space separated system package names.
@@ -132,6 +139,10 @@ DOCS_SOURCE_FOLDER?=docs/source
 # Default: docs/html
 DOCS_TARGET_FOLDER?=docs/html
 
+# Documentation linkcheck output folder.
+# Default: docs/linkcheck
+DOCS_LINKCHECK_FOLDER?=docs/linkcheck
+
 # Documentation Python requirements to be installed (via pip).
 # No default value.
 DOCS_REQUIREMENTS?=
@@ -185,6 +196,9 @@ TYPECHECK_TARGETS?=
 FORMAT_TARGETS?=
 
 export PATH:=$(if $(EXTRA_PATH),$(EXTRA_PATH):,)$(PATH)
+
+# Helper variable: adds trailing slash to PROJECT_PATH_PYTHON only if non-empty
+PYTHON_PROJECT_PREFIX=$(if $(PROJECT_PATH_PYTHON),$(PROJECT_PATH_PYTHON)/,)
 
 # Defensive settings for make: https://tech.davis-hansson.com/p/make/
 SHELL:=bash
@@ -435,6 +449,11 @@ docs-live: $(DOCS_TARGET) $(DOCS_TARGETS)
 	@echo "Rebuild Sphinx documentation on changes, with live-reload in the browser"
 	@$(SPHINX_AUTOBUILD_BIN) $(DOCS_SOURCE_FOLDER) $(DOCS_TARGET_FOLDER)
 
+.PHONY: docs-linkcheck
+docs-linkcheck: $(DOCS_TARGET) $(DOCS_TARGETS)
+	@echo "Run Sphinx linkcheck"
+	@$(SPHINX_BIN) -b linkcheck $(DOCS_SOURCE_FOLDER) $(DOCS_LINKCHECK_FOLDER)
+
 .PHONY: docs-dirty
 docs-dirty:
 	@rm -f $(DOCS_TARGET)
@@ -501,7 +520,7 @@ else
 	@echo "[settings]" > $(PROJECT_CONFIG)
 endif
 
-LOCAL_PACKAGE_FILES:=$(wildcard pyproject.toml setup.cfg setup.py requirements.txt constraints.txt)
+LOCAL_PACKAGE_FILES:=$(wildcard $(PYTHON_PROJECT_PREFIX)pyproject.toml $(PYTHON_PROJECT_PREFIX)setup.cfg $(PYTHON_PROJECT_PREFIX)setup.py $(PYTHON_PROJECT_PREFIX)requirements.txt $(PYTHON_PROJECT_PREFIX)constraints.txt)
 
 FILES_TARGET:=requirements-mxdev.txt
 $(FILES_TARGET): $(PROJECT_CONFIG) $(MXENV_TARGET) $(SOURCES_TARGET) $(LOCAL_PACKAGE_FILES)
