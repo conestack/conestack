@@ -100,6 +100,14 @@ TODO
   - [x] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
 
+- [ ] Test blacklist
+    - [ ] sphinx-conestack-theme
+    - [ ] treibstoff (added to existing optional-dependencies)
+    - [ ] yafowil-example-helloworld
+    - [ ] yafowil.demo
+    - [ ] yafowil.documentation
+    - [ ] yafowil.webob
+
 - [ ] Refactor package structure in dedicated feature branches.
   - [ ] cone.app
   - [ ] cone.calendar

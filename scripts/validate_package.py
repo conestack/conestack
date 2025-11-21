@@ -84,6 +84,7 @@ The script performs the following validation steps in order:
    - Fails if installation or import fails
 
 6. Test Execution
+   - Install test dependencies via package[test] extras
    - Run pytest in the installed environment
    - Sets required environment variables (LDAP paths, etc.)
    - Executes package tests
@@ -120,6 +121,7 @@ NOTES
 - Test venv is created in /tmp/validate_{package}_{timestamp}/
 - All paths are relative to the conestack monorepo root
 - Package must be checked out in sources/{package-name}/
+- Package must have [project.optional-dependencies] test defined in pyproject.toml
 
 AUTHOR
 ======
@@ -191,8 +193,7 @@ def print_info(message, verbose=False):
 
 
 def run_command(cmd, cwd=None, env=None, verbose=False):
-    """
-    Run a shell command and return output.
+    """Run a shell command and return output.
 
     Raises ValidationError if command fails.
     """
@@ -249,8 +250,7 @@ def validate_package(
     pyroma_threshold=8,
     verbose=False
 ):
-    """
-    Validate a package through all validation steps.
+    """Validate a package through all validation steps.
 
     :param package_name: Name of the package to validate
     :param keep_dist: Keep dist/ directory after validation
@@ -322,7 +322,10 @@ def validate_package(
     print_success('PyPI metadata validation passed')
 
     # Step 4: Quality Rating (pyroma)
-    print_step(f'Rating package quality (pyroma, threshold: {pyroma_threshold}/10)', verbose)
+    print_step(
+        f'Rating package quality (pyroma, threshold: {pyroma_threshold}/10)',
+        verbose
+    )
 
     try:
         output = run_command(
@@ -354,7 +357,10 @@ def validate_package(
         if 'below threshold' in str(e):
             raise
         # If pyroma fails for other reasons, show warning but continue
-        print(f'{Colors.WARNING}Warning: Pyroma check had issues but continuing...{Colors.ENDC}')
+        print(
+            f'{Colors.WARNING}Warning: Pyroma check had issues but '
+            f'continuing...{Colors.ENDC}'
+        )
         if verbose:
             print(str(e))
 
@@ -405,36 +411,22 @@ def validate_package(
             )
             print_success(f'Package imports successfully')
         except ValidationError:
-            # Some packages might have different import names or require special handling
-            print(f'{Colors.WARNING}Warning: Could not verify import (this may be normal for some packages){Colors.ENDC}')
+            # Some packages might have different import names or special handling
+            print(
+                f'{Colors.WARNING}Warning: Could not verify import '
+                f'(this may be normal for some packages){Colors.ENDC}'
+            )
 
         # Step 6: Test Execution
         if not skip_tests:
             print_step('Running tests in isolated environment', verbose)
 
             # Install test dependencies
-            # Try to install with [test] extras if available
             print_info('Installing test dependencies', verbose)
-            try:
-                run_command(
-                    [str(venv_python), '-m', 'pip', 'install', f'{wheel_file}[test]'],
-                    verbose=verbose
-                )
-            except ValidationError:
-                pass  # Extras might not exist, will check pytest below
-
-            # Verify pytest is available, install if not
-            try:
-                run_command(
-                    [str(venv_python), '-c', 'import pytest'],
-                    verbose=verbose
-                )
-            except ValidationError:
-                print_info('pytest not found, installing it', verbose)
-                run_command(
-                    [str(venv_python), '-m', 'pip', 'install', 'pytest'],
-                    verbose=verbose
-                )
+            run_command(
+                [str(venv_python), '-m', 'pip', 'install', f'{wheel_file}[test]'],
+                verbose=verbose
+            )
 
             # Set up environment variables for tests
             test_env = os.environ.copy()
@@ -473,7 +465,10 @@ def validate_package(
     else:
         print_info(f'Keeping dist directory: {dist_dir}', verbose)
 
-    print(f'\n{Colors.OKGREEN}{Colors.BOLD}✓ Package validation completed successfully!{Colors.ENDC}\n')
+    print(
+        f'\n{Colors.OKGREEN}{Colors.BOLD}✓ Package validation completed '
+        f'successfully!{Colors.ENDC}\n'
+    )
 
 
 def main():
