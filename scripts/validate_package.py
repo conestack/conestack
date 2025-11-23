@@ -39,6 +39,9 @@ Examples:
     # Set custom pyroma threshold
     python scripts/validate_package.py plumber --pyroma-threshold 9
 
+    # Collect build artifacts to root dist/ directory
+    python scripts/validate_package.py node --collect-dist
+
 OPTIONS
 =======
 
@@ -51,6 +54,7 @@ Optional Arguments:
   --skip-tests         Skip test execution phase
   --pyroma-threshold   Minimum pyroma quality score (default: 8)
   --verbose, -v        Show detailed output
+  --collect-dist       Copy build artifacts to root dist/ directory
   --help, -h           Show this help message
 
 VALIDATION STEPS
@@ -91,6 +95,7 @@ The script performs the following validation steps in order:
    - Fails if tests fail
 
 7. Cleanup
+   - Copy build artifacts to root directory dist/ folder (if --collect-dist)
    - Remove temporary venv (unless --keep-venv)
    - Remove dist/ directory (unless --keep-dist)
 
@@ -248,7 +253,8 @@ def validate_package(
     keep_venv=False,
     skip_tests=False,
     pyroma_threshold=8,
-    verbose=False
+    verbose=False,
+    collect_dist=False
 ):
     """Validate a package through all validation steps.
 
@@ -258,6 +264,7 @@ def validate_package(
     :param skip_tests: Skip test execution
     :param pyroma_threshold: Minimum pyroma score required
     :param verbose: Show detailed output
+    :param collect_dist: Copy build artifacts to root dist/ directory
     """
     # Get repository root and package directory
     repo_root = Path.cwd()
@@ -458,6 +465,18 @@ def validate_package(
         else:
             print_info(f'Keeping test venv: {venv_dir}', verbose)
 
+    # Copy build artifacts to root dist/ if requested
+    if collect_dist:
+        root_dist = repo_root / 'dist'
+        root_dist.mkdir(exist_ok=True)
+
+        print_info(f'Copying build artifacts to {root_dist}', verbose)
+        shutil.copy2(wheel_file, root_dist)
+        shutil.copy2(sdist_file, root_dist)
+        print_success(
+            f'Copied {wheel_file.name} and {sdist_file.name} to dist/'
+        )
+
     # Cleanup dist
     if not keep_dist:
         print_info('Removing dist directory', verbose)
@@ -509,6 +528,11 @@ def main():
         action='store_true',
         help='Show detailed output'
     )
+    parser.add_argument(
+        '--collect-dist',
+        action='store_true',
+        help='Copy build artifacts to root dist/ directory'
+    )
 
     args = parser.parse_args()
 
@@ -527,7 +551,8 @@ def main():
             keep_venv=args.keep_venv,
             skip_tests=args.skip_tests,
             pyroma_threshold=args.pyroma_threshold,
-            verbose=args.verbose
+            verbose=args.verbose,
+            collect_dist=args.collect_dist
         )
 
         sys.exit(0)
