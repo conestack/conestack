@@ -100,69 +100,59 @@ TODO
   - [x] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
 
-- [ ] Test blacklist
-    - [ ] sphinx-conestack-theme
-    - [ ] treibstoff (added to existing optional-dependencies)
-    - [ ] yafowil-example-helloworld
-    - [ ] yafowil.demo
-    - [ ] yafowil.documentation
-    - [ ] yafowil.webob
-
 - [ ] Refactor package structure in dedicated feature branches.
-  - [ ] cone.app
-  - [ ] cone.calendar
-  - [ ] cone.charts
-  - [ ] cone.fileupload
-  - [ ] cone.firebase
-  - [ ] cone.ldap
-  - [ ] cone.maps
-  - [ ] cone.sql
-  - [ ] conestack
+  - [x] cone.app
+  - [x] cone.calendar
+  - [x] cone.charts
+  - [x] cone.fileupload
+  - [x] cone.firebase
+  - [x] cone.ldap
+  - [x] cone.maps
+  - [x] cone.sql
   - [ ] cone.three
-  - [ ] cone.tile
-  - [ ] cone.tokens
-  - [ ] cone.ugm
-  - [ ] cone.zodb
+  - [x] cone.tile
+  - [x] cone.tokens
+  - [x] cone.ugm
+  - [x] cone.zodb
   - [ ] cookiecutter-cone
-  - [ ] mxenv
-  - [ ] node.ext.directory
-  - [ ] node.ext.fs
-  - [ ] node.ext.ldap
-  - [ ] node.ext.ugm
-  - [ ] node.ext.yaml
-  - [ ] node.ext.zodb
-  - [ ] node
-  - [ ] odict
-  - [ ] plumber
-  - [ ] sphinx-conestack-theme
-  - [ ] treibstoff
-  - [ ] webresource
-  - [ ] yafowil.bootstrap
-  - [ ] yafowil.demo
-  - [ ] yafowil.documentation
-  - [ ] yafowil-example-helloworld
-  - [ ] yafowil
-  - [ ] yafowil.lingua
-  - [ ] yafowil.webob
-  - [ ] yafowil.werkzeug
-  - [ ] yafowil.widget.ace
-  - [ ] yafowil.widget.array
-  - [ ] yafowil.widget.autocomplete
-  - [ ] yafowil.widget.chosen
-  - [ ] yafowil.widget.color
-  - [ ] yafowil.widget.cron
-  - [ ] yafowil.widget.datetime
-  - [ ] yafowil.widget.dict
-  - [ ] yafowil.widget.dynatree
-  - [ ] yafowil.widget.image
-  - [ ] yafowil.widget.location
-  - [ ] yafowil.widget.multiselect
-  - [ ] yafowil.widget.richtext
-  - [ ] yafowil.widget.select2
-  - [ ] yafowil.widget.slider
-  - [ ] yafowil.widget.tiptap
-  - [ ] yafowil.widget.wysihtml5
-  - [ ] yafowil.yaml
+  - [x] node.ext.directory
+  - [x] node.ext.fs
+  - [x] node.ext.ldap
+  - [x] node.ext.ugm
+  - [x] node.ext.yaml
+  - [x] node.ext.zodb
+  - [x] node
+  - [x] odict
+  - [x] plumber
+  - [x] sphinx-conestack-theme
+  - [x] treibstoff
+  - [x] webresource
+  - [x] yafowil.bootstrap
+  - [x] yafowil.demo
+  - [x] yafowil.documentation
+  - [x] yafowil-example-helloworld
+  - [x] yafowil
+  - [x] yafowil.lingua
+  - [x] yafowil.webob
+  - [x] yafowil.werkzeug
+  - [x] yafowil.widget.ace
+  - [x] yafowil.widget.array
+  - [x] yafowil.widget.autocomplete
+  - [x] yafowil.widget.chosen
+  - [x] yafowil.widget.color
+  - [x] yafowil.widget.cron
+  - [x] yafowil.widget.datetime
+  - [x] yafowil.widget.dict
+  - [x] yafowil.widget.dynatree
+  - [x] yafowil.widget.image
+  - [x] yafowil.widget.location
+  - [x] yafowil.widget.multiselect
+  - [x] yafowil.widget.richtext
+  - [x] yafowil.widget.select2
+  - [x] yafowil.widget.slider
+  - [x] yafowil.widget.tiptap
+  - [x] yafowil.widget.wysihtml5
+  - [x] yafowil.yaml
 
 - [ ] Restrict lower versions for next gen base and node.* release and release package
       structure refactoring.
