@@ -2,114 +2,138 @@
 # Package Validation Targets
 ##############################################################################
 
-# All packages from mx.ini (48 packages)
+# All packages from mx.ini (alphabetically sorted, one per line)
 VALIDATE_ALL_PACKAGES = \
-    odict plumber \
-    node node.ext.directory node.ext.fs node.ext.ldap \
-    node.ext.ugm node.ext.yaml node.ext.zodb \
-    yafowil yafowil.yaml yafowil.lingua yafowil.webob \
+    cone.app \
+    cone.calendar \
+    cone.charts \
+    cone.fileupload \
+    cone.firebase \
+    cone.ldap \
+    cone.maps \
+    cone.sql \
+    cone.tile \
+    cone.tokens \
+    cone.ugm \
+    cone.zodb \
+    node \
+    node.ext.directory \
+    node.ext.fs \
+    node.ext.ldap \
+    node.ext.ugm \
+    node.ext.yaml \
+    node.ext.zodb \
+    odict \
+    plumber \
+    sphinx-conestack-theme \
+    treibstoff \
+    webresource \
+    yafowil \
     yafowil.bootstrap \
-    yafowil.widget.ace yafowil.widget.array yafowil.widget.autocomplete \
-    yafowil.widget.chosen yafowil.widget.color yafowil.widget.cron \
-    yafowil.widget.datetime yafowil.widget.dict yafowil.widget.image \
-    yafowil.widget.location yafowil.widget.multiselect \
-    yafowil.widget.richtext yafowil.widget.select2 yafowil.widget.slider \
-    yafowil.widget.tiptap yafowil.widget.wysihtml5 \
-    yafowil.demo yafowil.documentation yafowil-example-helloworld \
-    treibstoff webresource \
-    cone.app cone.calendar cone.charts cone.fileupload cone.firebase \
-    cone.ugm cone.ldap cone.maps cone.sql cone.tile cone.tokens cone.zodb
+    yafowil.demo \
+    yafowil.documentation \
+    yafowil.lingua \
+    yafowil.webob \
+    yafowil.widget.ace \
+    yafowil.widget.array \
+    yafowil.widget.autocomplete \
+    yafowil.widget.chosen \
+    yafowil.widget.color \
+    yafowil.widget.cron \
+    yafowil.widget.datetime \
+    yafowil.widget.dict \
+    yafowil.widget.image \
+    yafowil.widget.location \
+    yafowil.widget.multiselect \
+    yafowil.widget.richtext \
+    yafowil.widget.select2 \
+    yafowil.widget.slider \
+    yafowil.widget.tiptap \
+    yafowil.widget.wysihtml5 \
+    yafowil.yaml \
+    yafowil-example-helloworld
 
-# Test blacklist from TODO.rst (6 packages - tests skipped)
+# Test blacklist from TODO.rst (alphabetically sorted, one per line)
 VALIDATE_TEST_BLACKLIST = \
-    sphinx-conestack-theme treibstoff yafowil-example-helloworld \
-    yafowil.demo yafowil.documentation yafowil.webob
+    sphinx-conestack-theme \
+    treibstoff \
+    yafowil.demo \
+    yafowil.documentation \
+    yafowil.webob \
+    yafowil-example-helloworld
 
-# Packages that run tests (48 - 6 = 42 packages)
+# Packages that run tests
 VALIDATE_WITH_TESTS = $(filter-out $(VALIDATE_TEST_BLACKLIST), \
     $(VALIDATE_ALL_PACKAGES))
 
-# Packages that skip tests (6 packages)
+# Packages that skip tests
 VALIDATE_SKIP_TESTS = $(filter $(VALIDATE_TEST_BLACKLIST), \
     $(VALIDATE_ALL_PACKAGES))
 
+# Helper function to run validation on a list of packages in parallel
+# Usage: $(call validate-packages,<package-list>,<script-options>)
+define validate-packages
+	@mkdir -p /tmp/conestack-dev
+	@rm -f /tmp/conestack-dev/validate_failed.txt
+	@for pkg in $(1); do \
+		(venv/bin/python scripts/validate_package.py $$pkg $(2) \
+			> /tmp/conestack-dev/validate_$$pkg.log 2>&1 \
+			&& echo "✓ $$pkg" \
+			|| (echo "✗ $$pkg" && echo $$pkg >> /tmp/conestack-dev/validate_failed.txt)) & \
+	done; \
+	wait; \
+	if [ -f /tmp/conestack-dev/validate_failed.txt ]; then \
+		echo ""; \
+		echo "Failed packages:"; \
+		cat /tmp/conestack-dev/validate_failed.txt; \
+		echo ""; \
+		echo "Check logs in /tmp/conestack-dev/validate_<package>.log"; \
+		exit 1; \
+	else \
+		echo ""; \
+		echo "All packages validated successfully"; \
+	fi
+endef
+
+.PHONY: validate-build
+validate-build: $(PACKAGES_TARGET)
+	@echo "Building all packages..."
+	@mkdir -p dist
+	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--env --build)
+
+.PHONY: validate-check
+validate-check: $(PACKAGES_TARGET)
+	@echo "Checking all packages (pyroma + twine)..."
+	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--check)
+
+.PHONY: validate-test
+validate-test: $(PACKAGES_TARGET)
+	@echo "Testing packages (excluding blacklist)..."
+	$(call validate-packages,$(VALIDATE_WITH_TESTS),--test)
+
 .PHONY: validate-all
 validate-all: $(PACKAGES_TARGET)
-	@echo "=== Batch Package Validation (with tests) ==="
-	@echo "Validating $(words $(VALIDATE_ALL_PACKAGES)) packages in parallel..."
-	@echo "  - $(words $(VALIDATE_WITH_TESTS)) packages WITH tests"
-	@echo "  - $(words $(VALIDATE_SKIP_TESTS)) packages WITHOUT tests"
-	@rm -rf dist/
-	@mkdir -p /tmp/conestack-dev
-	@failed=""; \
-	pids=""; \
-	for pkg in $(VALIDATE_WITH_TESTS); do \
-		(venv/bin/python scripts/validate_package.py $$pkg --collect-dist \
-		 > /tmp/conestack-dev/validate_$$pkg.log 2>&1 && \
-		 echo "✓ $$pkg" || \
-		 (echo "✗ $$pkg" && echo "$$pkg" >> /tmp/conestack-dev/validate_failed.txt)) & \
-		pids="$$pids $$!"; \
-	done; \
-	for pkg in $(VALIDATE_SKIP_TESTS); do \
-		(venv/bin/python scripts/validate_package.py $$pkg --skip-tests \
-		 --collect-dist > /tmp/conestack-dev/validate_$$pkg.log 2>&1 && \
-		 echo "✓ $$pkg (tests skipped)" || \
-		 (echo "✗ $$pkg (tests skipped)" && \
-		  echo "$$pkg" >> /tmp/conestack-dev/validate_failed.txt)) & \
-		pids="$$pids $$!"; \
-	done; \
-	wait $$pids; \
-	echo ""; \
-	echo "=== Validation Complete ==="; \
-	if [ -f /tmp/conestack-dev/validate_failed.txt ]; then \
-		failed=$$(cat /tmp/conestack-dev/validate_failed.txt); \
-		count=$$(wc -l < /tmp/conestack-dev/validate_failed.txt); \
-		echo "❌ $$count package(s) FAILED:"; \
-		cat /tmp/conestack-dev/validate_failed.txt | sed 's/^/  - /'; \
-		echo ""; \
-		echo "Check logs in /tmp/conestack-dev/validate_*.log for details"; \
-		rm /tmp/conestack-dev/validate_failed.txt; \
-		exit 1; \
-	else \
-		echo "✅ All $(words $(VALIDATE_ALL_PACKAGES)) packages passed!"; \
-		echo "Build artifacts collected in dist/"; \
-	fi
-
-.PHONY: validate-quick
-validate-quick: $(PACKAGES_TARGET)
-	@echo "=== Quick Package Validation (skip all tests) ==="
-	@echo "Validating $(words $(VALIDATE_ALL_PACKAGES)) packages in parallel..."
-	@rm -rf dist/
-	@mkdir -p /tmp/conestack-dev
-	@failed=""; \
-	pids=""; \
-	for pkg in $(VALIDATE_ALL_PACKAGES); do \
-		(venv/bin/python scripts/validate_package.py $$pkg --skip-tests \
-		 --collect-dist > /tmp/conestack-dev/validate_$$pkg.log 2>&1 && \
-		 echo "✓ $$pkg" || \
-		 (echo "✗ $$pkg" && echo "$$pkg" >> /tmp/conestack-dev/validate_failed.txt)) & \
-		pids="$$pids $$!"; \
-	done; \
-	wait $$pids; \
-	echo ""; \
-	echo "=== Validation Complete ==="; \
-	if [ -f /tmp/conestack-dev/validate_failed.txt ]; then \
-		failed=$$(cat /tmp/conestack-dev/validate_failed.txt); \
-		count=$$(wc -l < /tmp/conestack-dev/validate_failed.txt); \
-		echo "❌ $$count package(s) FAILED:"; \
-		cat /tmp/conestack-dev/validate_failed.txt | sed 's/^/  - /'; \
-		echo ""; \
-		echo "Check logs in /tmp/conestack-dev/validate_*.log for details"; \
-		rm /tmp/conestack-dev/validate_failed.txt; \
-		exit 1; \
-	else \
-		echo "✅ All $(words $(VALIDATE_ALL_PACKAGES)) packages passed!"; \
-		echo "Build artifacts collected in dist/"; \
-	fi
+	@echo "Running full validation (env, build, check, test, clean)..."
+	@mkdir -p dist
+	@rm -rf dist/*
+	$(call validate-packages,$(VALIDATE_WITH_TESTS),--all)
+	@echo ""
+	@echo "Validating test-blacklisted packages (no tests)..."
+	@for pkg in $(VALIDATE_SKIP_TESTS); do \
+		echo "Validating $$pkg (skipping tests)..."; \
+		venv/bin/python scripts/validate_package.py $$pkg --env \
+			&& venv/bin/python scripts/validate_package.py $$pkg --build \
+			&& venv/bin/python scripts/validate_package.py $$pkg --check \
+			&& venv/bin/python scripts/validate_package.py $$pkg --clean \
+			|| exit 1; \
+	done
+	@echo ""
+	@echo "Full validation complete for all packages"
 
 .PHONY: validate-clean
 validate-clean:
 	@echo "Cleaning validation artifacts..."
-	@rm -rf dist/
+	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--clean)
+	@rm -rf dist
 	@rm -rf /tmp/conestack-dev
-	@echo "✓ Cleaned dist/ and validation logs"
+	@echo "Validation artifacts cleaned"

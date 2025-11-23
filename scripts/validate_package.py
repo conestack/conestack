@@ -134,14 +134,17 @@ AUTHOR
 Generated for the Conestack monorepo package validation workflow.
 """
 
+from pathlib import Path
+
 import argparse
 import os
 import shutil
 import subprocess
 import sys
-import tempfile
-import time
-from pathlib import Path
+
+
+# Constant for venv directory name
+VALIDATE_VENV_DIR = "venv"
 
 
 class ValidationError(Exception):
@@ -247,70 +250,132 @@ def check_dependencies():
         sys.exit(2)
 
 
-def validate_package(
-    package_name,
-    keep_dist=False,
-    keep_venv=False,
-    skip_tests=False,
-    pyroma_threshold=8,
-    verbose=False,
-    collect_dist=False
-):
-    """Validate a package through all validation steps.
+def phase_env(package, repo_root, verbose=False):
+    """Create venv and install build and validation tools.
 
-    :param package_name: Name of the package to validate
-    :param keep_dist: Keep dist/ directory after validation
-    :param keep_venv: Keep test venv after validation
-    :param skip_tests: Skip test execution
-    :param pyroma_threshold: Minimum pyroma score required
+    Creates venv at sources/<package>/venv/ and installs:
+    - build (for building wheels/sdists)
+    - pyroma (for quality checks)
+    - twine (for PyPI validation)
+
+    Does NOT install the package itself - that happens in phase_test.
+
+    :param package: Package name
+    :param repo_root: Path to repository root
     :param verbose: Show detailed output
-    :param collect_dist: Copy build artifacts to root dist/ directory
+    :return: 0 on success, 1 on failure
     """
-    # Get repository root and package directory
-    repo_root = Path.cwd()
-    package_dir = repo_root / 'sources' / package_name
+    print_step(f'Phase: env - Creating venv for {package}', verbose)
 
-    print(f'\n{Colors.BOLD}Validating package: {package_name}{Colors.ENDC}')
-    print(f'Package directory: {package_dir}\n')
+    package_dir = repo_root / "sources" / package
+    venv_path = package_dir / VALIDATE_VENV_DIR
 
-    # Step 1: Pre-checks
-    print_step('Pre-checks', verbose)
+    # Remove existing venv if it exists (ensure clean state)
+    if venv_path.exists():
+        print_info(f'Removing existing venv: {venv_path}', verbose)
+        shutil.rmtree(venv_path)
 
-    if not package_dir.exists():
-        raise ValidationError(f'Package directory not found: {package_dir}')
-    print_success(f'Package directory exists')
+    # Create venv
+    print_info(f'Creating venv: {venv_path}', verbose)
+    try:
+        run_command(
+            [sys.executable, '-m', 'venv', str(venv_path)],
+            verbose=verbose
+        )
+    except ValidationError as e:
+        print_error(f'Failed to create venv: {e}')
+        return 1
 
-    pyproject_file = package_dir / 'pyproject.toml'
-    if not pyproject_file.exists():
-        raise ValidationError(f'pyproject.toml not found in {package_dir}')
-    print_success('pyproject.toml exists')
+    venv_python = venv_path / 'bin' / 'python'
+    if not venv_python.exists():
+        print_error(f'Venv python not found: {venv_python}')
+        return 1
 
-    # Clean previous dist
-    dist_dir = package_dir / 'dist'
+    # Upgrade pip
+    print_info('Upgrading pip in venv', verbose)
+    try:
+        run_command(
+            [str(venv_python), '-m', 'pip', 'install', '--upgrade', 'pip'],
+            verbose=verbose
+        )
+    except ValidationError as e:
+        print_error(f'Failed to upgrade pip: {e}')
+        return 1
+
+    # Install build, pyroma, and twine
+    print_info('Installing build, pyroma, and twine', verbose)
+    try:
+        run_command(
+            [str(venv_python), '-m', 'pip', 'install', 'build', 'pyroma', 'twine'],
+            verbose=verbose
+        )
+    except ValidationError as e:
+        print_error(f'Failed to install tools: {e}')
+        return 1
+
+    print_success(f'Venv created successfully at {venv_path}')
+    return 0
+
+
+def phase_build(package, repo_root, verbose=False):
+    """Build wheel and sdist using venv, copy to root dist/.
+
+    Builds distribution artifacts using the build tool from venv and copies
+    them to the root dist/ directory where they can be used as dependencies
+    by other packages. Requires that --env has been run first.
+
+    :param package: Package name
+    :param repo_root: Path to repository root
+    :param verbose: Show detailed output
+    :return: 0 on success, 1 on failure, 2 on setup error
+    """
+    print_step(f'Phase: build - Building {package}', verbose)
+
+    package_dir = repo_root / "sources" / package
+    venv_path = package_dir / VALIDATE_VENV_DIR
+    dist_dir = package_dir / "dist"
+
+    # Check venv exists
+    if not venv_path.exists():
+        print_error(f'Venv not found: {venv_path}')
+        print_error('Please run --env phase first')
+        return 2
+
+    venv_python = venv_path / 'bin' / 'python'
+    if not venv_python.exists():
+        print_error(f'Venv python not found: {venv_python}')
+        return 2
+
+    # Clean existing dist
     if dist_dir.exists():
         print_info(f'Removing previous dist directory', verbose)
         shutil.rmtree(dist_dir)
-    print_success('Cleaned previous build artifacts')
 
-    # Step 2: Build Phase
-    print_step('Building distributions', verbose)
+    # Build using venv
+    print_info(f'Building with: {venv_python} -m build', verbose)
+    try:
+        run_command(
+            [str(venv_python), '-m', 'build', str(package_dir)],
+            verbose=verbose
+        )
+    except ValidationError as e:
+        print_error(f'Build failed: {e}')
+        return 1
 
-    run_command(
-        [sys.executable, '-m', 'build'],
-        cwd=package_dir,
-        verbose=verbose
-    )
-
+    # Verify artifacts exist
     if not dist_dir.exists() or not list(dist_dir.glob('*')):
-        raise ValidationError('Build succeeded but no distributions found')
+        print_error('Build succeeded but no distributions found')
+        return 1
 
     wheels = list(dist_dir.glob('*.whl'))
     sdists = list(dist_dir.glob('*.tar.gz'))
 
     if not wheels:
-        raise ValidationError('No wheel (.whl) file found')
+        print_error('No wheel (.whl) file found')
+        return 1
     if not sdists:
-        raise ValidationError('No source distribution (.tar.gz) file found')
+        print_error('No source distribution (.tar.gz) file found')
+        return 1
 
     wheel_file = wheels[0]
     sdist_file = sdists[0]
@@ -318,31 +383,78 @@ def validate_package(
     print_success(f'Built wheel: {wheel_file.name}')
     print_success(f'Built sdist: {sdist_file.name}')
 
-    # Step 3: PyPI Validation (twine check)
-    print_step('Validating PyPI compatibility (twine check)', verbose)
+    # Copy to root dist/
+    root_dist = repo_root / "dist"
+    root_dist.mkdir(exist_ok=True)
 
-    run_command(
-        [sys.executable, '-m', 'twine', 'check', 'dist/*'],
-        cwd=package_dir,
-        verbose=verbose
-    )
-    print_success('PyPI metadata validation passed')
+    print_info(f'Copying artifacts to {root_dist}', verbose)
+    try:
+        shutil.copy2(wheel_file, root_dist)
+        shutil.copy2(sdist_file, root_dist)
+    except Exception as e:
+        print_error(f'Failed to copy artifacts: {e}')
+        return 1
 
-    # Step 4: Quality Rating (pyroma)
-    print_step(
-        f'Rating package quality (pyroma, threshold: {pyroma_threshold}/10)',
-        verbose
-    )
+    print_success(f'Copied {wheel_file.name} and {sdist_file.name} to dist/')
+    return 0
 
+
+def phase_check(package, repo_root, pyroma_threshold=8, verbose=False):
+    """Run pyroma and twine check on built packages.
+
+    Validates package quality and PyPI compliance using tools from venv.
+    Requires that --env and --build have been run first.
+
+    :param package: Package name
+    :param repo_root: Path to repository root
+    :param pyroma_threshold: Minimum pyroma score (default: 8)
+    :param verbose: Show detailed output
+    :return: 0 on success, 1 on failure, 2 on setup error
+    """
+    print_step(f'Phase: check - Validating {package}', verbose)
+
+    package_dir = repo_root / "sources" / package
+    venv_path = package_dir / VALIDATE_VENV_DIR
+    dist_dir = package_dir / "dist"
+
+    # Check venv exists
+    if not venv_path.exists():
+        print_error(f'Venv not found: {venv_path}')
+        print_error('Please run --env phase first')
+        return 2
+
+    # Check dist exists
+    if not dist_dir.exists():
+        print_error(f'Dist directory not found: {dist_dir}')
+        print_error('Please run --build phase first')
+        return 2
+
+    venv_python = venv_path / 'bin' / 'python'
+
+    # Run twine check
+    print_info('Running twine check', verbose)
+    try:
+        run_command(
+            [str(venv_python), '-m', 'twine', 'check', 'dist/*'],
+            cwd=package_dir,
+            verbose=verbose
+        )
+    except ValidationError as e:
+        print_error(f'Twine check failed: {e}')
+        return 1
+
+    print_success('PyPI metadata validation passed (twine)')
+
+    # Run pyroma
+    print_info(f'Running pyroma (threshold: {pyroma_threshold}/10)', verbose)
     try:
         output = run_command(
-            [sys.executable, '-m', 'pyroma', '.'],
+            [str(venv_python), '-m', 'pyroma', '.'],
             cwd=package_dir,
             verbose=verbose
         )
 
         # Parse pyroma score from output
-        # Pyroma outputs "Final rating: X/10"
         score = None
         for line in output.split('\n'):
             if 'rating:' in line.lower() and '/10' in line:
@@ -354,184 +466,210 @@ def validate_package(
         if score is not None:
             print_success(f'Pyroma score: {score}/10')
             if score < pyroma_threshold:
-                raise ValidationError(
-                    f'Pyroma score {score} below threshold {pyroma_threshold}'
-                )
+                print_error(f'Pyroma score {score} below threshold {pyroma_threshold}')
+                return 1
         else:
             print_success('Pyroma check completed (score not parsed)')
 
     except ValidationError as e:
-        if 'below threshold' in str(e):
-            raise
-        # If pyroma fails for other reasons, show warning but continue
-        print(
-            f'{Colors.WARNING}Warning: Pyroma check had issues but '
-            f'continuing...{Colors.ENDC}'
-        )
+        # If pyroma fails, show warning but continue
+        print(f'{Colors.WARNING}Warning: Pyroma check had issues but continuing...{Colors.ENDC}')
         if verbose:
             print(str(e))
 
-    # Step 5: Installation Test
-    print_step('Testing installation in isolated environment', verbose)
+    print_success('Quality checks passed')
+    return 0
 
-    # Create temporary venv
-    timestamp = int(time.time())
-    venv_dir = Path(tempfile.gettempdir()) / f'validate_{package_name}_{timestamp}'
 
-    print_info(f'Creating venv: {venv_dir}', verbose)
-    run_command(
-        [sys.executable, '-m', 'venv', str(venv_dir)],
-        verbose=verbose
-    )
+def phase_test(package, repo_root, env_vars, verbose=False):
+    """Install package from root/dist and run pytest.
 
-    # Get venv python path
-    venv_python = venv_dir / 'bin' / 'python'
-    if not venv_python.exists():
-        raise ValidationError(f'Venv python not found: {venv_python}')
+    Installs the package from root/dist (NOT from sources) to simulate
+    a real PyPI installation, then runs tests. This validates the actual
+    release artifact. Requires that --env and --build have been run first.
 
+    :param package: Package name
+    :param repo_root: Path to repository root
+    :param env_vars: Environment variables to set (from mx.ini)
+    :param verbose: Show detailed output
+    :return: 0 on success, 1 on failure, 2 on setup error
+    """
+    print_step(f'Phase: test - Testing {package}', verbose)
+
+    package_dir = repo_root / "sources" / package
+    venv_path = package_dir / VALIDATE_VENV_DIR
+    root_dist = repo_root / "dist"
+
+    # Check venv exists
+    if not venv_path.exists():
+        print_error(f'Venv not found: {venv_path}')
+        print_error('Please run --env phase first')
+        return 2
+
+    venv_python = venv_path / 'bin' / 'python'
+
+    # Check root dist has package wheel
+    package_name_safe = package.replace('-', '_').replace('.', '_')
+    wheels_in_dist = list(root_dist.glob(f'{package}*.whl')) + \
+                     list(root_dist.glob(f'{package_name_safe}*.whl'))
+
+    if not wheels_in_dist:
+        print_error(f'No wheel for {package} found in {root_dist}')
+        print_error('Please run --build phase first')
+        return 2
+
+    # Install package from root/dist with --find-links
+    # Use --pre to prefer development versions and --upgrade to force reinstall
+    print_info(f'Installing {package} from {root_dist} (with dependencies)', verbose)
     try:
-        # Upgrade pip
-        print_info('Upgrading pip', verbose)
         run_command(
-            [str(venv_python), '-m', 'pip', 'install', '--upgrade', 'pip'],
+            [str(venv_python), '-m', 'pip', 'install',
+             '--find-links', str(root_dist),
+             '--pre',  # Allow pre-release/development versions
+             '--upgrade',  # Force upgrade to local version if exists
+             f'{package}[test]'],
             verbose=verbose
         )
+    except ValidationError as e:
+        print_error(f'Failed to install package: {e}')
+        return 1
 
-        # Install the wheel
-        print_info(f'Installing wheel: {wheel_file}', verbose)
+    print_success(f'Package installed from root/dist')
+
+    # Set up environment variables for tests
+    test_env = os.environ.copy()
+    test_env.update(env_vars)
+
+    # Run pytest from the package directory
+    print_info('Running pytest', verbose)
+    try:
         run_command(
-            [str(venv_python), '-m', 'pip', 'install', str(wheel_file)],
+            [str(venv_python), '-m', 'pytest', '-v'],
+            cwd=package_dir,
+            env=test_env,
             verbose=verbose
         )
-        print_success(f'Package installed successfully')
+    except ValidationError as e:
+        print_error(f'Tests failed: {e}')
+        return 1
 
-        # Verify import
-        # Try to import the main package module
-        # Handle namespace packages (e.g., cone.app -> import cone.app)
-        import_name = package_name.replace('-', '_')
-        print_info(f'Verifying import: {import_name}', verbose)
+    print_success('All tests passed')
+    return 0
 
+
+def phase_clean(package, repo_root, verbose=False):
+    """Remove venv and dist directories.
+
+    Cleans up validation artifacts for the package. Does NOT remove
+    artifacts from root dist/ directory.
+
+    :param package: Package name
+    :param repo_root: Path to repository root
+    :param verbose: Show detailed output
+    :return: 0 (always succeeds)
+    """
+    print_step(f'Phase: clean - Cleaning {package}', verbose)
+
+    package_dir = repo_root / "sources" / package
+    venv_path = package_dir / VALIDATE_VENV_DIR
+    dist_path = package_dir / "dist"
+
+    cleaned = []
+
+    # Remove venv
+    if venv_path.exists():
+        print_info(f'Removing venv: {venv_path}', verbose)
         try:
-            run_command(
-                [str(venv_python), '-c', f'import {import_name}'],
-                verbose=verbose
-            )
-            print_success(f'Package imports successfully')
-        except ValidationError:
-            # Some packages might have different import names or special handling
-            print(
-                f'{Colors.WARNING}Warning: Could not verify import '
-                f'(this may be normal for some packages){Colors.ENDC}'
-            )
+            shutil.rmtree(venv_path)
+            cleaned.append('venv')
+        except Exception as e:
+            print(f'{Colors.WARNING}Warning: Failed to remove venv: {e}{Colors.ENDC}')
 
-        # Step 6: Test Execution
-        if not skip_tests:
-            print_step('Running tests in isolated environment', verbose)
+    # Remove dist
+    if dist_path.exists():
+        print_info(f'Removing dist: {dist_path}', verbose)
+        try:
+            shutil.rmtree(dist_path)
+            cleaned.append('dist')
+        except Exception as e:
+            print(f'{Colors.WARNING}Warning: Failed to remove dist: {e}{Colors.ENDC}')
 
-            # Install test dependencies
-            print_info('Installing test dependencies', verbose)
-            run_command(
-                [str(venv_python), '-m', 'pip', 'install', f'{wheel_file}[test]'],
-                verbose=verbose
-            )
-
-            # Set up environment variables for tests
-            test_env = os.environ.copy()
-            test_env.update({
-                'TESTRUN_MARKER': '1',
-                'LDAP_ADD_BIN': str(repo_root / 'openldap' / 'bin' / 'ldapadd'),
-                'LDAP_DELETE_BIN': str(repo_root / 'openldap' / 'bin' / 'ldapdelete'),
-                'SLAPD_BIN': str(repo_root / 'openldap' / 'libexec' / 'slapd'),
-                'SLAPD_URIS': 'ldap://127.0.0.1:12345',
-            })
-
-            # Run pytest from the package directory
-            print_info('Running pytest', verbose)
-            run_command(
-                [str(venv_python), '-m', 'pytest', '-v'],
-                cwd=package_dir,
-                env=test_env,
-                verbose=verbose
-            )
-            print_success('All tests passed')
-        else:
-            print(f'{Colors.WARNING}Skipping tests (--skip-tests flag){Colors.ENDC}')
-
-    finally:
-        # Cleanup venv
-        if not keep_venv:
-            print_info(f'Removing test venv: {venv_dir}', verbose)
-            shutil.rmtree(venv_dir, ignore_errors=True)
-        else:
-            print_info(f'Keeping test venv: {venv_dir}', verbose)
-
-    # Copy build artifacts to root dist/ if requested
-    if collect_dist:
-        root_dist = repo_root / 'dist'
-        root_dist.mkdir(exist_ok=True)
-
-        print_info(f'Copying build artifacts to {root_dist}', verbose)
-        shutil.copy2(wheel_file, root_dist)
-        shutil.copy2(sdist_file, root_dist)
-        print_success(
-            f'Copied {wheel_file.name} and {sdist_file.name} to dist/'
-        )
-
-    # Cleanup dist
-    if not keep_dist:
-        print_info('Removing dist directory', verbose)
-        shutil.rmtree(dist_dir, ignore_errors=True)
+    if cleaned:
+        print_success(f'Cleaned: {", ".join(cleaned)}')
     else:
-        print_info(f'Keeping dist directory: {dist_dir}', verbose)
+        print_info('Nothing to clean', verbose)
 
-    print(
-        f'\n{Colors.OKGREEN}{Colors.BOLD}✓ Package validation completed '
-        f'successfully!{Colors.ENDC}\n'
-    )
+    return 0
+
+
+def load_env_vars(repo_root):
+    """Load environment variables for test execution."""
+    return {
+        'TESTRUN_MARKER': '1',
+        'LDAP_ADD_BIN': str(repo_root / 'openldap' / 'bin' / 'ldapadd'),
+        'LDAP_DELETE_BIN': str(repo_root / 'openldap' / 'bin' / 'ldapdelete'),
+        'SLAPD_BIN': str(repo_root / 'openldap' / 'libexec' / 'slapd'),
+        'SLAPD_URIS': 'ldap://127.0.0.1:12345',
+    }
 
 
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Validate Python package for PyPI upload',
+        description='Validate a Python package through build, check, and test phases.',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='See script docstring for detailed documentation.'
     )
 
     parser.add_argument(
         'package',
-        help='Package name (directory name in sources/)'
+        help='Package name (must exist in sources/)'
     )
-    parser.add_argument(
-        '--keep-dist',
+
+    # Phase selection (mutually exclusive)
+    phase_group = parser.add_mutually_exclusive_group(required=True)
+    phase_group.add_argument(
+        '--env',
         action='store_true',
-        help='Keep dist/ directory after validation'
+        help='Create venv and install validation tools (build, pyroma, twine)'
     )
-    parser.add_argument(
-        '--keep-venv',
+    phase_group.add_argument(
+        '--build',
         action='store_true',
-        help='Keep test venv for debugging'
+        help='Build wheel/sdist using venv and copy to root dist/ (requires --env)'
     )
-    parser.add_argument(
-        '--skip-tests',
+    phase_group.add_argument(
+        '--check',
         action='store_true',
-        help='Skip test execution phase'
+        help='Run pyroma and twine check (requires --env and --build)'
     )
+    phase_group.add_argument(
+        '--test',
+        action='store_true',
+        help='Install package from root/dist and run pytest (requires --env and --build)'
+    )
+    phase_group.add_argument(
+        '--clean',
+        action='store_true',
+        help='Remove venv and dist/'
+    )
+    phase_group.add_argument(
+        '--all',
+        action='store_true',
+        help='Run all phases: env, build, check, test, clean'
+    )
+
+    # Configuration options
     parser.add_argument(
         '--pyroma-threshold',
         type=int,
         default=8,
-        help='Minimum pyroma quality score (default: 8)'
+        help='Minimum pyroma score (default: 8)'
     )
     parser.add_argument(
-        '--verbose', '-v',
+        '-v', '--verbose',
         action='store_true',
         help='Show detailed output'
-    )
-    parser.add_argument(
-        '--collect-dist',
-        action='store_true',
-        help='Copy build artifacts to root dist/ directory'
     )
 
     args = parser.parse_args()
@@ -540,26 +678,69 @@ def main():
     if not sys.stdout.isatty():
         Colors.disable()
 
+    # Get repository root
+    repo_root = Path.cwd()
+
+    # Verify package exists
+    package_dir = repo_root / "sources" / args.package
+    if not package_dir.exists():
+        print_error(f'Package directory not found: {package_dir}')
+        sys.exit(2)
+
+    # Check dependencies
+    check_dependencies()
+
+    # Load environment variables
+    env_vars = load_env_vars(repo_root)
+
+    print(f'\n{Colors.BOLD}Validating package: {args.package}{Colors.ENDC}')
+    print(f'Package directory: {package_dir}\n')
+
+    # Execute requested phase(s)
     try:
-        # Check dependencies
-        check_dependencies()
+        if args.all:
+            # Run all phases in sequence
+            phases = [
+                ("env", lambda: phase_env(args.package, repo_root, args.verbose)),
+                ("build", lambda: phase_build(args.package, repo_root, args.verbose)),
+                ("check", lambda: phase_check(args.package, repo_root, args.pyroma_threshold, args.verbose)),
+                ("test", lambda: phase_test(args.package, repo_root, env_vars, args.verbose)),
+                ("clean", lambda: phase_clean(args.package, repo_root, args.verbose)),
+            ]
 
-        # Run validation
-        validate_package(
-            args.package,
-            keep_dist=args.keep_dist,
-            keep_venv=args.keep_venv,
-            skip_tests=args.skip_tests,
-            pyroma_threshold=args.pyroma_threshold,
-            verbose=args.verbose,
-            collect_dist=args.collect_dist
-        )
+            for phase_name, phase_func in phases:
+                result = phase_func()
+                if result != 0:
+                    print_error(f'\nPhase "{phase_name}" failed')
+                    sys.exit(result if result != 2 else 1)
 
-        sys.exit(0)
+            print(f'\n{Colors.OKGREEN}{Colors.BOLD}✓ All phases completed successfully!{Colors.ENDC}\n')
+            sys.exit(0)
 
-    except ValidationError as e:
-        print_error(f'\nValidation failed: {e}')
-        sys.exit(1)
+        elif args.env:
+            result = phase_env(args.package, repo_root, args.verbose)
+            sys.exit(result)
+
+        elif args.build:
+            result = phase_build(args.package, repo_root, args.verbose)
+            sys.exit(result)
+
+        elif args.check:
+            result = phase_check(args.package, repo_root, args.pyroma_threshold, args.verbose)
+            sys.exit(result)
+
+        elif args.test:
+            result = phase_test(args.package, repo_root, env_vars, args.verbose)
+            sys.exit(result)
+
+        elif args.clean:
+            result = phase_clean(args.package, repo_root, args.verbose)
+            sys.exit(result)
+
+        else:
+            print_error('No phase selected')
+            sys.exit(2)
+
     except KeyboardInterrupt:
         print_error('\nValidation interrupted by user')
         sys.exit(1)
