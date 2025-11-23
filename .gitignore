@@ -4,6 +4,7 @@
 /.python-version
 /.vscode/
 /constraints-mxdev.txt
+/dist/
 /docs/html/
 /htmlcov/
 /openldap/

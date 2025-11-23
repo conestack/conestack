@@ -1,46 +1,66 @@
 #!/usr/bin/env python
 """Package Validation Script for Conestack Monorepo
 
-This script validates Python packages before uploading to PyPI by performing
-comprehensive checks including building, metadata validation, quality rating,
-installation testing, and running tests in an isolated environment.
+This script validates Python packages through multiple phases to ensure they are
+ready for release to PyPI. It tests the actual built artifacts, not source code,
+simulating what users will receive when installing from PyPI.
 
 REQUIREMENTS
 ============
 
-This script requires the following packages to be installed:
+This script requires `pip` and `venv` to be installed in used python interpreter.
 
-    pip install build twine pyroma
-
-The script also expects pytest to be available in the test virtual environment
-(it will be installed as part of the package's test dependencies).
+Each validation creates its own isolated venv with `build`, `pyrmoma` and `pytest`
+installed plus the package being validated.
 
 USAGE
 =====
 
-Basic usage:
+The script supports modular phase-based validation. You can run individual phases
+or execute all phases in sequence.
 
-    python scripts/validate_package.py <package-name>
+Phase Commands:
+
+    # Create venv and install build/validation tools
+    python scripts/validate_package.py <package> --env
+
+    # Build wheel/sdist and copy to root dist/
+    python scripts/validate_package.py <package> --build
+
+    # Run pyroma and twine check
+    python scripts/validate_package.py <package> --check
+
+    # Install from root/dist and run pytest
+    python scripts/validate_package.py <package> --test
+
+    # Remove venv and dist/
+    python scripts/validate_package.py <package> --clean
+
+    # Run all phases in sequence
+    python scripts/validate_package.py <package> --all
 
 Examples:
 
-    # Validate the 'node' package
-    python scripts/validate_package.py node
+    # Full validation workflow
+    python scripts/validate_package.py node --all
 
-    # Validate with verbose output
-    python scripts/validate_package.py cone.app --verbose
+    # Manual step-by-step validation
+    python scripts/validate_package.py node --env
+    python scripts/validate_package.py node --build
+    python scripts/validate_package.py node --check
+    python scripts/validate_package.py node --test
+    python scripts/validate_package.py node --clean
 
-    # Keep build artifacts for inspection
-    python scripts/validate_package.py yafowil --keep-dist
+    # Build all packages, then test one
+    make validate-build
+    python scripts/validate_package.py node --env
+    python scripts/validate_package.py node --test
 
-    # Skip test execution (for debugging)
-    python scripts/validate_package.py odict --skip-tests
+    # Verbose output
+    python scripts/validate_package.py cone.app --all -v
 
-    # Set custom pyroma threshold
-    python scripts/validate_package.py plumber --pyroma-threshold 9
-
-    # Collect build artifacts to root dist/ directory
-    python scripts/validate_package.py node --collect-dist
+    # Custom pyroma threshold
+    python scripts/validate_package.py plumber --all --pyroma-threshold 9
 
 OPTIONS
 =======
@@ -48,63 +68,63 @@ OPTIONS
 Positional Arguments:
   package              Package name (directory name in sources/)
 
-Optional Arguments:
-  --keep-dist          Keep dist/ directory after validation (default: remove)
-  --keep-venv          Keep test venv for debugging (default: remove)
-  --skip-tests         Skip test execution phase
-  --pyroma-threshold   Minimum pyroma quality score (default: 8)
-  --verbose, -v        Show detailed output
-  --collect-dist       Copy build artifacts to root dist/ directory
-  --help, -h           Show this help message
+Phase Selection (required, mutually exclusive):
+  --env                Create venv and install build/validation tools
+  --build              Build wheel/sdist using venv and copy to root dist/
+  --check              Run pyroma and twine check
+  --test               Install package from root/dist and run pytest
+  --clean              Remove venv and dist/
+  --all                Run all phases: env → build → check → test → clean
 
-VALIDATION STEPS
-================
+Configuration Options:
+  --pyroma-threshold N Minimum pyroma quality score (default: 8)
+  -v, --verbose        Show detailed output
+  -h, --help           Show this help message
 
-The script performs the following validation steps in order:
+VALIDATION PHASES
+=================
 
-1. Pre-checks
-   - Verify package directory exists in sources/
-   - Verify pyproject.toml exists
-   - Clean previous dist/ directory
+1. --env: Environment Setup
+   - Creates venv at sources/<package>/venv/
+   - Upgrades pip
+   - Installs build, pyroma, twine
+   - Venv persists for use by other phases
 
-2. Build Phase
-   - Build wheel and source distribution using 'python -m build'
-   - Fails immediately if build errors occur
+2. --build: Build Distributions
+   - Uses venv's build tool to create wheel and sdist
+   - Copies artifacts to root dist/ directory
+   - Makes packages available for cross-package dependencies
+   - Requires: --env
 
-3. PyPI Validation (twine check)
-   - Validate package metadata for PyPI compatibility
-   - Check README rendering
-   - Fails if metadata issues found
+3. --check: Quality Validation
+   - Runs twine check on built distributions
+   - Runs pyroma quality rating (must meet threshold)
+   - Requires: --env and --build
 
-4. Quality Rating (pyroma)
-   - Rate package quality and best practices
-   - Score must meet threshold (default: 8/10)
-   - Fails if score below threshold
+4. --test: Installation and Testing
+   - Installs package FROM root/dist (NOT from sources)
+   - Uses --find-links to resolve dependencies from root/dist
+   - Installs test dependencies via package[test]
+   - Runs pytest with configured environment variables
+   - Validates the actual release artifact
+   - Requires: --env and --build
 
-5. Installation Test
-   - Create temporary isolated virtual environment
-   - Install built wheel distribution
-   - Verify package can be imported
-   - Fails if installation or import fails
+5. --clean: Cleanup
+   - Removes sources/<package>/venv/
+   - Removes sources/<package>/dist/
+   - Does NOT remove root dist/ (managed by make targets)
 
-6. Test Execution
-   - Install test dependencies via package[test] extras
-   - Run pytest in the installed environment
-   - Sets required environment variables (LDAP paths, etc.)
-   - Executes package tests
-   - Fails if tests fail
-
-7. Cleanup
-   - Copy build artifacts to root directory dist/ folder (if --collect-dist)
-   - Remove temporary venv (unless --keep-venv)
-   - Remove dist/ directory (unless --keep-dist)
+6. --all: Complete Workflow
+   - Runs env → build → check → test → clean in sequence
+   - Stops on first failure
+   - Cleans up automatically at the end
 
 EXIT CODES
 ==========
 
-0  - All validations passed successfully
-1  - Validation failed (build, tests, quality, etc.)
-2  - Setup error (missing dependencies, invalid arguments, etc.)
+0  - Phase completed successfully
+1  - Phase failed (build error, test failure, quality below threshold, etc.)
+2  - Setup error (missing venv, missing dist/, invalid package, etc.)
 
 ENVIRONMENT
 ===========
@@ -118,14 +138,31 @@ The script sets the following environment variables during test execution
 - SLAPD_BIN=openldap/libexec/slapd
 - SLAPD_URIS=ldap://127.0.0.1:12345
 
+KEY DESIGN POINTS
+=================
+
+1. The --test phase installs the package FROM root/dist (the built wheel),
+   NOT from sources. This simulates a real PyPI installation and validates
+   the actual release artifact that users will receive.
+
+2. All pip installs use --find-links pointing to root/dist, allowing packages
+   to depend on pre-built versions of sibling packages. This enables validation
+   of the entire dependency tree before publishing to PyPI.
+
+3. Venv and dist/ persist between phases until --clean is run. This allows
+   incremental validation and debugging of specific phases.
+
+4. Development versions (e.g., 2.0.0.dev0) are preferred over published versions
+   using pip's --pre and --upgrade flags.
+
 NOTES
 =====
 
-- The script operates in fail-fast mode: stops at first error
-- Build artifacts are created in the package's dist/ directory
-- Test venv is created in /tmp/validate_{package}_{timestamp}/
-- All paths are relative to the conestack monorepo root
-- Package must be checked out in sources/{package-name}/
+- Each phase can be run independently or combined with --all
+- Venv location: sources/<package>/venv/ (persists between phases)
+- Build artifacts: sources/<package>/dist/ (copied to root dist/)
+- Phases must be run in dependency order: env before build/test, build before check/test
+- Package must exist in sources/{package-name}/
 - Package must have [project.optional-dependencies] test defined in pyproject.toml
 
 AUTHOR
