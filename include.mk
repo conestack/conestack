@@ -95,11 +95,17 @@ define validate-packages
 	fi
 endef
 
+.PHONY: validate-env
+validate-env: $(PACKAGES_TARGET)
+	@echo "Building all packages..."
+	@mkdir -p dist
+	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--env)
+
 .PHONY: validate-build
 validate-build: $(PACKAGES_TARGET)
 	@echo "Building all packages..."
 	@mkdir -p dist
-	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--env --build)
+	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--build)
 
 .PHONY: validate-check
 validate-check: $(PACKAGES_TARGET)
