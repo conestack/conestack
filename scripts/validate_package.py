@@ -558,13 +558,21 @@ def phase_test(package, repo_root, env_vars, verbose=False):
     # Install package from root/dist with --find-links
     # Use --pre to prefer development versions and --upgrade to force reinstall
     print_info(f'Installing {package} from {root_dist} (with dependencies)', verbose)
+
+    def find_wheel(package_name: str):
+        normalized = package_name.replace('.', '_')
+        for wheel in root_dist.glob(f"{normalized}-*.whl"):
+            return wheel
+        raise FileNotFoundError(f"No wheel found for {package_name}")
+
+    wheel_path = find_wheel(package)
     try:
         run_command(
             [str(venv_python), '-m', 'pip', 'install',
              '--find-links', str(root_dist),
              '--pre',  # Allow pre-release/development versions
              '--upgrade',  # Force upgrade to local version if exists
-             f'{package}[test]'],
+             f'{wheel_path}[test]'],
             verbose=verbose
         )
     except ValidationError as e:
