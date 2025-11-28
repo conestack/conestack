@@ -25,7 +25,6 @@ VALIDATE_ALL_PACKAGES = \
     node.ext.zodb \
     odict \
     plumber \
-    sphinx-conestack-theme \
     treibstoff \
     webresource \
     yafowil \
@@ -55,12 +54,12 @@ VALIDATE_ALL_PACKAGES = \
 
 # Test blacklist from TODO.rst (alphabetically sorted, one per line)
 VALIDATE_TEST_BLACKLIST = \
-    sphinx-conestack-theme \
+    node \
     treibstoff \
+    yafowil-example-helloworld \
     yafowil.demo \
     yafowil.documentation \
     yafowil.webob \
-    yafowil-example-helloworld
 
 # Packages that run tests
 VALIDATE_WITH_TESTS = $(filter-out $(VALIDATE_TEST_BLACKLIST), \

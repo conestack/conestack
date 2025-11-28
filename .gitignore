@@ -3,6 +3,7 @@
 /.mxmake/
 /.python-version
 /.vscode/
+/constraints.txt
 /constraints-mxdev.txt
 /dist/
 /docs/html/

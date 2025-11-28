@@ -433,6 +433,18 @@ def phase_build(package, repo_root, verbose=False):
         return 1
 
     print_success(f'Copied {wheel_file.name} and {sdist_file.name} to dist/')
+
+    # generate constraints
+    print_info('Generating constraints', verbose)
+    constraints_path = root_dist / "constraints.txt"
+    with open(constraints_path, "w") as f:
+        for whl in root_dist.glob("*.whl"):
+            parts = whl.name.split("-")
+            pkg = parts[0].replace("_", "-")
+            version = parts[1]
+            f.write(f"{pkg}=={version}\n")
+    print_success('Generated constraints to constraints.txt')
+
     return 0
 
 
@@ -559,19 +571,21 @@ def phase_test(package, repo_root, env_vars, verbose=False):
     # Use --pre to prefer development versions and --upgrade to force reinstall
     print_info(f'Installing {package} from {root_dist} (with dependencies)', verbose)
 
+    # find wheel
     def find_wheel(package_name: str):
         normalized = package_name.replace('.', '_')
         for wheel in root_dist.glob(f"{normalized}-*.whl"):
             return wheel
         raise FileNotFoundError(f"No wheel found for {package_name}")
-
     wheel_path = find_wheel(package)
+
     try:
         run_command(
             [str(venv_python), '-m', 'pip', 'install',
              '--find-links', str(root_dist),
              '--pre',  # Allow pre-release/development versions
              '--upgrade',  # Force upgrade to local version if exists
+             '-c', f'{repo_root}/constraints.txt',
              f'{wheel_path}[test]'],
             verbose=verbose
         )
