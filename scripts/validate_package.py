@@ -436,7 +436,7 @@ def phase_build(package, repo_root, verbose=False):
 
     # generate constraints
     print_info('Generating constraints', verbose)
-    constraints_path = root_dist / "constraints.txt"
+    constraints_path = repo_root / "constraints.txt"
     with open(constraints_path, "w") as f:
         for whl in root_dist.glob("*.whl"):
             parts = whl.name.split("-")
