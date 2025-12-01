@@ -90,7 +90,7 @@ TODO
   - [x] yafowil.widget.cron
   - [x] yafowil.widget.datetime
   - [x] yafowil.widget.dict
-  - [x] yafowil.widget.dynatree
+  - [ ] yafowil.widget.dynatree
   - [x] yafowil.widget.image
   - [x] yafowil.widget.location
   - [x] yafowil.widget.multiselect
@@ -134,7 +134,6 @@ TODO
   - [x] yafowil
   - [x] yafowil.lingua
   - [x] yafowil.webob
-  - [x] yafowil.werkzeug
   - [x] yafowil.widget.ace
   - [x] yafowil.widget.array
   - [x] yafowil.widget.autocomplete
@@ -143,7 +142,7 @@ TODO
   - [x] yafowil.widget.cron
   - [x] yafowil.widget.datetime
   - [x] yafowil.widget.dict
-  - [x] yafowil.widget.dynatree
+  - [ ] yafowil.widget.dynatree
   - [x] yafowil.widget.image
   - [x] yafowil.widget.location
   - [x] yafowil.widget.multiselect
@@ -154,8 +153,64 @@ TODO
   - [x] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
 
-- [ ] Restrict lower versions for next gen base and node.* release and release package
-      structure refactoring.
+- [ ] Merge package structure refactoring.
+  - [x] node.ext.directory
+  - [x] node.ext.fs
+  - [x] node.ext.ldap
+  - [x] node.ext.ugm
+  - [x] node.ext.yaml
+  - [x] node.ext.zodb
+  - [x] node
+  - [x] odict
+  - [x] plumber
+  - [ ] sphinx-conestack-theme
+  - [x] treibstoff
+  - [x] yafowil.bootstrap
+  - [x] yafowil.demo
+  - [x] yafowil.documentation
+  - [x] yafowil-example-helloworld
+  - [x] yafowil
+  - [x] yafowil.lingua
+  - [x] yafowil.webob
+  - [x] yafowil.widget.ace
+  - [x] yafowil.widget.array
+  - [x] yafowil.widget.autocomplete
+  - [x] yafowil.widget.chosen
+  - [x] yafowil.widget.color
+  - [x] yafowil.widget.cron
+  - [x] yafowil.widget.datetime
+  - [x] yafowil.widget.dict
+  - [ ] yafowil.widget.dynatree
+  - [x] yafowil.widget.image
+  - [x] yafowil.widget.location
+  - [x] yafowil.widget.multiselect
+  - [x] yafowil.widget.richtext
+  - [x] yafowil.widget.select2
+  - [x] yafowil.widget.slider
+  - [x] yafowil.widget.tiptap
+  - [x] yafowil.widget.wysihtml5
+  - [x] yafowil.yaml
+  - [x] cone.app
+  - [x] cone.calendar
+  - [x] cone.charts
+  - [x] cone.fileupload
+  - [x] cone.firebase
+  - [x] cone.ldap
+  - [x] cone.maps
+  - [x] cone.sql
+  - [ ] cone.three
+  - [x] cone.tile
+  - [x] cone.tokens
+  - [x] cone.ugm
+  - [x] cone.zodb
+  - [ ] cookiecutter-cone
+
+- [ ] copyright year
+- [ ] feature-branch
+- [ ] docs (cone.app, yafowil)
+- [ ] package checks with source dists
+
+- [ ] Restrict lower versions for next gen base and node.* release and release.
   - [ ] node.ext.directory
   - [ ] node.ext.fs
   - [ ] node.ext.ldap
@@ -166,9 +221,7 @@ TODO
   - [ ] odict
   - [ ] plumber
 
-- [ ] Restrict lower versions for next gen yafowil.* release  and release package
-      structure refactoring.
-  - [ ] webresource
+- [ ] Restrict lower versions for next gen yafowil.* release  and release.
   - [ ] treibstoff
   - [ ] yafowil.bootstrap
   - [ ] yafowil.demo
@@ -177,7 +230,6 @@ TODO
   - [ ] yafowil
   - [ ] yafowil.lingua
   - [ ] yafowil.webob
-  - [ ] yafowil.werkzeug
   - [ ] yafowil.widget.ace
   - [ ] yafowil.widget.array
   - [ ] yafowil.widget.autocomplete
@@ -198,8 +250,7 @@ TODO
   - [ ] yafowil.yaml
 
 - [ ] Merge webresource support for all cone.* packages. Restrict lower and
-      upper versions and release all cone.* packages with package structure
-      refactoring.
+      upper versions and release all cone.* packages.
   - [ ] cone.app
   - [ ] cone.calendar
   - [ ] cone.charts
