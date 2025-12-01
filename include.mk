@@ -12,6 +12,7 @@ VALIDATE_ALL_PACKAGES = \
     cone.ldap \
     cone.maps \
     cone.sql \
+    cone.three \
     cone.tile \
     cone.tokens \
     cone.ugm \
@@ -41,6 +42,7 @@ VALIDATE_ALL_PACKAGES = \
     yafowil.widget.cron \
     yafowil.widget.datetime \
     yafowil.widget.dict \
+    yafowil.widget.dynatree \
     yafowil.widget.image \
     yafowil.widget.location \
     yafowil.widget.multiselect \
@@ -54,6 +56,7 @@ VALIDATE_ALL_PACKAGES = \
 
 # Test blacklist from TODO.rst (alphabetically sorted, one per line)
 VALIDATE_TEST_BLACKLIST = \
+    cone.three \
     node \
     treibstoff \
     yafowil-example-helloworld \
