@@ -3,11 +3,16 @@
 /.mxmake/
 /.python-version
 /.vscode/
+/constraints.txt
 /constraints-mxdev.txt
+/dist/
 /docs/html/
 /htmlcov/
 /openldap/
+/plans/
 /pyvenv.cfg
 /requirements-mxdev.txt
 /sources/
 /venv/
+TODO_*.rst
+mx_*.ini

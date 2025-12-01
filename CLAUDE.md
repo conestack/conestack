@@ -37,7 +37,7 @@ The codebase consists of three main package families:
 - `openldap/` - Locally built OpenLDAP server (required for LDAP-related tests)
 - `.mxmake/` - Build system artifacts and generated scripts
 
-**Important:** Some packages in `sources/` may contain their own nested mxmake setup (with their own `sources/`, `venv/`, etc.) if they were developed standalone. When working from the root conestack directory, **ignore these nested structures** - they are for standalone development of individual packages. Only the root-level directories matter for monorepo development.
+**Important:** Packages in `sources/` may contain their own nested mxmake setup (with their own `sources/`, `venv/`, etc.) if they were developed standalone. When working from the root conestack directory, **ignore these nested structures** - they are for standalone development of individual packages. Only the root-level directories matter for monorepo development.
 
 ## Common Commands
 
@@ -67,7 +67,13 @@ make test
 make coverage
 ```
 
-The test runner uses **zope.testrunner** and runs tests from all packages defined in mx.ini. Tests requiring LDAP functionality need the OpenLDAP installation (built via `make openldap`).
+**pytest** is used as the test runner for all packages defined in mx.ini. Tests requiring LDAP functionality need the OpenLDAP installation (built via `make openldap`).
+
+**Testing styles vary by package**:
+- Most packages use **unittest.TestCase** with **zope.testlayer** fixtures
+- **zope.pytestlayer** provides pytest compatibility for zope testlayers
+- Some packages use pytest-style tests with pytest fixtures
+- **Never mix styles within a single package**
 
 ### Building Documentation
 
@@ -125,7 +131,7 @@ The test runner sets these environment variables (defined in mx.ini):
 
 ## Package Structure Convention
 
-All packages follow a consistent structure:
+Most packages follow a consistent structure:
 
 ```
 package-name/
@@ -135,7 +141,7 @@ package-name/
 │           ├── __init__.py
 │           ├── (implementation files)
 │           └── tests/
-├── setup.py or setup.cfg
+├── pyproject.toml
 └── README.rst
 ```
 
@@ -143,8 +149,8 @@ Most packages use namespace packages (e.g., `cone.app` has code in `src/cone/app
 
 ## Python Version
 
-Minimum Python version: **3.7** (configured in Makefile)
-Currently using Python 3.11 (see `.python-version`)
+Minimum Python version: **3.10** (configured in Makefile)
+For current Python version see `.python-version`
 
 ## Working with Individual Packages
 
@@ -159,3 +165,85 @@ Each package in `sources/` is its own Git repository. To work on a specific pack
 
 - **mx.ini** - Package repository configuration, build settings, test paths
 - **Makefile** - Generated build orchestration (Generated, only edited settings are kept)
+
+## Development Guidelines
+
+### General Workflow
+
+- Every change, improvement, refactoring follows a detailed implementation plan
+- When working on tests, never modify production code
+- When production code is not covered by tests, add tests first
+- When fixing bugs or adding features, update/extend tests in the same workflow
+- Do not be too verbose (you're an LLM though).
+- Do not hesitate to ask.
+
+### Code Quality Standards
+
+**Simplicity Rules**:
+- The simplest solution that could possibly work
+- YAGNI - implement only what's needed now
+- Avoid premature optimization
+- Delete dead code immediately
+
+**Clarity Requirements**:
+- Names should reveal intent
+- Functions should do one thing
+- Avoid clever code - optimize for readability
+- Make dependencies explicit
+- Fail fast and loud with clear error messages
+
+**Refactoring Triggers** - Refactor when you see:
+- Duplication (Rule of Three - refactor on third copy)
+- Long methods (>20 lines is suspicious)
+- Too many parameters (>3 is a smell)
+- Comments explaining what code does (code should be self-documenting)
+- Nested conditionals (extract to methods)
+
+**Comments**:
+- Comments explain WHY, not WHAT
+- Focus on current behavior, not history
+- Delete outdated comments immediately
+- Prefer self-documenting code over comments
+
+### Python
+
+- Follow PEP 20 – The Zen of Python (https://peps.python.org/pep-0020)
+- Follow PEP 8 – Style Guide for Python Code (https://peps.python.org/pep-0008)
+
+#### Docstrings
+
+Use **Sphinx/reStructuredText style** for all docstrings:
+
+```python
+"""Description of the function.
+
+:param name: Description of the argument.
+:return: Description of the return value.
+"""
+```
+
+### Testing Guidelines
+
+**Consistency Rule**: Each package uses either unittest or pytest style - never mix them.
+
+**Before adding tests**:
+1. Check existing tests in the package (`sources/<package>/src/*/tests/`)
+2. Use the same style and patterns as existing tests
+
+**unittest/zope.testlayer style** (most common):
+- Inherit from `unittest.TestCase`
+- Use `setUp()` and `tearDown()` for test-level setup
+- Use zope testlayers for integration/functional fixtures
+- Test methods: `test_<descriptive_name>`
+- Use unittest assertions: `assertEqual()`, `assertTrue()`, `assertRaises()`
+
+**pytest style** (some packages):
+- Use pytest fixtures (`@pytest.fixture`)
+- Use `assert` statements directly
+- Use pytest marks and parametrize when needed
+- Test functions: `test_<descriptive_name>`
+
+**General**:
+- Write tests that document behavior, not implementation
+- Test names should describe the expected behavior
+- One logical assertion per test when possible
