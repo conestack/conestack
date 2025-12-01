@@ -90,7 +90,7 @@ TODO
   - [x] yafowil.widget.cron
   - [x] yafowil.widget.datetime
   - [x] yafowil.widget.dict
-  - [x] yafowil.widget.dynatree
+  - [ ] yafowil.widget.dynatree
   - [x] yafowil.widget.image
   - [x] yafowil.widget.location
   - [x] yafowil.widget.multiselect
@@ -143,7 +143,7 @@ TODO
   - [x] yafowil.widget.cron
   - [x] yafowil.widget.datetime
   - [x] yafowil.widget.dict
-  - [x] yafowil.widget.dynatree
+  - [ ] yafowil.widget.dynatree
   - [x] yafowil.widget.image
   - [x] yafowil.widget.location
   - [x] yafowil.widget.multiselect
@@ -168,7 +168,6 @@ TODO
 
 - [ ] Restrict lower versions for next gen yafowil.* release  and release package
       structure refactoring.
-  - [ ] webresource
   - [ ] treibstoff
   - [ ] yafowil.bootstrap
   - [ ] yafowil.demo
