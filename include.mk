@@ -54,7 +54,6 @@ VALIDATE_ALL_PACKAGES = \
 
 # Test blacklist from TODO.rst (alphabetically sorted, one per line)
 VALIDATE_TEST_BLACKLIST = \
-    node \
     treibstoff \
     yafowil-example-helloworld \
     yafowil.demo \
