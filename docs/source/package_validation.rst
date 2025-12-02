@@ -121,7 +121,7 @@ The following make targets are available for batch validation of all packages:
 ``make validate-check``
     Run pyroma and twine check on all packages.
 
-``make validate-test``
+``make validate-test-wheel``
     Test all packages by installing from wheels.
     Excludes packages in the test blacklist.
 
@@ -138,7 +138,7 @@ The following make targets are available for batch validation of all packages:
 
 ``make validate-all``
     Run the complete validation QA chain in sequence:
-    env → build → compare → check → test → test-sdist → clean.
+    env → build → compare → check → test-wheel → test-sdist → clean.
     Stops on first failure.
 
 
@@ -169,7 +169,7 @@ Or run individual steps:
     make validate-check
 
     # 5. Test from wheels
-    make validate-test
+    make validate-test-wheel
 
     # 6. Test from sdists
     make validate-test-sdist
@@ -204,8 +204,8 @@ sequentially (not in parallel):
 
 These are defined in ``VALIDATE_SEQUENTIAL_TESTS`` in ``include.mk``.
 
-The ``validate-test`` and ``validate-test-sdist`` targets automatically handle this
-by first running all other packages in parallel, then running sequential packages
+The ``validate-test-wheel`` and ``validate-test-sdist`` targets automatically handle
+this by first running all other packages in parallel, then running sequential packages
 one at a time.
 
 

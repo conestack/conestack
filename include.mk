@@ -146,12 +146,12 @@ validate-check: $(PACKAGES_TARGET)
 	@echo "Checking all packages (pyroma + twine)..."
 	$(call validate-packages-parallel,$(VALIDATE_ALL_PACKAGES),--check)
 
-.PHONY: validate-test
-validate-test: $(PACKAGES_TARGET)
+.PHONY: validate-test-wheel
+validate-test-wheel: $(PACKAGES_TARGET)
 	@echo "Testing packages from wheel (parallel)..."
 	$(call validate-packages-parallel,$(VALIDATE_PARALLEL_TESTS),--test)
 	@echo ""
-	@echo "Testing LDAP packages from wheel (sequential)..."
+	@echo "Testing packages from wheel (sequential)..."
 	$(call validate-packages-sequential,$(VALIDATE_SEQUENTIAL_TESTS),--test)
 
 .PHONY: validate-test-sdist
@@ -159,7 +159,7 @@ validate-test-sdist: $(PACKAGES_TARGET)
 	@echo "Testing packages from sdist (parallel)..."
 	$(call validate-packages-parallel,$(VALIDATE_PARALLEL_TESTS),--test --install-from sdist)
 	@echo ""
-	@echo "Testing LDAP packages from sdist (sequential)..."
+	@echo "Testing packages from sdist (sequential)..."
 	$(call validate-packages-sequential,$(VALIDATE_SEQUENTIAL_TESTS),--test --install-from sdist)
 
 .PHONY: validate-compare
@@ -189,7 +189,7 @@ validate-all:
 	@echo ""
 	$(MAKE) validate-check
 	@echo ""
-	$(MAKE) validate-test
+	$(MAKE) validate-test-wheel
 	@echo ""
 	$(MAKE) validate-test-sdist
 	@echo ""

@@ -247,3 +247,52 @@ Use **Sphinx/reStructuredText style** for all docstrings:
 - Write tests that document behavior, not implementation
 - Test names should describe the expected behavior
 - One logical assertion per test when possible
+
+## Release Validation
+
+Before releasing packages to PyPI, run the validation QA chain to ensure all packages
+build correctly and pass tests when installed from their built artifacts.
+
+### Quick Validation
+
+```bash
+# Run complete QA chain (recommended before release)
+make validate-all
+```
+
+This runs: env → build → compare → check → test-wheel → test-sdist → clean
+
+### Individual Validation Steps
+
+```bash
+make validate-env          # Create venvs for all packages
+make validate-build        # Build wheels and sdists
+make validate-compare      # Compare artifact contents
+make validate-check        # Run pyroma and twine checks
+make validate-test-wheel   # Test by installing from wheels
+make validate-test-sdist   # Test by installing from sdists
+make validate-clean        # Clean validation artifacts
+```
+
+### Single Package Validation
+
+```bash
+# Full validation for one package
+./venv/bin/python scripts/validate_package.py <package> --all
+
+# Individual phases
+./venv/bin/python scripts/validate_package.py <package> --env
+./venv/bin/python scripts/validate_package.py <package> --build
+./venv/bin/python scripts/validate_package.py <package> --check
+./venv/bin/python scripts/validate_package.py <package> --test
+./venv/bin/python scripts/validate_package.py <package> --test --install-from sdist
+./venv/bin/python scripts/validate_package.py <package> --clean
+```
+
+### Key Validation Concepts
+
+- **Artifact Testing**: Packages are installed from built wheels/sdists, not from source
+- **Test Separation**: Tests run from source checkout against the installed package
+- **Sequential Tests**: LDAP packages (cone.ldap, node.ext.ldap) run sequentially due to shared OpenLDAP server
+
+See `docs/source/package_validation.rst` for comprehensive documentation.
