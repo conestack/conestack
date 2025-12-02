@@ -155,7 +155,6 @@ TODO
 
 - [ ] Merge package structure refactoring.
   - [ ] cookiecutter-cone
-  - [ ] sphinx-conestack-theme
   - [x] cone.app
   - [x] cone.calendar
   - [x] cone.charts
@@ -178,6 +177,7 @@ TODO
   - [x] node.ext.zodb
   - [x] odict
   - [x] plumber
+  - [x] sphinx-conestack-theme
   - [x] treibstoff
   - [x] yafowil
   - [x] yafowil-example-helloworld
@@ -207,8 +207,9 @@ TODO
 
 - [x] copyright year
 - [x] feature-branch
+- [x] package checks with source dists
+- [ ] changelogs
 - [ ] docs (cone.app, yafowil)
-- [ ] package checks with source dists
 
 - [ ] Restrict lower versions for next gen base and node.* release and release.
   - [ ] node.ext.directory
