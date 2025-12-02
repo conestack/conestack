@@ -57,7 +57,6 @@ VALIDATE_ALL_PACKAGES = \
 # Test blacklist from TODO.rst (alphabetically sorted, one per line)
 VALIDATE_TEST_BLACKLIST = \
     cone.three \
-    node \
     treibstoff \
     yafowil-example-helloworld \
     yafowil.demo \
@@ -118,25 +117,6 @@ validate-check: $(PACKAGES_TARGET)
 validate-test: $(PACKAGES_TARGET)
 	@echo "Testing packages (excluding blacklist)..."
 	$(call validate-packages,$(VALIDATE_WITH_TESTS),--test)
-
-.PHONY: validate-all
-validate-all: $(PACKAGES_TARGET)
-	@echo "Running full validation (env, build, check, test, clean)..."
-	@mkdir -p dist
-	@rm -rf dist/*
-	$(call validate-packages,$(VALIDATE_WITH_TESTS),--all)
-	@echo ""
-	@echo "Validating test-blacklisted packages (no tests)..."
-	@for pkg in $(VALIDATE_SKIP_TESTS); do \
-		echo "Validating $$pkg (skipping tests)..."; \
-		venv/bin/python scripts/validate_package.py $$pkg --env \
-			&& venv/bin/python scripts/validate_package.py $$pkg --build \
-			&& venv/bin/python scripts/validate_package.py $$pkg --check \
-			&& venv/bin/python scripts/validate_package.py $$pkg --clean \
-			|| exit 1; \
-	done
-	@echo ""
-	@echo "Full validation complete for all packages"
 
 .PHONY: validate-clean
 validate-clean:
