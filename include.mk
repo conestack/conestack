@@ -115,8 +115,13 @@ validate-check: $(PACKAGES_TARGET)
 
 .PHONY: validate-test
 validate-test: $(PACKAGES_TARGET)
-	@echo "Testing packages (excluding blacklist)..."
+	@echo "Testing packages from wheel (excluding blacklist)..."
 	$(call validate-packages,$(VALIDATE_WITH_TESTS),--test)
+
+.PHONY: validate-test-sdist
+validate-test-sdist: $(PACKAGES_TARGET)
+	@echo "Testing packages from sdist (excluding blacklist)..."
+	$(call validate-packages,$(VALIDATE_WITH_TESTS),--test --install-from sdist)
 
 .PHONY: validate-clean
 validate-clean:

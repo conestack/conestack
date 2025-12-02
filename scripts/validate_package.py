@@ -78,6 +78,7 @@ Phase Selection (required, mutually exclusive):
 
 Configuration Options:
   --pyroma-threshold N Minimum pyroma quality score (default: 8)
+  --install-from TYPE  Install from 'wheel' or 'sdist' for testing (default: wheel)
   -v, --verbose        Show detailed output
   -h, --help           Show this help message
 
@@ -509,7 +510,7 @@ def phase_check(package, repo_root, pyroma_threshold=8, verbose=False):
     return 0
 
 
-def phase_test(package, repo_root, env_vars, verbose=False):
+def phase_test(package, repo_root, env_vars, install_from='wheel', verbose=False):
     """Install package from root/dist and run pytest.
 
     Installs the package from root/dist (NOT from sources) to simulate
@@ -519,10 +520,11 @@ def phase_test(package, repo_root, env_vars, verbose=False):
     :param package: Package name
     :param repo_root: Path to repository root
     :param env_vars: Environment variables to set (from mx.ini)
+    :param install_from: Install from 'wheel' or 'sdist' (default: 'wheel')
     :param verbose: Show detailed output
     :return: 0 on success, 1 on failure, 2 on setup error
     """
-    print_step(f'Phase: test - Testing {package}', verbose)
+    print_step(f'Phase: test - Testing {package} (from {install_from})', verbose)
 
     package_dir = repo_root / "sources" / package
     venv_path = package_dir / VALIDATE_VENV_DIR
@@ -536,27 +538,30 @@ def phase_test(package, repo_root, env_vars, verbose=False):
 
     venv_python = venv_path / 'bin' / 'python'
 
-    # Check root dist has package wheel
-    package_name_safe = package.replace('-', '_').replace('.', '_')
-    wheels_in_dist = list(root_dist.glob(f'{package}*.whl')) + \
-                     list(root_dist.glob(f'{package_name_safe}*.whl'))
+    # Normalize package name for file matching
+    package_normalized = package.replace('.', '_')
 
-    if not wheels_in_dist:
-        print_error(f'No wheel for {package} found in {root_dist}')
+    # Find the artifact to install
+    def find_artifact(artifact_type):
+        if artifact_type == 'wheel':
+            pattern = f"{package_normalized}-*.whl"
+        else:  # sdist
+            pattern = f"{package_normalized}-*.tar.gz"
+        artifacts = list(root_dist.glob(pattern))
+        if not artifacts:
+            raise FileNotFoundError(f"No {artifact_type} found for {package}")
+        return artifacts[0]
+
+    try:
+        artifact_path = find_artifact(install_from)
+    except FileNotFoundError as e:
+        print_error(str(e))
         print_error('Please run --build phase first')
         return 2
 
     # Install package from root/dist with --find-links
     # Use --pre to prefer development versions and --upgrade to force reinstall
-    print_info(f'Installing {package} from {root_dist} (with dependencies)', verbose)
-
-    # find wheel
-    def find_wheel(package_name: str):
-        normalized = package_name.replace('.', '_')
-        for wheel in root_dist.glob(f"{normalized}-*.whl"):
-            return wheel
-        raise FileNotFoundError(f"No wheel found for {package_name}")
-    wheel_path = find_wheel(package)
+    print_info(f'Installing {package} from {artifact_path.name}', verbose)
 
     try:
         run_command(
@@ -565,14 +570,14 @@ def phase_test(package, repo_root, env_vars, verbose=False):
              '--pre',  # Allow pre-release/development versions
              '--upgrade',  # Force upgrade to local version if exists
              '-c', f'{repo_root}/constraints-validate.txt',
-             f'{wheel_path}[test]'],
+             f'{artifact_path}[test]'],
             verbose=verbose
         )
     except ValidationError as e:
         print_error(f'Failed to install package: {e}')
         return 1
 
-    print_success(f'Package installed from root/dist')
+    print_success(f'Package installed from {install_from}')
 
     # Set up environment variables for tests
     test_env = os.environ.copy()
@@ -705,6 +710,12 @@ def main():
         help='Minimum pyroma score (default: 8)'
     )
     parser.add_argument(
+        '--install-from',
+        choices=['wheel', 'sdist'],
+        default='wheel',
+        help='Install from wheel or sdist for testing (default: wheel)'
+    )
+    parser.add_argument(
         '-v', '--verbose',
         action='store_true',
         help='Show detailed output'
@@ -739,7 +750,7 @@ def main():
                 ("env", lambda: phase_env(args.package, repo_root, args.verbose)),
                 ("build", lambda: phase_build(args.package, repo_root, args.verbose)),
                 ("check", lambda: phase_check(args.package, repo_root, args.pyroma_threshold, args.verbose)),
-                ("test", lambda: phase_test(args.package, repo_root, env_vars, args.verbose)),
+                ("test", lambda: phase_test(args.package, repo_root, env_vars, args.install_from, args.verbose)),
                 ("clean", lambda: phase_clean(args.package, repo_root, args.verbose)),
             ]
 
@@ -765,7 +776,7 @@ def main():
             sys.exit(result)
 
         elif args.test:
-            result = phase_test(args.package, repo_root, env_vars, args.verbose)
+            result = phase_test(args.package, repo_root, env_vars, args.install_from, args.verbose)
             sys.exit(result)
 
         elif args.clean:
