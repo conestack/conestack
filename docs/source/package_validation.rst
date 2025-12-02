@@ -46,6 +46,10 @@ The script supports the following phases:
     This validates the actual release artifact that users will receive.
     Supports ``--install-from wheel`` (default) or ``--install-from sdist``.
 
+    **Important**: The package code is installed from the built artifact, but
+    tests are executed from the source checkout directory. See
+    `Test Execution Model`_ for details.
+
 ``--clean``
     Remove the package's venv and local dist directory.
 
@@ -125,8 +129,17 @@ The following make targets are available for batch validation of all packages:
     Test all packages by installing from sdists.
     Excludes packages in the test blacklist.
 
+``make validate-compare``
+    Compare wheel and sdist contents for all packages.
+    Reports files that are in one artifact but not the other.
+
 ``make validate-clean``
     Clean all validation artifacts (venvs, dist directories, logs).
+
+``make validate-all``
+    Run the complete validation QA chain in sequence:
+    env → build → compare → check → test → test-sdist → clean.
+    Stops on first failure.
 
 
 Typical Workflow
@@ -136,22 +149,32 @@ For a complete validation of all packages before release:
 
 .. code-block:: bash
 
+    # Run the complete QA chain (recommended)
+    make validate-all
+
+Or run individual steps:
+
+.. code-block:: bash
+
     # 1. Create venvs for all packages
     make validate-env
 
     # 2. Build all packages
     make validate-build
 
-    # 3. Check package quality
+    # 3. Compare artifact contents
+    make validate-compare
+
+    # 4. Check package quality
     make validate-check
 
-    # 4. Test from wheels
+    # 5. Test from wheels
     make validate-test
 
-    # 5. Optionally test from sdists
+    # 6. Test from sdists
     make validate-test-sdist
 
-    # 6. Clean up
+    # 7. Clean up
     make validate-clean
 
 
@@ -170,8 +193,8 @@ Some packages are excluded from test validation (defined in ``include.mk``):
 These packages still go through env, build, and check phases.
 
 
-LDAP Packages
--------------
+Sequential Test Packages
+------------------------
 
 The following packages require a local OpenLDAP server for testing and must run
 sequentially (not in parallel):
@@ -179,8 +202,11 @@ sequentially (not in parallel):
 - ``cone.ldap``
 - ``node.ext.ldap``
 
+These are defined in ``VALIDATE_SEQUENTIAL_TESTS`` in ``include.mk``.
+
 The ``validate-test`` and ``validate-test-sdist`` targets automatically handle this
-by first running all other packages in parallel, then running LDAP packages sequentially.
+by first running all other packages in parallel, then running sequential packages
+one at a time.
 
 
 Environment Variables
@@ -197,20 +223,90 @@ The test phase sets the following environment variables (matching ``mx.ini`` con
 These are required for packages that have LDAP-related tests.
 
 
+Test Execution Model
+--------------------
+
+The validation system uses a hybrid approach for testing:
+
+- **Package code**: Installed from the built artifact (wheel or sdist) into the venv
+- **Test code**: Executed from the source checkout directory (``sources/<package>/``)
+
+This design is intentional:
+
+1. It validates that the actual release artifact works correctly
+2. It allows using the latest test code without rebuilding
+3. It prepares for a future change where tests will be moved to package root
+   folders (outside ``src/``) and excluded from wheel/sdist builds
+
+When pytest runs, it imports the package from the venv (the installed artifact),
+but discovers and runs test files from the source checkout. This ensures:
+
+- The installed package API is what gets tested
+- Test fixtures and utilities from the source tree are available
+- Tests don't need to be included in release artifacts
+
+
+Artifact Comparison
+-------------------
+
+The ``scripts/compare_artifacts.py`` script compares wheel and sdist contents
+for all packages in ``dist/``. It helps identify:
+
+- Files in wheel but not in sdist (unexpected)
+- Files in sdist but not in wheel (may need exclusion)
+
+Usage
+~~~~~
+
+.. code-block:: bash
+
+    # After building packages
+    make validate-build
+
+    # Compare all artifacts
+    make validate-compare
+
+The script automatically filters expected differences:
+
+- ``.gitignore`` files (expected in sdist only)
+- Metadata files (PKG-INFO, pyproject.toml, etc.)
+- Documentation files (README, LICENSE, CHANGES, etc.)
+- Test files (excluded from comparison)
+
+Common Issues
+~~~~~~~~~~~~~
+
+Files that commonly appear as differences:
+
+**cfg/*.xml files**
+    Test configuration files in cone.ldap, cone.ugm. Should be excluded
+    from sdist via ``[tool.hatch.build]`` excludes in pyproject.toml.
+
+**.travis.yml, Makefile, MANIFEST.in**
+    Obsolete files that should be removed from the repository or excluded.
+
+**Nested .gitignore files**
+    Sometimes included in wheels when in package subdirectories
+    (e.g., static asset directories).
+
+
 Key Design Points
 -----------------
 
 1. **Artifact Testing**: The ``--test`` phase installs from ``dist/`` (the built wheel or
    sdist), NOT from sources. This simulates a real PyPI installation.
 
-2. **Cross-Package Dependencies**: All pip installs use ``--find-links`` pointing to
+2. **Test Separation**: Tests run from source checkout against the installed package.
+   This validates the release artifact while keeping tests in the development tree.
+
+3. **Cross-Package Dependencies**: All pip installs use ``--find-links`` pointing to
    ``dist/``, allowing packages to depend on pre-built versions of sibling packages.
 
-3. **Constraints File**: The build phase generates ``constraints-validate.txt`` to ensure
+4. **Constraints File**: The build phase generates ``constraints-validate.txt`` to ensure
    consistent versions across all package installations.
 
-4. **Parallel Execution**: Make targets run package validations in parallel for efficiency.
+5. **Parallel Execution**: Make targets run package validations in parallel for efficiency.
    Logs are written to ``/tmp/conestack-dev/validate_<package>.log``.
 
-5. **Development Versions**: Uses pip's ``--pre`` and ``--upgrade`` flags to prefer
+6. **Development Versions**: Uses pip's ``--pre`` and ``--upgrade`` flags to prefer
    development versions (e.g., ``2.0.0.dev0``) over published versions.

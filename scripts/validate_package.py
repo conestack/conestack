@@ -103,12 +103,18 @@ VALIDATION PHASES
    - Requires: --env and --build
 
 4. --test: Installation and Testing
-   - Installs package FROM root/dist (NOT from sources)
+   - Installs package FROM root/dist (wheel or sdist, NOT from sources)
    - Uses --find-links to resolve dependencies from root/dist
    - Installs test dependencies via package[test]
-   - Runs pytest with configured environment variables
+   - Runs pytest from the source checkout directory
    - Validates the actual release artifact
    - Requires: --env and --build
+
+   IMPORTANT: The package code is installed from the built artifact (wheel/sdist),
+   but tests are executed from the source checkout (sources/<package>/). This is
+   intentional - tests are planned to be moved to the package root folder and
+   excluded from releases in future versions. This approach validates that the
+   installed package works correctly while using the latest test code.
 
 5. --clean: Cleanup
    - Removes sources/<package>/venv/
@@ -142,18 +148,26 @@ The script sets the following environment variables during test execution
 KEY DESIGN POINTS
 =================
 
-1. The --test phase installs the package FROM root/dist (the built wheel),
-   NOT from sources. This simulates a real PyPI installation and validates
-   the actual release artifact that users will receive.
+1. The --test phase installs the package FROM root/dist (the built wheel or
+   sdist), NOT from sources. This simulates a real PyPI installation and
+   validates the actual release artifact that users will receive.
 
-2. All pip installs use --find-links pointing to root/dist, allowing packages
+2. Tests are executed from the source checkout directory (sources/<package>/),
+   not from the installed package. This is by design:
+   - Package code under test comes from the installed artifact
+   - Test code comes from the source checkout
+   - This allows tests to be excluded from releases in the future
+   - Tests will be moved to package root folders (outside src/) and excluded
+     from wheel/sdist builds
+
+3. All pip installs use --find-links pointing to root/dist, allowing packages
    to depend on pre-built versions of sibling packages. This enables validation
    of the entire dependency tree before publishing to PyPI.
 
-3. Venv and dist/ persist between phases until --clean is run. This allows
+4. Venv and dist/ persist between phases until --clean is run. This allows
    incremental validation and debugging of specific phases.
 
-4. Development versions (e.g., 2.0.0.dev0) are preferred over published versions
+5. Development versions (e.g., 2.0.0.dev0) are preferred over published versions
    using pip's --pre and --upgrade flags.
 
 NOTES

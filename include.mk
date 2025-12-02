@@ -64,7 +64,7 @@ VALIDATE_TEST_BLACKLIST = \
     yafowil.webob
 
 # Packages requiring local OpenLDAP server (must run sequentially)
-VALIDATE_LDAP_PACKAGES = \
+VALIDATE_SEQUENTIAL_TESTS = \
     cone.ldap \
     node.ext.ldap
 
@@ -73,7 +73,7 @@ VALIDATE_WITH_TESTS = $(filter-out $(VALIDATE_TEST_BLACKLIST), \
     $(VALIDATE_ALL_PACKAGES))
 
 # Packages that run tests in parallel (excluding LDAP packages)
-VALIDATE_PARALLEL_TESTS = $(filter-out $(VALIDATE_LDAP_PACKAGES), \
+VALIDATE_PARALLEL_TESTS = $(filter-out $(VALIDATE_SEQUENTIAL_TESTS), \
     $(VALIDATE_WITH_TESTS))
 
 # Packages that skip tests
@@ -81,8 +81,8 @@ VALIDATE_SKIP_TESTS = $(filter $(VALIDATE_TEST_BLACKLIST), \
     $(VALIDATE_ALL_PACKAGES))
 
 # Helper function to run validation on a list of packages in parallel
-# Usage: $(call validate-packages,<package-list>,<script-options>)
-define validate-packages
+# Usage: $(call validate-packages-parallel,<package-list>,<script-options>)
+define validate-packages-parallel
 	@mkdir -p /tmp/conestack-dev
 	@rm -f /tmp/conestack-dev/validate_failed.txt
 	@for pkg in $(1); do \
@@ -133,39 +133,68 @@ endef
 validate-env: $(PACKAGES_TARGET)
 	@echo "Building all packages..."
 	@mkdir -p dist
-	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--env)
+	$(call validate-packages-parallel,$(VALIDATE_ALL_PACKAGES),--env)
 
 .PHONY: validate-build
 validate-build: $(PACKAGES_TARGET)
 	@echo "Building all packages..."
 	@mkdir -p dist
-	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--build)
+	$(call validate-packages-parallel,$(VALIDATE_ALL_PACKAGES),--build)
 
 .PHONY: validate-check
 validate-check: $(PACKAGES_TARGET)
 	@echo "Checking all packages (pyroma + twine)..."
-	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--check)
+	$(call validate-packages-parallel,$(VALIDATE_ALL_PACKAGES),--check)
 
 .PHONY: validate-test
 validate-test: $(PACKAGES_TARGET)
 	@echo "Testing packages from wheel (parallel)..."
-	$(call validate-packages,$(VALIDATE_PARALLEL_TESTS),--test)
+	$(call validate-packages-parallel,$(VALIDATE_PARALLEL_TESTS),--test)
 	@echo ""
 	@echo "Testing LDAP packages from wheel (sequential)..."
-	$(call validate-packages-sequential,$(VALIDATE_LDAP_PACKAGES),--test)
+	$(call validate-packages-sequential,$(VALIDATE_SEQUENTIAL_TESTS),--test)
 
 .PHONY: validate-test-sdist
 validate-test-sdist: $(PACKAGES_TARGET)
 	@echo "Testing packages from sdist (parallel)..."
-	$(call validate-packages,$(VALIDATE_PARALLEL_TESTS),--test --install-from sdist)
+	$(call validate-packages-parallel,$(VALIDATE_PARALLEL_TESTS),--test --install-from sdist)
 	@echo ""
 	@echo "Testing LDAP packages from sdist (sequential)..."
-	$(call validate-packages-sequential,$(VALIDATE_LDAP_PACKAGES),--test --install-from sdist)
+	$(call validate-packages-sequential,$(VALIDATE_SEQUENTIAL_TESTS),--test --install-from sdist)
+
+.PHONY: validate-compare
+validate-compare:
+	@echo "Comparing wheel and sdist contents..."
+	@venv/bin/python scripts/compare_artifacts.py
 
 .PHONY: validate-clean
 validate-clean:
 	@echo "Cleaning validation artifacts..."
-	$(call validate-packages,$(VALIDATE_ALL_PACKAGES),--clean)
+	$(call validate-packages-parallel,$(VALIDATE_ALL_PACKAGES),--clean)
 	@rm -rf dist
 	@rm -rf /tmp/conestack-dev
 	@echo "Validation artifacts cleaned"
+
+.PHONY: validate-all
+validate-all:
+	@echo "============================================================"
+	@echo "Running complete validation QA chain"
+	@echo "============================================================"
+	@echo ""
+	$(MAKE) validate-env
+	@echo ""
+	$(MAKE) validate-build
+	@echo ""
+	$(MAKE) validate-compare
+	@echo ""
+	$(MAKE) validate-check
+	@echo ""
+	$(MAKE) validate-test
+	@echo ""
+	$(MAKE) validate-test-sdist
+	@echo ""
+	$(MAKE) validate-clean
+	@echo ""
+	@echo "============================================================"
+	@echo "Complete validation QA chain finished successfully"
+	@echo "============================================================"
