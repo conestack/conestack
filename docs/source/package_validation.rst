@@ -170,6 +170,19 @@ Some packages are excluded from test validation (defined in ``include.mk``):
 These packages still go through env, build, and check phases.
 
 
+LDAP Packages
+-------------
+
+The following packages require a local OpenLDAP server for testing and must run
+sequentially (not in parallel):
+
+- ``cone.ldap``
+- ``node.ext.ldap``
+
+The ``validate-test`` and ``validate-test-sdist`` targets automatically handle this
+by first running all other packages in parallel, then running LDAP packages sequentially.
+
+
 Environment Variables
 ---------------------
 

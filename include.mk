@@ -61,11 +61,20 @@ VALIDATE_TEST_BLACKLIST = \
     yafowil-example-helloworld \
     yafowil.demo \
     yafowil.documentation \
-    yafowil.webob \
+    yafowil.webob
 
-# Packages that run tests
+# Packages requiring local OpenLDAP server (must run sequentially)
+VALIDATE_LDAP_PACKAGES = \
+    cone.ldap \
+    node.ext.ldap
+
+# Packages that run tests (excluding blacklist)
 VALIDATE_WITH_TESTS = $(filter-out $(VALIDATE_TEST_BLACKLIST), \
     $(VALIDATE_ALL_PACKAGES))
+
+# Packages that run tests in parallel (excluding LDAP packages)
+VALIDATE_PARALLEL_TESTS = $(filter-out $(VALIDATE_LDAP_PACKAGES), \
+    $(VALIDATE_WITH_TESTS))
 
 # Packages that skip tests
 VALIDATE_SKIP_TESTS = $(filter $(VALIDATE_TEST_BLACKLIST), \
@@ -83,6 +92,30 @@ define validate-packages
 			|| (echo "✗ $$pkg" && echo $$pkg >> /tmp/conestack-dev/validate_failed.txt)) & \
 	done; \
 	wait; \
+	if [ -f /tmp/conestack-dev/validate_failed.txt ]; then \
+		echo ""; \
+		echo "Failed packages:"; \
+		cat /tmp/conestack-dev/validate_failed.txt; \
+		echo ""; \
+		echo "Check logs in /tmp/conestack-dev/validate_<package>.log"; \
+		exit 1; \
+	else \
+		echo ""; \
+		echo "All packages validated successfully"; \
+	fi
+endef
+
+# Helper function to run validation on a list of packages sequentially
+# Usage: $(call validate-packages-sequential,<package-list>,<script-options>)
+define validate-packages-sequential
+	@mkdir -p /tmp/conestack-dev
+	@rm -f /tmp/conestack-dev/validate_failed.txt
+	@for pkg in $(1); do \
+		venv/bin/python scripts/validate_package.py $$pkg $(2) \
+			> /tmp/conestack-dev/validate_$$pkg.log 2>&1 \
+			&& echo "✓ $$pkg" \
+			|| (echo "✗ $$pkg" && echo $$pkg >> /tmp/conestack-dev/validate_failed.txt); \
+	done; \
 	if [ -f /tmp/conestack-dev/validate_failed.txt ]; then \
 		echo ""; \
 		echo "Failed packages:"; \
@@ -115,13 +148,19 @@ validate-check: $(PACKAGES_TARGET)
 
 .PHONY: validate-test
 validate-test: $(PACKAGES_TARGET)
-	@echo "Testing packages from wheel (excluding blacklist)..."
-	$(call validate-packages,$(VALIDATE_WITH_TESTS),--test)
+	@echo "Testing packages from wheel (parallel)..."
+	$(call validate-packages,$(VALIDATE_PARALLEL_TESTS),--test)
+	@echo ""
+	@echo "Testing LDAP packages from wheel (sequential)..."
+	$(call validate-packages-sequential,$(VALIDATE_LDAP_PACKAGES),--test)
 
 .PHONY: validate-test-sdist
 validate-test-sdist: $(PACKAGES_TARGET)
-	@echo "Testing packages from sdist (excluding blacklist)..."
-	$(call validate-packages,$(VALIDATE_WITH_TESTS),--test --install-from sdist)
+	@echo "Testing packages from sdist (parallel)..."
+	$(call validate-packages,$(VALIDATE_PARALLEL_TESTS),--test --install-from sdist)
+	@echo ""
+	@echo "Testing LDAP packages from sdist (sequential)..."
+	$(call validate-packages-sequential,$(VALIDATE_LDAP_PACKAGES),--test --install-from sdist)
 
 .PHONY: validate-clean
 validate-clean:
