@@ -266,27 +266,6 @@ def run_command(cmd, cwd=None, env=None, verbose=False):
         raise ValidationError(f'Command failed with exit code {e.returncode}')
 
 
-def check_dependencies():
-    """Check if required Python packages are available."""
-    required = {
-        'build': 'build',
-        'twine': 'twine',
-        'pyroma': 'pyroma'
-    }
-    missing = []
-
-    for module_name, package_name in required.items():
-        try:
-            __import__(module_name)
-        except ImportError:
-            missing.append(package_name)
-
-    if missing:
-        print_error(f'Missing required packages: {", ".join(missing)}')
-        print_error('Install with: pip install build twine pyroma')
-        sys.exit(2)
-
-
 def phase_env(package, repo_root, verbose=False):
     """Create venv and install build and validation tools.
 
@@ -436,14 +415,14 @@ def phase_build(package, repo_root, verbose=False):
 
     # generate constraints
     print_info('Generating constraints', verbose)
-    constraints_path = repo_root / "constraints.txt"
+    constraints_path = repo_root / "constraints-validate.txt"
     with open(constraints_path, "w") as f:
         for whl in root_dist.glob("*.whl"):
             parts = whl.name.split("-")
             pkg = parts[0].replace("_", "-")
             version = parts[1]
             f.write(f"{pkg}=={version}\n")
-    print_success('Generated constraints to constraints.txt')
+    print_success('Generated constraints to constraints-validate.txt')
 
     return 0
 
@@ -585,7 +564,7 @@ def phase_test(package, repo_root, env_vars, verbose=False):
              '--find-links', str(root_dist),
              '--pre',  # Allow pre-release/development versions
              '--upgrade',  # Force upgrade to local version if exists
-             '-c', f'{repo_root}/constraints.txt',
+             '-c', f'{repo_root}/constraints-validate.txt',
              f'{wheel_path}[test]'],
             verbose=verbose
         )
@@ -745,9 +724,6 @@ def main():
     if not package_dir.exists():
         print_error(f'Package directory not found: {package_dir}')
         sys.exit(2)
-
-    # Check dependencies
-    check_dependencies()
 
     # Load environment variables
     env_vars = load_env_vars(repo_root)
