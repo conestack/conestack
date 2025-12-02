@@ -90,7 +90,7 @@ TODO
   - [x] yafowil.widget.cron
   - [x] yafowil.widget.datetime
   - [x] yafowil.widget.dict
-  - [ ] yafowil.widget.dynatree
+  - [x] yafowil.widget.dynatree
   - [x] yafowil.widget.image
   - [x] yafowil.widget.location
   - [x] yafowil.widget.multiselect
@@ -101,6 +101,7 @@ TODO
   - [x] yafowil.yaml
 
 - [ ] Refactor package structure in dedicated feature branches.
+  - [ ] cookiecutter-cone
   - [x] cone.app
   - [x] cone.calendar
   - [x] cone.charts
@@ -109,29 +110,28 @@ TODO
   - [x] cone.ldap
   - [x] cone.maps
   - [x] cone.sql
-  - [ ] cone.three
+  - [x] cone.three
   - [x] cone.tile
   - [x] cone.tokens
   - [x] cone.ugm
   - [x] cone.zodb
-  - [ ] cookiecutter-cone
+  - [x] node
   - [x] node.ext.directory
   - [x] node.ext.fs
   - [x] node.ext.ldap
   - [x] node.ext.ugm
   - [x] node.ext.yaml
   - [x] node.ext.zodb
-  - [x] node
   - [x] odict
   - [x] plumber
   - [x] sphinx-conestack-theme
   - [x] treibstoff
   - [x] webresource
+  - [x] yafowil
+  - [x] yafowil-example-helloworld
   - [x] yafowil.bootstrap
   - [x] yafowil.demo
   - [x] yafowil.documentation
-  - [x] yafowil-example-helloworld
-  - [x] yafowil
   - [x] yafowil.lingua
   - [x] yafowil.webob
   - [x] yafowil.widget.ace
@@ -142,7 +142,7 @@ TODO
   - [x] yafowil.widget.cron
   - [x] yafowil.widget.datetime
   - [x] yafowil.widget.dict
-  - [ ] yafowil.widget.dynatree
+  - [x] yafowil.widget.dynatree
   - [x] yafowil.widget.image
   - [x] yafowil.widget.location
   - [x] yafowil.widget.multiselect
@@ -154,22 +154,36 @@ TODO
   - [x] yafowil.yaml
 
 - [ ] Merge package structure refactoring.
+  - [ ] cookiecutter-cone
+  - [ ] sphinx-conestack-theme
+  - [x] cone.app
+  - [x] cone.calendar
+  - [x] cone.charts
+  - [x] cone.fileupload
+  - [x] cone.firebase
+  - [x] cone.ldap
+  - [x] cone.maps
+  - [x] cone.sql
+  - [x] cone.three
+  - [x] cone.tile
+  - [x] cone.tokens
+  - [x] cone.ugm
+  - [x] cone.zodb
+  - [x] node
   - [x] node.ext.directory
   - [x] node.ext.fs
   - [x] node.ext.ldap
   - [x] node.ext.ugm
   - [x] node.ext.yaml
   - [x] node.ext.zodb
-  - [x] node
   - [x] odict
   - [x] plumber
-  - [ ] sphinx-conestack-theme
   - [x] treibstoff
+  - [x] yafowil
+  - [x] yafowil-example-helloworld
   - [x] yafowil.bootstrap
   - [x] yafowil.demo
   - [x] yafowil.documentation
-  - [x] yafowil-example-helloworld
-  - [x] yafowil
   - [x] yafowil.lingua
   - [x] yafowil.webob
   - [x] yafowil.widget.ace
@@ -180,7 +194,7 @@ TODO
   - [x] yafowil.widget.cron
   - [x] yafowil.widget.datetime
   - [x] yafowil.widget.dict
-  - [ ] yafowil.widget.dynatree
+  - [x] yafowil.widget.dynatree
   - [x] yafowil.widget.image
   - [x] yafowil.widget.location
   - [x] yafowil.widget.multiselect
@@ -190,23 +204,9 @@ TODO
   - [x] yafowil.widget.tiptap
   - [x] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
-  - [x] cone.app
-  - [x] cone.calendar
-  - [x] cone.charts
-  - [x] cone.fileupload
-  - [x] cone.firebase
-  - [x] cone.ldap
-  - [x] cone.maps
-  - [x] cone.sql
-  - [ ] cone.three
-  - [x] cone.tile
-  - [x] cone.tokens
-  - [x] cone.ugm
-  - [x] cone.zodb
-  - [ ] cookiecutter-cone
 
-- [ ] copyright year
-- [ ] feature-branch
+- [x] copyright year
+- [x] feature-branch
 - [ ] docs (cone.app, yafowil)
 - [ ] package checks with source dists
 
