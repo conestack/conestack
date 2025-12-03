@@ -296,3 +296,35 @@ make validate-clean        # Clean validation artifacts
 - **Sequential Tests**: LDAP packages (cone.ldap, node.ext.ldap) run sequentially due to shared OpenLDAP server
 
 See `docs/source/package_validation.rst` for comprehensive documentation.
+
+## README Badge Format
+
+Each package README.rst should include badges in the following order:
+
+1. **PyPI version badge** (required)
+2. **PyPI downloads badge** (required)
+3. **GitHub Actions test badge(s)** (if workflow exists)
+
+### Badge Template
+
+```rst
+.. image:: https://img.shields.io/pypi/v/PACKAGE.svg
+    :target: https://pypi.python.org/pypi/PACKAGE
+    :alt: Latest PyPI version
+
+.. image:: https://img.shields.io/pypi/dm/PACKAGE.svg
+    :target: https://pypi.python.org/pypi/PACKAGE
+    :alt: Number of PyPI downloads
+
+.. image:: https://github.com/conestack/PACKAGE/actions/workflows/WORKFLOW/badge.svg
+    :target: https://github.com/conestack/PACKAGE/actions/workflows/WORKFLOW
+    :alt: Test PACKAGE
+```
+
+### Rules
+
+- **No workflow exists** → Only PyPI badges (version + downloads)
+- **One workflow** → PyPI badges + one GitHub Actions badge
+- **Multiple workflows** → PyPI badges + one badge per workflow (e.g., `test_py.yaml` + `test_js.yaml`)
+- **Workflow filename must match exactly** → Check `.github/workflows/` for actual filename (`.yml` vs `.yaml`)
+- **No Travis CI or Coveralls badges** → These are outdated and should be removed

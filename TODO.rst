@@ -205,13 +205,7 @@ TODO
   - [x] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
 
-- [x] copyright year
-- [x] feature-branch
-- [x] package checks with source dists
-- [ ] changelogs
-- [ ] docs (cone.app, yafowil)
-
-- [ ] Restrict lower versions for next gen base and node.* release and release.
+- [ ] Release next gen base and node.* packages.
   - [ ] node.ext.directory
   - [ ] node.ext.fs
   - [ ] node.ext.ldap
@@ -222,7 +216,7 @@ TODO
   - [ ] odict
   - [ ] plumber
 
-- [ ] Restrict lower versions for next gen yafowil.* release  and release.
+- [ ] Release next gen yafowil.* packages.
   - [ ] treibstoff
   - [ ] yafowil.bootstrap
   - [ ] yafowil.demo
@@ -250,8 +244,7 @@ TODO
   - [ ] yafowil.widget.wysihtml5
   - [ ] yafowil.yaml
 
-- [ ] Merge webresource support for all cone.* packages. Restrict lower and
-      upper versions and release all cone.* packages.
+- [ ] Restrict lower and upper versions and release all cone.* packages.
   - [ ] cone.app
   - [ ] cone.calendar
   - [ ] cone.charts
@@ -287,37 +280,11 @@ TODO
   - [ ] cookiecutter-cone
   - [ ] treibstoff
 
-Yafowil BS 5 Branches
----------------------
-
-- [x] yafowil
-- [x] yafowil-example-helloworld
-- [x] yafowil.bootstrap
-- [x] yafowil.demo
-- [x] yafowil.documentation
-- [x] yafowil.lingua
-- [x] yafowil.webob
-- [x] yafowil.widget.ace
-- [x] yafowil.widget.array
-- [x] yafowil.widget.autocomplete
-- [x] yafowil.widget.chosen
-- [x] yafowil.widget.color
-- [x] yafowil.widget.cron
-- [x] yafowil.widget.datetime
-- [x] yafowil.widget.dict
-- [x] yafowil.widget.image
-- [x] yafowil.widget.location
-- [x] yafowil.widget.multiselect
-- [x] yafowil.widget.richtext
-- [x] yafowil.widget.select2
-- [x] yafowil.widget.slider
-- [x] yafowil.widget.tiptap
-- [x] yafowil.widget.wysihtml5
-- [x] yafowil.yaml
 
 MISC
 ----
 
-- [ ] mxenv -> adopt venv related changes from node.ext.ldap
+- [ ] version table in docs
+- [ ] docs (cone.app, yafowil)
 - [ ] expectError, expect_error -> with self.assertRaises
 - [ ] check_output -> checkOutput
