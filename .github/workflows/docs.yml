@@ -1,6 +1,12 @@
-name: Docs
+name: Generate Docs
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    branches:
+      - master
 
 jobs:
   docs:

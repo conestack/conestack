@@ -3,10 +3,7 @@ name: Test conestack
 on:
   push:
     branches:
-      - refactor-package-layout
-  workflow_dispatch:
-    branches:
-      - refactor-package-layout
+      - master
 
 jobs:
   test:
