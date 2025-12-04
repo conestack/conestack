@@ -26,74 +26,86 @@ A package needs release when CHANGES.rst contains an "(unreleased)" section
 with actual change entries (not "No changes yet").
 """
 
-from pathlib import Path
-from zest.releaser.baserelease import NOTHING_CHANGED_YET
-
 import argparse
 import re
 import subprocess
 import sys
+from pathlib import Path
+
+from zest.releaser.baserelease import NOTHING_CHANGED_YET
 
 # Package groups in dependency order
 PACKAGE_GROUPS = [
     # Group 1: Base packages
-    ("Base packages", [
-        "odict",
-        "plumber",
-        "webresource",
-        "treibstoff",
-    ]),
+    (
+        "Base packages",
+        [
+            "odict",
+            "plumber",
+            "webresource",
+            "treibstoff",
+        ],
+    ),
     # Group 2: Node packages
-    ("Node packages", [
-        "node",
-        "node.ext.directory",
-        "node.ext.fs",
-        "node.ext.ldap",
-        "node.ext.ugm",
-        "node.ext.yaml",
-        "node.ext.zodb",
-    ]),
+    (
+        "Node packages",
+        [
+            "node",
+            "node.ext.directory",
+            "node.ext.fs",
+            "node.ext.ldap",
+            "node.ext.ugm",
+            "node.ext.yaml",
+            "node.ext.zodb",
+        ],
+    ),
     # Group 3: YAFOWIL packages
-    ("YAFOWIL packages", [
-        "yafowil",
-        "yafowil.bootstrap",
-        "yafowil.lingua",
-        "yafowil.webob",
-        "yafowil.yaml",
-        "yafowil.widget.ace",
-        "yafowil.widget.array",
-        "yafowil.widget.autocomplete",
-        "yafowil.widget.chosen",
-        "yafowil.widget.color",
-        "yafowil.widget.cron",
-        "yafowil.widget.datetime",
-        "yafowil.widget.dict",
-        "yafowil.widget.dynatree",
-        "yafowil.widget.image",
-        "yafowil.widget.location",
-        "yafowil.widget.multiselect",
-        "yafowil.widget.richtext",
-        "yafowil.widget.select2",
-        "yafowil.widget.slider",
-        "yafowil.widget.tiptap",
-        "yafowil.widget.wysihtml5",
-    ]),
+    (
+        "YAFOWIL packages",
+        [
+            "yafowil",
+            "yafowil.bootstrap",
+            "yafowil.lingua",
+            "yafowil.webob",
+            "yafowil.yaml",
+            "yafowil.widget.ace",
+            "yafowil.widget.array",
+            "yafowil.widget.autocomplete",
+            "yafowil.widget.chosen",
+            "yafowil.widget.color",
+            "yafowil.widget.cron",
+            "yafowil.widget.datetime",
+            "yafowil.widget.dict",
+            "yafowil.widget.dynatree",
+            "yafowil.widget.image",
+            "yafowil.widget.location",
+            "yafowil.widget.multiselect",
+            "yafowil.widget.richtext",
+            "yafowil.widget.select2",
+            "yafowil.widget.slider",
+            "yafowil.widget.tiptap",
+            "yafowil.widget.wysihtml5",
+        ],
+    ),
     # Group 4: Cone packages
-    ("Cone packages", [
-        "cone.tile",
-        "cone.app",
-        "cone.calendar",
-        "cone.charts",
-        "cone.fileupload",
-        "cone.firebase",
-        "cone.ldap",
-        "cone.maps",
-        "cone.sql",
-        "cone.three",
-        "cone.tokens",
-        "cone.ugm",
-        "cone.zodb",
-    ]),
+    (
+        "Cone packages",
+        [
+            "cone.tile",
+            "cone.app",
+            "cone.calendar",
+            "cone.charts",
+            "cone.fileupload",
+            "cone.firebase",
+            "cone.ldap",
+            "cone.maps",
+            "cone.sql",
+            "cone.three",
+            "cone.tokens",
+            "cone.ugm",
+            "cone.zodb",
+        ],
+    ),
 ]
 
 # Flat list of all packages in release order

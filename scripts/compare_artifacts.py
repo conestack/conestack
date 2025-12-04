@@ -103,10 +103,10 @@ from pathlib import Path
 def get_wheel_files(wheel_path):
     """Extract file list from wheel (zip format)."""
     files = set()
-    with zipfile.ZipFile(wheel_path, 'r') as zf:
+    with zipfile.ZipFile(wheel_path, "r") as zf:
         for name in zf.namelist():
             # Skip .dist-info directory
-            if '.dist-info/' in name:
+            if ".dist-info/" in name:
                 continue
             # Normalize path
             files.add(name)
@@ -116,20 +116,20 @@ def get_wheel_files(wheel_path):
 def get_sdist_files(sdist_path):
     """Extract file list from sdist (tar.gz format)."""
     files = set()
-    with tarfile.open(sdist_path, 'r:gz') as tf:
+    with tarfile.open(sdist_path, "r:gz") as tf:
         for member in tf.getmembers():
             if member.isfile():
                 # Remove the top-level directory (package-version/)
-                parts = member.name.split('/', 1)
+                parts = member.name.split("/", 1)
                 if len(parts) > 1:
                     path = parts[1]
                     # Skip metadata files
-                    if path in ('PKG-INFO', 'setup.cfg', 'setup.py', 'pyproject.toml'):
+                    if path in ("PKG-INFO", "setup.cfg", "setup.py", "pyproject.toml"):
                         continue
-                    if path.startswith(('LICENSE', 'README', 'CHANGES', 'HISTORY')):
+                    if path.startswith(("LICENSE", "README", "CHANGES", "HISTORY")):
                         continue
                     # Skip .gitignore (expected in sdist but not wheel)
-                    if path == '.gitignore' or path.endswith('/.gitignore'):
+                    if path == ".gitignore" or path.endswith("/.gitignore"):
                         continue
                     files.add(path)
     return files
@@ -144,7 +144,7 @@ def normalize_wheel_path(path):
 def normalize_sdist_path(path):
     """Normalize sdist path for comparison."""
     # Remove src/ prefix if present (src-layout packages)
-    if path.startswith('src/'):
+    if path.startswith("src/"):
         return path[4:]
     return path
 
@@ -162,10 +162,10 @@ def compare_package(wheel_path, sdist_path):
     sdist_package_files = set()
     for f in sdist_normalized:
         # Skip test files
-        if '/tests/' in f or f.startswith('tests/'):
+        if "/tests/" in f or f.startswith("tests/"):
             continue
         # Skip non-Python files that aren't typically in wheels
-        if f.endswith(('.rst', '.md', '.txt', '.ini', '.cfg', '.toml')):
+        if f.endswith((".rst", ".md", ".txt", ".ini", ".cfg", ".toml")):
             continue
         sdist_package_files.add(f)
 
@@ -176,26 +176,26 @@ def compare_package(wheel_path, sdist_path):
     sdist_only = sdist_package_files - wheel_files
 
     return {
-        'wheel_files': wheel_files,
-        'sdist_files': sdist_files,
-        'sdist_package_files': sdist_package_files,
-        'wheel_only': wheel_only,
-        'sdist_only': sdist_only,
+        "wheel_files": wheel_files,
+        "sdist_files": sdist_files,
+        "sdist_package_files": sdist_package_files,
+        "wheel_only": wheel_only,
+        "sdist_only": sdist_only,
     }
 
 
 def main():
-    dist_dir = Path('/home/rnix/workspace/conestack/dist')
+    dist_dir = Path("/home/rnix/workspace/conestack/dist")
 
     # Find all wheel files
-    wheels = sorted(dist_dir.glob('*.whl'))
+    wheels = sorted(dist_dir.glob("*.whl"))
 
     issues_found = False
 
     for wheel_path in wheels:
         # Extract package name and version from wheel filename
         # Format: {package}-{version}-{python}-{abi}-{platform}.whl
-        parts = wheel_path.stem.split('-')
+        parts = wheel_path.stem.split("-")
         pkg_name = parts[0]
         pkg_version = parts[1]
 
@@ -203,46 +203,50 @@ def main():
         sdist_path = dist_dir / f"{pkg_name}-{pkg_version}.tar.gz"
 
         if not sdist_path.exists():
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"PACKAGE: {pkg_name}")
-            print(f"{'='*60}")
+            print(f"{'=' * 60}")
             print(f"  ERROR: No sdist found for {wheel_path.name}")
             issues_found = True
             continue
 
         result = compare_package(wheel_path, sdist_path)
 
-        has_issues = result['wheel_only'] or result['sdist_only']
+        has_issues = result["wheel_only"] or result["sdist_only"]
 
         if has_issues:
             issues_found = True
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"PACKAGE: {pkg_name}")
-            print(f"{'='*60}")
+            print(f"{'=' * 60}")
             print(f"  Wheel: {wheel_path.name}")
             print(f"  Sdist: {sdist_path.name}")
             print(f"  Wheel file count: {len(result['wheel_files'])}")
             print(f"  Sdist file count: {len(result['sdist_files'])}")
 
-            if result['wheel_only']:
-                print(f"\n  FILES IN WHEEL BUT NOT IN SDIST ({len(result['wheel_only'])}):")
-                for f in sorted(result['wheel_only']):
+            if result["wheel_only"]:
+                print(
+                    f"\n  FILES IN WHEEL BUT NOT IN SDIST ({len(result['wheel_only'])}):"
+                )
+                for f in sorted(result["wheel_only"]):
                     print(f"    + {f}")
 
-            if result['sdist_only']:
-                print(f"\n  FILES IN SDIST BUT NOT IN WHEEL ({len(result['sdist_only'])}):")
-                for f in sorted(result['sdist_only']):
+            if result["sdist_only"]:
+                print(
+                    f"\n  FILES IN SDIST BUT NOT IN WHEEL ({len(result['sdist_only'])}):"
+                )
+                for f in sorted(result["sdist_only"]):
                     print(f"    - {f}")
 
     if not issues_found:
         print("All packages: wheel and sdist contents match (no issues found)")
     else:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print("NOTE: Some differences are expected:")
         print("  - Tests are typically excluded from wheels")
         print("  - Documentation files are excluded from wheels")
         print("  - Only package source files should be in both")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
