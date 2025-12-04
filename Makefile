@@ -133,11 +133,11 @@ MXMAKE?=mxmake
 
 # Documentation source folder.
 # Default: docs/source
-DOCS_SOURCE_FOLDER?=docs/source
+DOCS_SOURCE_FOLDER?=docs-source
 
 # Documentation generation target folder.
 # Default: docs/html
-DOCS_TARGET_FOLDER?=docs/html
+DOCS_TARGET_FOLDER?=docs
 
 # Documentation linkcheck output folder.
 # Default: docs/linkcheck
@@ -145,7 +145,7 @@ DOCS_LINKCHECK_FOLDER?=docs/linkcheck
 
 # Documentation Python requirements to be installed (via pip).
 # No default value.
-DOCS_REQUIREMENTS?=
+DOCS_REQUIREMENTS?=sphinx_conestack_theme
 
 ## core.mxfiles
 
