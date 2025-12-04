@@ -148,11 +148,11 @@ ISORT_SRC?=scripts
 
 # Documentation source folder.
 # Default: docs/source
-DOCS_SOURCE_FOLDER?=docs-source
+DOCS_SOURCE_FOLDER?=docs/source
 
 # Documentation generation target folder.
 # Default: docs/html
-DOCS_TARGET_FOLDER?=docs
+DOCS_TARGET_FOLDER?=docs/html
 
 # Documentation linkcheck output folder.
 # Default: docs/linkcheck
