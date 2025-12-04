@@ -11,6 +11,8 @@
 #: ldap.openldap
 #: ldap.python-ldap
 #: qa.coverage
+#: qa.isort
+#: qa.ruff
 #: qa.test
 #: system.dependencies
 #
@@ -128,6 +130,18 @@ MXDEV?=mxdev
 # mxmake to install in virtual environment.
 # Default: mxmake
 MXMAKE?=mxmake
+
+## qa.ruff
+
+# Source folder to scan for Python files to run ruff on.
+# Default: src
+RUFF_SRC?=scripts
+
+## qa.isort
+
+# Source folder to scan for Python files to run isort on.
+# Default: src
+ISORT_SRC?=scripts
 
 ## docs.sphinx
 
@@ -393,6 +407,85 @@ endif
 INSTALL_TARGETS+=mxenv
 DIRTY_TARGETS+=mxenv-dirty
 CLEAN_TARGETS+=mxenv-clean
+
+##############################################################################
+# ruff
+##############################################################################
+
+# Adjust RUFF_SRC to respect PROJECT_PATH_PYTHON if still at default
+ifeq ($(RUFF_SRC),src)
+RUFF_SRC:=$(PYTHON_PROJECT_PREFIX)src
+endif
+
+RUFF_TARGET:=$(SENTINEL_FOLDER)/ruff.sentinel
+$(RUFF_TARGET): $(MXENV_TARGET)
+	@echo "Install Ruff"
+	@$(PYTHON_PACKAGE_COMMAND) install ruff
+	@touch $(RUFF_TARGET)
+
+.PHONY: ruff-check
+ruff-check: $(RUFF_TARGET)
+	@echo "Run ruff check"
+	@ruff check $(RUFF_SRC)
+
+.PHONY: ruff-format
+ruff-format: $(RUFF_TARGET)
+	@echo "Run ruff format"
+	@ruff format $(RUFF_SRC)
+
+.PHONY: ruff-dirty
+ruff-dirty:
+	@rm -f $(RUFF_TARGET)
+
+.PHONY: ruff-clean
+ruff-clean: ruff-dirty
+	@test -e $(MXENV_PYTHON) && $(MXENV_PYTHON) -m pip uninstall -y ruff || :
+	@rm -rf .ruff_cache
+
+INSTALL_TARGETS+=$(RUFF_TARGET)
+CHECK_TARGETS+=ruff-check
+FORMAT_TARGETS+=ruff-format
+DIRTY_TARGETS+=ruff-dirty
+CLEAN_TARGETS+=ruff-clean
+
+##############################################################################
+# isort
+##############################################################################
+
+# Adjust ISORT_SRC to respect PROJECT_PATH_PYTHON if still at default
+ifeq ($(ISORT_SRC),src)
+ISORT_SRC:=$(PYTHON_PROJECT_PREFIX)src
+endif
+
+ISORT_TARGET:=$(SENTINEL_FOLDER)/isort.sentinel
+$(ISORT_TARGET): $(MXENV_TARGET)
+	@echo "Install isort"
+	@$(PYTHON_PACKAGE_COMMAND) install isort
+	@touch $(ISORT_TARGET)
+
+.PHONY: isort-check
+isort-check: $(ISORT_TARGET)
+	@echo "Run isort check"
+	@isort --check $(ISORT_SRC)
+
+.PHONY: isort-format
+isort-format: $(ISORT_TARGET)
+	@echo "Run isort format"
+	@isort $(ISORT_SRC)
+
+.PHONY: isort-dirty
+isort-dirty:
+	@rm -f $(ISORT_TARGET)
+
+.PHONY: isort-clean
+isort-clean: isort-dirty
+	@test -e $(MXENV_PYTHON) && $(MXENV_PYTHON) -m pip uninstall -y isort || :
+
+INSTALL_TARGETS+=$(ISORT_TARGET)
+CHECK_TARGETS+=isort-check
+FORMAT_TARGETS+=isort-format
+DIRTY_TARGETS+=isort-dirty
+CLEAN_TARGETS+=isort-clean
 
 ##############################################################################
 # python-ldap
