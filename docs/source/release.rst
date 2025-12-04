@@ -53,7 +53,7 @@ Release all packages with unreleased changes:
 
 .. code-block:: bash
 
-    ./venv/bin/python scripts/release_packages.py
+    ./venv/bin/python scripts/release_packages.py --all
 
 Script Options
 ~~~~~~~~~~~~~~
@@ -64,10 +64,11 @@ Script Options
 
     options:
       --dry-run         Show what would be released without doing it
-      --list            List packages needing release and exit
+      --list            List packages needing release and exit (implies --all)
       --package PKG     Release only specified package (can be repeated)
       --skip PKG        Skip specified package (can be repeated)
       --no-upload       Prepare release but don't upload to PyPI
+      --all             Process all packages (required unless --package is specified)
       -v, --verbose     Verbose output
 
 Examples
@@ -75,20 +76,23 @@ Examples
 
 .. code-block:: bash
 
-    # Preview what will be released
-    ./venv/bin/python scripts/release_packages.py --dry-run
-
     # List packages needing release
     ./venv/bin/python scripts/release_packages.py --list
+
+    # Preview what will be released (dry-run)
+    ./venv/bin/python scripts/release_packages.py --all --dry-run
+
+    # Release all packages with changes
+    ./venv/bin/python scripts/release_packages.py --all
 
     # Release specific packages only
     ./venv/bin/python scripts/release_packages.py --package node --package odict
 
     # Release all except specific packages
-    ./venv/bin/python scripts/release_packages.py --skip cone.ldap
+    ./venv/bin/python scripts/release_packages.py --all --skip cone.ldap
 
     # Prepare releases without uploading
-    ./venv/bin/python scripts/release_packages.py --no-upload
+    ./venv/bin/python scripts/release_packages.py --all --no-upload
 
 Manual Release (Single Package)
 -------------------------------

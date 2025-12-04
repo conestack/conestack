@@ -7,14 +7,14 @@ using zest.releaser.
 USAGE
 =====
 
-    # Preview releases (dry-run)
-    python scripts/release_packages.py --dry-run
-
-    # List packages needing release
+    # List all packages needing release
     python scripts/release_packages.py --list
 
+    # Preview releases (dry-run)
+    python scripts/release_packages.py --all --dry-run
+
     # Release all packages with changes
-    python scripts/release_packages.py
+    python scripts/release_packages.py --all
 
     # Release specific packages
     python scripts/release_packages.py --package node --package odict
@@ -172,22 +172,28 @@ def needs_release(package):
     return has_changes, version, reason
 
 
+def get_venv_bin():
+    """Get the path to venv/bin directory."""
+    return get_root_dir() / "venv" / "bin"
+
+
 def release_package(package, dry_run=False, no_upload=False, verbose=False):
     """Release a single package using zest.releaser.
 
     :return: True if successful, False otherwise
     """
     package_dir = get_package_dir(package)
+    venv_bin = get_venv_bin()
 
     if dry_run:
         print(f"  [DRY-RUN] Would run fullrelease in {package_dir}")
         return True
 
     # Build fullrelease command
-    cmd = ["fullrelease", "--no-input"]
+    cmd = [str(venv_bin / "fullrelease"), "--no-input"]
     if no_upload:
         # Use prerelease + release without upload
-        cmd = ["prerelease", "--no-input"]
+        cmd = [str(venv_bin / "prerelease"), "--no-input"]
 
     try:
         result = subprocess.run(
@@ -205,14 +211,14 @@ def release_package(package, dry_run=False, no_upload=False, verbose=False):
         if no_upload:
             # Run release (tag) but skip upload
             subprocess.run(
-                ["release", "--no-input"],
+                [str(venv_bin / "release"), "--no-input"],
                 cwd=package_dir,
                 capture_output=not verbose,
                 text=True,
             )
             # Run postrelease for version bump
             subprocess.run(
-                ["postrelease", "--no-input"],
+                [str(venv_bin / "postrelease"), "--no-input"],
                 cwd=package_dir,
                 capture_output=not verbose,
                 text=True,
@@ -264,6 +270,11 @@ def main():
         help="Prepare release but don't upload to PyPI",
     )
     parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Process all packages (required unless --package is specified)",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -272,12 +283,17 @@ def main():
 
     args = parser.parse_args()
 
+    # --list implies --all
+    if args.list_only:
+        args.all = True
+
     # Determine which packages to process
     if args.packages:
-        # Keep user-specified order but filter to valid packages
-        packages = [p for p in args.packages if p in ALL_PACKAGES]
-    else:
+        packages = args.packages
+    elif args.all:
         packages = ALL_PACKAGES
+    else:
+        parser.error("Either --all or --package must be specified")
 
     if args.skip_packages:
         packages = [p for p in packages if p not in args.skip_packages]
