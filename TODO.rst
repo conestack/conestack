@@ -99,3 +99,189 @@ TODO
   - [x] yafowil.widget.slider
   - [x] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
+
+- [ ] Refactor package structure in dedicated feature branches.
+  - [ ] cookiecutter-cone
+  - [x] cone.app
+  - [x] cone.calendar
+  - [x] cone.charts
+  - [x] cone.fileupload
+  - [x] cone.firebase
+  - [x] cone.ldap
+  - [x] cone.maps
+  - [x] cone.sql
+  - [x] cone.three
+  - [x] cone.tile
+  - [x] cone.tokens
+  - [x] cone.ugm
+  - [x] cone.zodb
+  - [x] node
+  - [x] node.ext.directory
+  - [x] node.ext.fs
+  - [x] node.ext.ldap
+  - [x] node.ext.ugm
+  - [x] node.ext.yaml
+  - [x] node.ext.zodb
+  - [x] odict
+  - [x] plumber
+  - [x] sphinx-conestack-theme
+  - [x] treibstoff
+  - [x] webresource
+  - [x] yafowil
+  - [x] yafowil-example-helloworld
+  - [x] yafowil.bootstrap
+  - [x] yafowil.demo
+  - [x] yafowil.documentation
+  - [x] yafowil.lingua
+  - [x] yafowil.webob
+  - [x] yafowil.widget.ace
+  - [x] yafowil.widget.array
+  - [x] yafowil.widget.autocomplete
+  - [x] yafowil.widget.chosen
+  - [x] yafowil.widget.color
+  - [x] yafowil.widget.cron
+  - [x] yafowil.widget.datetime
+  - [x] yafowil.widget.dict
+  - [x] yafowil.widget.dynatree
+  - [x] yafowil.widget.image
+  - [x] yafowil.widget.location
+  - [x] yafowil.widget.multiselect
+  - [x] yafowil.widget.richtext
+  - [x] yafowil.widget.select2
+  - [x] yafowil.widget.slider
+  - [x] yafowil.widget.tiptap
+  - [x] yafowil.widget.wysihtml5
+  - [x] yafowil.yaml
+
+- [ ] Merge package structure refactoring.
+  - [ ] cookiecutter-cone
+  - [x] cone.app
+  - [x] cone.calendar
+  - [x] cone.charts
+  - [x] cone.fileupload
+  - [x] cone.firebase
+  - [x] cone.ldap
+  - [x] cone.maps
+  - [x] cone.sql
+  - [x] cone.three
+  - [x] cone.tile
+  - [x] cone.tokens
+  - [x] cone.ugm
+  - [x] cone.zodb
+  - [x] node
+  - [x] node.ext.directory
+  - [x] node.ext.fs
+  - [x] node.ext.ldap
+  - [x] node.ext.ugm
+  - [x] node.ext.yaml
+  - [x] node.ext.zodb
+  - [x] odict
+  - [x] plumber
+  - [x] sphinx-conestack-theme
+  - [x] treibstoff
+  - [x] yafowil
+  - [x] yafowil-example-helloworld
+  - [x] yafowil.bootstrap
+  - [x] yafowil.demo
+  - [x] yafowil.documentation
+  - [x] yafowil.lingua
+  - [x] yafowil.webob
+  - [x] yafowil.widget.ace
+  - [x] yafowil.widget.array
+  - [x] yafowil.widget.autocomplete
+  - [x] yafowil.widget.chosen
+  - [x] yafowil.widget.color
+  - [x] yafowil.widget.cron
+  - [x] yafowil.widget.datetime
+  - [x] yafowil.widget.dict
+  - [x] yafowil.widget.dynatree
+  - [x] yafowil.widget.image
+  - [x] yafowil.widget.location
+  - [x] yafowil.widget.multiselect
+  - [x] yafowil.widget.richtext
+  - [x] yafowil.widget.select2
+  - [x] yafowil.widget.slider
+  - [x] yafowil.widget.tiptap
+  - [x] yafowil.widget.wysihtml5
+  - [x] yafowil.yaml
+
+- [ ] Release next gen base and node.* packages.
+  - [ ] node.ext.directory
+  - [ ] node.ext.fs
+  - [ ] node.ext.ldap
+  - [ ] node.ext.ugm
+  - [ ] node.ext.yaml
+  - [ ] node.ext.zodb
+  - [ ] node
+  - [ ] odict
+  - [ ] plumber
+
+- [ ] Release next gen yafowil.* packages.
+  - [ ] treibstoff
+  - [ ] yafowil.bootstrap
+  - [ ] yafowil.demo
+  - [ ] yafowil.documentation
+  - [ ] yafowil-example-helloworld
+  - [ ] yafowil
+  - [ ] yafowil.lingua
+  - [ ] yafowil.webob
+  - [ ] yafowil.widget.ace
+  - [ ] yafowil.widget.array
+  - [ ] yafowil.widget.autocomplete
+  - [ ] yafowil.widget.chosen
+  - [ ] yafowil.widget.color
+  - [ ] yafowil.widget.cron
+  - [ ] yafowil.widget.datetime
+  - [ ] yafowil.widget.dict
+  - [ ] yafowil.widget.dynatree
+  - [ ] yafowil.widget.image
+  - [ ] yafowil.widget.location
+  - [ ] yafowil.widget.multiselect
+  - [ ] yafowil.widget.richtext
+  - [ ] yafowil.widget.select2
+  - [ ] yafowil.widget.slider
+  - [ ] yafowil.widget.tiptap
+  - [ ] yafowil.widget.wysihtml5
+  - [ ] yafowil.yaml
+
+- [ ] Release next gen cone.* packages.
+  - [ ] cone.app
+  - [ ] cone.calendar
+  - [ ] cone.charts
+  - [ ] cone.fileupload
+  - [ ] cone.firebase
+  - [ ] cone.ldap
+  - [ ] cone.maps
+  - [ ] cone.sql
+  - [ ] conestack
+  - [ ] cone.three
+  - [ ] cone.tile
+  - [ ] cone.tokens
+  - [ ] cone.ugm
+  - [ ] cone.zodb
+  - [ ] cookiecutter-cone
+
+- [ ] Merge BS5 support for all cone.* packages. Restrict lower versions and
+      release all cone.* packages.
+  - [ ] cone.app
+  - [ ] cone.calendar
+  - [ ] cone.charts
+  - [ ] cone.fileupload
+  - [ ] cone.firebase
+  - [ ] cone.ldap
+  - [ ] cone.maps
+  - [ ] cone.sql
+  - [ ] conestack
+  - [ ] cone.three
+  - [ ] cone.tile
+  - [ ] cone.tokens
+  - [ ] cone.ugm
+  - [ ] cone.zodb
+  - [ ] cookiecutter-cone
+  - [ ] treibstoff
+
+- [ ] MISC
+  - [ ] version table in docs
+  - [ ] docs (cone.app, yafowil)
+  - [ ] expectError, expect_error -> with self.assertRaises
+  - [ ] check_output -> checkOutput

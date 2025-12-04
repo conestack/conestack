@@ -4,10 +4,15 @@
 /.python-version
 /.vscode/
 /constraints-mxdev.txt
+/constraints-validate.txt
+/dist/
 /docs/html/
 /htmlcov/
 /openldap/
+/plans/
 /pyvenv.cfg
 /requirements-mxdev.txt
 /sources/
 /venv/
+TODO_*.rst
+mx_*.ini

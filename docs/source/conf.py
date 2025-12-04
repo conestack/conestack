@@ -22,7 +22,7 @@ copyright = '2021-2025, Conestack Contributors'
 author = 'Conestack Contributors'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0'
+release = '2.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,6 +31,7 @@ release = '1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.githubpages'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -47,9 +48,21 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'conestack'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+html_theme_options = {
+    'cs_color': '#FFFFFF',
+    'cs_bg_color': 'var(--bs-gray-900)',
+    'logo_url': '_static/conestack.svg',
+    'logo_title': 'conestack',
+    'logo_height': '50px',
+    'logo_width': '50px',
+    'github_url': 'https://github.com/conestack/conestack'
+}
+
+html_title = "Conestack"
