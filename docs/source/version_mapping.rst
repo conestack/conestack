@@ -201,12 +201,6 @@ Cone Framework
      - 1.1.0
      - 2.0.0
      - Active
-   * - cookiecutter-cone
-     - UNSUPPORTED
-     - --
-     - --
-     - --
-     - Active (2.0+)
 
 YAFOWIL Core
 ------------
@@ -260,8 +254,8 @@ YAFOWIL Core
    * - yafowil.werkzeug
      - ARCHIVED
      - 0.2
-     - 2.0.0
-     - 2.0.0
+     - --
+     - --
      - ARCHIVED
    * - yafowil.yaml
      - 2.x
@@ -421,13 +415,13 @@ Supporting Packages
      - UNSUPPORTED
      - --
      - 1.0.0
-     - 1.0.0
+     - 2.0.0
      - Active (2.0+)
    * - webresource
      - UNSUPPORTED
      - --
-     - 1.3.0
-     - 1.3.0
+     - 2.0.0
+     - 2.0.0
      - Active (2.0+)
 
 Status Legend

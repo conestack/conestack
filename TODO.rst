@@ -244,7 +244,7 @@ TODO
   - [ ] yafowil.widget.wysihtml5
   - [ ] yafowil.yaml
 
-- [ ] Restrict lower and upper versions and release all cone.* packages.
+- [ ] Release next gen cone.* packages.
   - [ ] cone.app
   - [ ] cone.calendar
   - [ ] cone.charts
@@ -280,11 +280,8 @@ TODO
   - [ ] cookiecutter-cone
   - [ ] treibstoff
 
-
-MISC
-----
-
-- [ ] version table in docs
-- [ ] docs (cone.app, yafowil)
-- [ ] expectError, expect_error -> with self.assertRaises
-- [ ] check_output -> checkOutput
+- [ ] MISC
+  - [ ] version table in docs
+  - [ ] docs (cone.app, yafowil)
+  - [ ] expectError, expect_error -> with self.assertRaises
+  - [ ] check_output -> checkOutput

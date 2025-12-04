@@ -6,6 +6,18 @@ This is the 3.0 version set.
 The following packages are a known good set of interoperability.
 They work from Python 3.10 up to Python 3.14.
 
+``cone.*`` packages use Bootstrap 5 for theming.
+
+``yafowil.*`` packages support themes for Bootstrap 3, 4 and 5.
+
+.. note::
+
+    Conestack 3.0 marks the transition from Bootstrap 3 to Bootstrap 5.
+    Packages like ``treibstoff`` have a major version bump (1.x to 2.x)
+    to reflect this theming change. The upper version bounds in Conestack 2.0
+    packages (e.g., ``treibstoff<2.0.0``) ensure Bootstrap 3 compatibility
+    and prevent accidental upgrades to Bootstrap 5.
+
 - cone.app = 2.0.0
 - cone.calendar = 2.0.0
 - cone.charts = 2.0.0
@@ -28,15 +40,14 @@ They work from Python 3.10 up to Python 3.14.
 - node.ext.zodb = 2.0.0
 - odict = 2.0.0
 - plumber = 2.0.0
-- treibstoff = 1.0.0
-- webresource = 1.3.0
+- treibstoff = 2.0.0
+- webresource = 2.0.0
 - yafowil = 4.0.0
 - yafowil.bootstrap = 2.0.0
 - yafowil.demo = 4.0.0
 - yafowil.documentation = 4.0.0
 - yafowil.lingua = 2.0.0
 - yafowil.webob = 2.0.0
-- yafowil.werkzeug = 2.0.0
 - yafowil.widget.ace = 2.0.0
 - yafowil.widget.array = 2.0.0
 - yafowil.widget.autocomplete = 2.0.0

@@ -18,8 +18,8 @@ Version History
 
 **Conestack 2.0**
   The current stable version set supporting Python 3.10-3.14. This version
-  includes support for Bootstrap 3 in ``cone.*`` packages and Bootstrap 3, 4,
-  and 5 in ``yafowil.*`` packages.
+  includes support for Bootstrap 3 in ``cone.*`` packages and Bootstrap 3, and
+  5 in ``yafowil.*`` packages.
 
 **Conestack 3.0**
   The latest version set supporting Python 3.10-3.14. All ``cone.*`` packages
