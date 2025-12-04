@@ -3,12 +3,11 @@ Conestack 2.0
 
 This is the 2.0 version set.
 
-The following packages are a known good set of interoperability.
-They work from Python 3.10 up to Python 3.14.
+Packages work from Python 3.10 up to Python 3.14.
 
 ``cone.*`` packages use Bootstrap 3 for theming.
 
-``yafowil.*`` packages support themes for Bootstrap 3, 4 and 5.
+``yafowil.*`` packages support themes for Bootstrap 3 and 5.
 
 .. note::
 
@@ -17,51 +16,84 @@ They work from Python 3.10 up to Python 3.14.
     (Conestack 2.0) to Bootstrap 5 (Conestack 3.0). For example, ``cone.app``
     requires ``treibstoff<2.0.0`` to ensure Bootstrap 3 compatibility.
 
-- cone.app = 1.1.0
-- cone.calendar = 1.1.0
+New Packages
+------------
+
+The following packages are new in Conestack 2.0:
+
 - cone.charts = 1.1.0
-- cone.fileupload = 1.1.0
-- cone.firebase = 1.1.0
-- cone.ldap = 1.1.0
-- cone.maps = 1.1.0
-- cone.sql = 1.1.0
 - cone.three = 1.1.0
-- cone.tile = 2.0.0
 - cone.tokens = 1.1.0
-- cone.ugm = 1.1.0
-- cone.zodb = 1.1.0
-- node = 2.0.0
-- node.ext.directory = 2.0.0
-- node.ext.fs = 2.0.0
-- node.ext.ldap = 2.0.0
-- node.ext.ugm = 2.0.0
-- node.ext.yaml = 2.0.0
-- node.ext.zodb = 2.0.0
-- odict = 2.0.0
-- plumber = 2.0.0
 - treibstoff = 1.0.0
 - webresource = 2.0.0
-- yafowil = 4.0.0
-- yafowil.bootstrap = 2.0.0
-- yafowil.demo = 4.0.0
-- yafowil.documentation = 4.0.0
-- yafowil.lingua = 2.0.0
-- yafowil.webob = 2.0.0
-- yafowil.widget.ace = 2.0.0
-- yafowil.widget.array = 2.0.0
-- yafowil.widget.autocomplete = 2.0.0
-- yafowil.widget.chosen = 2.0.0
 - yafowil.widget.color = 2.0.0
-- yafowil.widget.cron = 2.0.0
-- yafowil.widget.datetime = 2.0.0
-- yafowil.widget.dict = 2.0.0
-- yafowil.widget.dynatree = 2.0.0
-- yafowil.widget.image = 2.0.0
-- yafowil.widget.location = 2.0.0
-- yafowil.widget.multiselect = 2.0.0
-- yafowil.widget.richtext = 2.0.0
-- yafowil.widget.select2 = 2.0.0
-- yafowil.widget.slider = 2.0.0
 - yafowil.widget.tiptap = 2.0.0
-- yafowil.widget.wysihtml5 = 2.0.0
-- yafowil.yaml = 3.0.0
+
+Removed Packages
+----------------
+
+The following packages have been removed or archived:
+
+- bdajax (replaced by treibstoff)
+- yafowil.werkzeug (ARCHIVED)
+
+Version Changes
+---------------
+
+All packages have been updated. Major version bumps:
+
+Core packages:
+
+- node: 1.2.3 → 2.0.0
+- odict: 1.9.0 → 2.0.0
+- plumber: 1.7 → 2.0.0
+
+Node extensions:
+
+- node.ext.directory: 0.8.2 → 2.0.0
+- node.ext.fs: 1.2 → 2.0.0
+- node.ext.ldap: 1.3.0 → 2.0.0
+- node.ext.ugm: 1.2 → 2.0.0
+- node.ext.yaml: 0.4 → 2.0.0
+- node.ext.zodb: 1.7 → 2.0.0
+
+Cone framework:
+
+- cone.app: 1.0.8 → 1.1.0
+- cone.calendar: 0.4 → 1.1.0
+- cone.fileupload: 0.8 → 1.1.0
+- cone.firebase: 0.1 → 1.1.0
+- cone.ldap: 0.3 → 1.1.0
+- cone.maps: 0.2 → 1.1.0
+- cone.sql: 0.8 → 1.1.0
+- cone.tile: 1.2 → 2.0.0
+- cone.ugm: 1.0 → 1.1.0
+- cone.zodb: 1.0 → 1.1.0
+
+YAFOWIL:
+
+- yafowil: 3.1.2 → 4.0.0
+- yafowil.bootstrap: 1.3.3 → 2.0.0
+- yafowil.demo: 1.3 → 4.0.0
+- yafowil.documentation: 2.4 → 4.0.0
+- yafowil.lingua: 1.0.1 → 2.0.0
+- yafowil.webob: 1.5 → 2.0.0
+- yafowil.yaml: 2.1 → 3.0.0
+
+YAFOWIL widgets:
+
+- yafowil.widget.ace: 1.3 → 2.0.0
+- yafowil.widget.array: 1.8 → 2.0.0
+- yafowil.widget.autocomplete: 1.8 → 2.0.0
+- yafowil.widget.chosen: 1.4 → 2.0.0
+- yafowil.widget.cron: 1.3 → 2.0.0
+- yafowil.widget.datetime: 1.14 → 2.0.0
+- yafowil.widget.dict: 1.9 → 2.0.0
+- yafowil.widget.dynatree: 1.7 → 2.0.0
+- yafowil.widget.image: 1.7 → 2.0.0
+- yafowil.widget.location: 1.3 → 2.0.0
+- yafowil.widget.multiselect: 1.4 → 2.0.0
+- yafowil.widget.richtext: 1.6 → 2.0.0
+- yafowil.widget.select2: 1.5 → 2.0.0
+- yafowil.widget.slider: 1.4 → 2.0.0
+- yafowil.widget.wysihtml5: 1.5 → 2.0.0

@@ -3,12 +3,11 @@ Conestack 3.0
 
 This is the 3.0 version set.
 
-The following packages are a known good set of interoperability.
-They work from Python 3.10 up to Python 3.14.
+Packages work from Python 3.10 up to Python 3.14.
 
 ``cone.*`` packages use Bootstrap 5 for theming.
 
-``yafowil.*`` packages support themes for Bootstrap 3, 4 and 5.
+``yafowil.*`` packages support themes for Bootstrap 3 and 5.
 
 .. note::
 
@@ -18,19 +17,34 @@ They work from Python 3.10 up to Python 3.14.
     packages (e.g., ``treibstoff<2.0.0``) ensure Bootstrap 3 compatibility
     and prevent accidental upgrades to Bootstrap 5.
 
-- cone.app = 2.0.0
-- cone.calendar = 2.0.0
-- cone.charts = 2.0.0
-- cone.fileupload = 2.0.0
-- cone.firebase = 2.0.0
-- cone.ldap = 2.0.0
-- cone.maps = 2.0.0
-- cone.sql = 2.0.0
-- cone.three = 2.0.0
+Version Changes
+---------------
+
+Bootstrap 5 transition - treibstoff major version bump:
+
+- treibstoff: 1.0.0 → 2.0.0
+
+Cone framework version bumps:
+
+- cone.app: 1.1.0 → 2.0.0
+- cone.calendar: 1.1.0 → 2.0.0
+- cone.fileupload: 1.1.0 → 2.0.0
+- cone.ldap: 1.1.0 → 2.0.0
+- cone.tokens: 1.1.0 → 2.0.0
+- cone.ugm: 1.1.0 → 2.0.0
+
+Unchanged Packages
+------------------
+
+The following packages remain at their Conestack 2.0 versions:
+
+- cone.charts = 1.1.0
+- cone.firebase = 1.1.0
+- cone.maps = 1.1.0
+- cone.sql = 1.1.0
+- cone.three = 1.1.0
 - cone.tile = 2.0.0
-- cone.tokens = 2.0.0
-- cone.ugm = 2.0.0
-- cone.zodb = 2.0.0
+- cone.zodb = 1.1.0
 - node = 2.0.0
 - node.ext.directory = 2.0.0
 - node.ext.fs = 2.0.0
@@ -40,7 +54,6 @@ They work from Python 3.10 up to Python 3.14.
 - node.ext.zodb = 2.0.0
 - odict = 2.0.0
 - plumber = 2.0.0
-- treibstoff = 2.0.0
 - webresource = 2.0.0
 - yafowil = 4.0.0
 - yafowil.bootstrap = 2.0.0

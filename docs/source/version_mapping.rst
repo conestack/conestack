@@ -133,7 +133,7 @@ Cone Framework
      - UNSUPPORTED
      - --
      - 1.1.0
-     - 2.0.0
+     - 1.1.0
      - Active (2.0+)
    * - cone.fileupload
      - 0.8.x
@@ -145,7 +145,7 @@ Cone Framework
      - 0.x
      - 0.1
      - 1.1.0
-     - 2.0.0
+     - 1.1.0
      - Active
    * - cone.ldap
      - 0.3.x
@@ -157,7 +157,7 @@ Cone Framework
      - 0.2.x
      - 0.2
      - 1.1.0
-     - 2.0.0
+     - 1.1.0
      - Active
    * - cone.mdb
      - ARCHIVED
@@ -169,13 +169,13 @@ Cone Framework
      - 0.9.x
      - 0.8
      - 1.1.0
-     - 2.0.0
+     - 1.1.0
      - Active
    * - cone.three
      - UNSUPPORTED
      - --
      - 1.1.0
-     - 2.0.0
+     - 1.1.0
      - Active (2.0+)
    * - cone.tile
      - 1.x
@@ -199,7 +199,7 @@ Cone Framework
      - 1.0.x
      - 1.0
      - 1.1.0
-     - 2.0.0
+     - 1.1.0
      - Active
 
 YAFOWIL Core
