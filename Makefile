@@ -160,7 +160,7 @@ DOCS_LINKCHECK_FOLDER?=docs/linkcheck
 
 # Documentation Python requirements to be installed (via pip).
 # No default value.
-DOCS_REQUIREMENTS?=sphinx_conestack_theme
+DOCS_REQUIREMENTS?=sphinx_conestack_theme==1.1.0
 
 ## core.mxfiles
 
