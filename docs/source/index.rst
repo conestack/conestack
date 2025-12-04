@@ -12,6 +12,7 @@ Conestack Documentation
 
    Introduction <introduction>
    Package Validation <package_validation>
+   Release Process <release>
    Version Overview <versions>
    Conestack 1.0 <versions_1.0>
    Conestack 2.0 <versions_2.0>

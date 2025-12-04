@@ -96,7 +96,6 @@ Generated for the Conestack monorepo artifact validation workflow.
 """
 
 import tarfile
-import tempfile
 import zipfile
 from pathlib import Path
 
