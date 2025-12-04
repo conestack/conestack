@@ -3,20 +3,21 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to conestack's documentation!
-=====================================
+Conestack Documentation
+=======================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   Introduction <introduction>
+   Package Validation <package_validation>
    Version Overview <versions>
-   Outdated Packages <versions_outdated>
    Conestack 1.0 <versions_1.0>
    Conestack 2.0 <versions_2.0>
    Conestack 3.0 <versions_3.0>
+   Outdated Packages <versions_outdated>
    Version Mapping <version_mapping>
-   Package Validation <package_validation>
 
 
 Indices and tables

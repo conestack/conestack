@@ -18,12 +18,25 @@ Version History
 
 **Conestack 2.0**
   The current stable version set supporting Python 3.10-3.14. This version
-  includes support for Bootstrap 3 in ``cone.*`` packages and Bootstrap 3, and
-  5 in ``yafowil.*`` packages.
+  uses Bootstrap 3 in ``cone.*`` packages. ``yafowil.*`` packages support
+  themes for Bootstrap 3 and 5.
 
 **Conestack 3.0**
-  The latest version set supporting Python 3.10-3.14. All ``cone.*`` packages
-  have been updated to 2.0.0 versions with enhanced Bootstrap 5 support.
+  The next version set supporting Python 3.10-3.14. This version transitions
+  ``cone.*`` packages from Bootstrap 3 to Bootstrap 5. Core packages like
+  ``cone.app``, ``cone.ugm``, and ``cone.ldap`` are updated to 2.0.0 versions.
+
+Bootstrap Transition
+--------------------
+
+The transition from Bootstrap 3 to Bootstrap 5 is managed through version
+bounds:
+
+- **Conestack 2.0**: Uses Bootstrap 3. Packages have upper version bounds
+  (e.g., ``treibstoff<2.0.0``) to ensure Bootstrap 3 compatibility.
+
+- **Conestack 3.0**: Uses Bootstrap 5. The ``treibstoff`` package is bumped
+  to 2.0.0, and upper version bounds are removed from dependent packages.
 
 Python Version Support
 ----------------------
@@ -37,8 +50,8 @@ Package Status
 
 Some packages are no longer maintained:
 
-- **ARCHIVED**: Package is no longer maintained and may not work
-- **UNSUPPORTED**: Package was not part of legacy versions
+- **ARCHIVED**: Package is no longer maintained and should not be used
+- **UNSUPPORTED**: Package was not part of legacy versions (1.0)
 
 See the individual version pages for complete package listings and the
 version mapping table for detailed package evolution across releases.
