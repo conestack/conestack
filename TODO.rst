@@ -281,19 +281,10 @@ TODO
       release all cone.* packages.
   - [ ] cone.app
   - [ ] cone.calendar
-  - [ ] cone.charts
   - [ ] cone.fileupload
-  - [ ] cone.firebase
   - [ ] cone.ldap
-  - [ ] cone.maps
-  - [ ] cone.sql
-  - [ ] conestack
-  - [ ] cone.three
-  - [ ] cone.tile
   - [ ] cone.tokens
   - [ ] cone.ugm
-  - [ ] cone.zodb
-  - [ ] cookiecutter-cone
   - [ ] treibstoff
 
 - [ ] MISC
