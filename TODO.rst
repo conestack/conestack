@@ -205,6 +205,22 @@ TODO
   - [x] yafowil.widget.wysihtml5
   - [x] yafowil.yaml
 
+- [x] Update translations
+  - [x] cone.app
+  - [x] cone.calendar
+  - [x] cone.fileupload
+  - [x] cone.ldap
+  - [x] cone.maps
+  - [x] cone.tokens
+  - [x] cone.ugm
+  - [x] yafowil
+  - [x] yafowil.widget.color
+  - [x] yafowil.widget.cron
+  - [x] yafowil.widget.datetime
+  - [x] yafowil.widget.dict
+  - [x] yafowil.widget.image
+  - [x] yafowil.widget.location
+
 - [ ] Release next gen base and node.* packages.
   - [ ] node.ext.directory
   - [ ] node.ext.fs
