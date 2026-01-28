@@ -213,15 +213,15 @@ Core Concepts
 
 **Storage Types**
 
-+------------------+---------------+------------------------------+
-| Storage Type     | Classes       | Interface                    |
-+==================+===============+==============================+
-| Mapping (dict)   | ``BaseNode``  | ``IMappingNode``             |
-+------------------+---------------+------------------------------+
++------------------+----------------+--------------------------------+
+| Storage Type     | Classes        | Interface                      |
++==================+================+================================+
+| Mapping (dict)   | ``BaseNode``   | ``IMappingNode``               |
++------------------+----------------+--------------------------------+
 | Mapping (odict)  | ``OrderedNode``| ``IMappingNode`` + ``IOrdered``|
-+------------------+---------------+------------------------------+
-| Sequence (list)  | ``ListNode``  | ``ISequenceNode``            |
-+------------------+---------------+------------------------------+
++------------------+----------------+--------------------------------+
+| Sequence (list)  | ``ListNode``   | ``ISequenceNode``              |
++------------------+----------------+--------------------------------+
 
 **Behavior Layers (Pipeline from Top to Bottom)**
 
@@ -278,23 +278,23 @@ Custom Node Creation
 Design Patterns
 ~~~~~~~~~~~~~~~
 
-+---------------------------+-------------------------------------------+
-| Pattern                   | Usage                                     |
-+===========================+===========================================+
-| **Composite**             | Tree structure of nodes                   |
-+---------------------------+-------------------------------------------+
-| **Plugin/Strategy**       | Behaviors as interchangeable strategies   |
-+---------------------------+-------------------------------------------+
-| **Chain of Responsibility**| Plumber pipeline                         |
-+---------------------------+-------------------------------------------+
-| **Decorator**             | Behavior layers wrap each other           |
-+---------------------------+-------------------------------------------+
-| **Observer**              | Lifecycle events                          |
-+---------------------------+-------------------------------------------+
-| **Lazy Loading**          | Factory behaviors                         |
-+---------------------------+-------------------------------------------+
-| **Index**                 | Reference system with UUID lookup         |
-+---------------------------+-------------------------------------------+
++-----------------------------+-----------------------------------------+
+| Pattern                     | Usage                                   |
++=============================+=========================================+
+| **Composite**               | Tree structure of nodes                 |
++-----------------------------+-----------------------------------------+
+| **Plugin/Strategy**         | Behaviors as interchangeable strategies |
++-----------------------------+-----------------------------------------+
+| **Chain of Responsibility** | Plumber pipeline                        |
++-----------------------------+-----------------------------------------+
+| **Decorator**               | Behavior layers wrap each other         |
++-----------------------------+-----------------------------------------+
+| **Observer**                | Lifecycle events                        |
++-----------------------------+-----------------------------------------+
+| **Lazy Loading**            | Factory behaviors                       |
++-----------------------------+-----------------------------------------+
+| **Index**                   | Reference system with UUID lookup       |
++-----------------------------+-----------------------------------------+
 
 
 node.ext.* - Backend Extensions
@@ -544,43 +544,43 @@ yafowil.widget.* - Widget Extensions
 
 The ``yafowil.widget.*`` packages provide specialized form widgets:
 
-+-------------------------------+------------------------------------------+
-| Package                       | Description                              |
-+===============================+==========================================+
-| ``yafowil.widget.ace``        | Ace code editor integration              |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.array``      | Dynamic array/list fields                |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.autocomplete``| Autocomplete text input                 |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.chosen``     | Chosen.js select enhancement            |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.color``      | Color picker widget                      |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.cron``       | Cron expression editor                   |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.datetime``   | Date and time pickers                    |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.dict``       | Key-value dictionary fields              |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.dynatree``   | Tree selection widget                    |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.image``      | Image upload and preview                 |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.location``   | Location/address picker with maps        |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.multiselect``| Multi-select list widget                 |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.richtext``   | Rich text editor integration             |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.select2``    | Select2.js integration                   |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.slider``     | Range slider widget                      |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.tiptap``     | Tiptap rich text editor                  |
-+-------------------------------+------------------------------------------+
-| ``yafowil.widget.wysihtml5``  | WYSIHTML5 editor integration             |
-+-------------------------------+------------------------------------------+
++--------------------------------+-------------------------------------+
+| Package                        | Description                         |
++================================+=====================================+
+| ``yafowil.widget.ace``         | Ace code editor integration         |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.array``       | Dynamic array/list fields           |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.autocomplete``| Autocomplete text input             |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.chosen``      | Chosen.js select enhancement        |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.color``       | Color picker widget                 |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.cron``        | Cron expression editor              |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.datetime``    | Date and time pickers               |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.dict``        | Key-value dictionary fields         |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.dynatree``    | Tree selection widget               |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.image``       | Image upload and preview            |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.location``    | Location/address picker with maps   |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.multiselect`` | Multi-select list widget            |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.richtext``    | Rich text editor integration        |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.select2``     | Select2.js integration              |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.slider``      | Range slider widget                 |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.tiptap``      | Tiptap rich text editor             |
++--------------------------------+-------------------------------------+
+| ``yafowil.widget.wysihtml5``   | WYSIHTML5 editor integration        |
++--------------------------------+-------------------------------------+
 
 Each widget package registers its blueprints via the yafowil plugin system,
 making them automatically available after installation.
