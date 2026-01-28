@@ -13,20 +13,17 @@ they integrate when used together.
 
 **Application Domains**
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 80
-
-   * - Package
-     - Domain
-   * - **plumber**
-     - Behavior composition for classes
-   * - **node**
-     - Tree-based data structures
-   * - **yafowil**
-     - Form processing and validation
-   * - **cone.app**
-     - Web application framework
++---------------+-------------------------------------+
+| Package       | Domain                              |
++===============+=====================================+
+| **plumber**   | Behavior composition for classes    |
++---------------+-------------------------------------+
+| **node**      | Tree-based data structures          |
++---------------+-------------------------------------+
+| **yafowil**   | Form processing and validation      |
++---------------+-------------------------------------+
+| **cone.app**  | Web application framework           |
++---------------+-------------------------------------+
 
 **Dependency Structure**
 
@@ -78,22 +75,14 @@ Core Concepts
 
 **Two-Stage Processing**
 
-.. list-table::
-   :header-rows: 1
-   :widths: 15 25 30 30
-
-   * - Stage
-     - Timing
-     - Instructions
-     - Purpose
-   * - Stage 1
-     - Before class creation
-     - ``default``, ``override``, ``finalize``
-     - Attribute extension
-   * - Stage 2
-     - After class creation
-     - ``plumb``, ``plumbifexists``
-     - Method pipelines
++---------+-----------------------+-----------------------------------+---------------------+
+| Stage   | Timing                | Instructions                      | Purpose             |
++=========+=======================+===================================+=====================+
+| Stage 1 | Before class creation | ``default``, ``override``,        | Attribute extension |
+|         |                       | ``finalize``                      |                     |
++---------+-----------------------+-----------------------------------+---------------------+
+| Stage 2 | After class creation  | ``plumb``, ``plumbifexists``      | Method pipelines    |
++---------+-----------------------+-----------------------------------+---------------------+
 
 **Precedence Hierarchy (Stage 1)**
 
@@ -119,21 +108,22 @@ Core Concepts
 Main Classes
 ~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 30 70
-
-   * - ``plumber`` (metaclass)
-     - Controls class creation, applies instructions
-   * - ``plumbing`` (decorator)
-     - Decorator API for applying behaviors
-   * - ``Behavior``
-     - Base class for all behaviors
-   * - ``Instruction``
-     - Abstract base class for instructions
-   * - ``default``, ``override``, ``finalize``
-     - Stage 1 instructions
-   * - ``plumb``, ``plumbifexists``
-     - Stage 2 instructions
++----------------------------------------+----------------------------------------------+
+| Class                                  | Description                                  |
++========================================+==============================================+
+| ``plumber`` (metaclass)                | Controls class creation, applies             |
+|                                        | instructions                                 |
++----------------------------------------+----------------------------------------------+
+| ``plumbing`` (decorator)               | Decorator API for applying behaviors         |
++----------------------------------------+----------------------------------------------+
+| ``Behavior``                           | Base class for all behaviors                 |
++----------------------------------------+----------------------------------------------+
+| ``Instruction``                        | Abstract base class for instructions         |
++----------------------------------------+----------------------------------------------+
+| ``default``, ``override``, ``finalize``| Stage 1 instructions                         |
++----------------------------------------+----------------------------------------------+
+| ``plumb``, ``plumbifexists``           | Stage 2 instructions                         |
++----------------------------------------+----------------------------------------------+
 
 Usage Example
 ~~~~~~~~~~~~~
@@ -223,22 +213,15 @@ Core Concepts
 
 **Storage Types**
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 25 50
-
-   * - Storage Type
-     - Classes
-     - Interface
-   * - Mapping (dict)
-     - ``BaseNode``
-     - ``IMappingNode``
-   * - Mapping (odict)
-     - ``OrderedNode``
-     - ``IMappingNode`` + ``IOrdered``
-   * - Sequence (list)
-     - ``ListNode``
-     - ``ISequenceNode``
++------------------+---------------+------------------------------+
+| Storage Type     | Classes       | Interface                    |
++==================+===============+==============================+
+| Mapping (dict)   | ``BaseNode``  | ``IMappingNode``             |
++------------------+---------------+------------------------------+
+| Mapping (odict)  | ``OrderedNode``| ``IMappingNode`` + ``IOrdered``|
++------------------+---------------+------------------------------+
+| Sequence (list)  | ``ListNode``  | ``ISequenceNode``            |
++------------------+---------------+------------------------------+
 
 **Behavior Layers (Pipeline from Top to Bottom)**
 
@@ -295,23 +278,23 @@ Custom Node Creation
 Design Patterns
 ~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 30 70
-
-   * - **Composite**
-     - Tree structure of nodes
-   * - **Plugin/Strategy**
-     - Behaviors as interchangeable strategies
-   * - **Chain of Responsibility**
-     - Plumber pipeline
-   * - **Decorator**
-     - Behavior layers wrap each other
-   * - **Observer**
-     - Lifecycle events
-   * - **Lazy Loading**
-     - Factory behaviors
-   * - **Index**
-     - Reference system with UUID lookup
++---------------------------+-------------------------------------------+
+| Pattern                   | Usage                                     |
++===========================+===========================================+
+| **Composite**             | Tree structure of nodes                   |
++---------------------------+-------------------------------------------+
+| **Plugin/Strategy**       | Behaviors as interchangeable strategies   |
++---------------------------+-------------------------------------------+
+| **Chain of Responsibility**| Plumber pipeline                         |
++---------------------------+-------------------------------------------+
+| **Decorator**             | Behavior layers wrap each other           |
++---------------------------+-------------------------------------------+
+| **Observer**              | Lifecycle events                          |
++---------------------------+-------------------------------------------+
+| **Lazy Loading**          | Factory behaviors                         |
++---------------------------+-------------------------------------------+
+| **Index**                 | Reference system with UUID lookup         |
++---------------------------+-------------------------------------------+
 
 
 node.ext.* - Backend Extensions
@@ -320,24 +303,24 @@ node.ext.* - Backend Extensions
 The ``node.ext.*`` packages provide adapters to expose various backend systems
 as node trees:
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 75
-
-   * - Package
-     - Description
-   * - ``node.ext.directory``
-     - File system directories as traversable tree structures
-   * - ``node.ext.fs``
-     - File system nodes with content access
-   * - ``node.ext.ldap``
-     - LDAP directories as node trees with full CRUD operations
-   * - ``node.ext.ugm``
-     - Abstract user/group management with pluggable backends
-   * - ``node.ext.yaml``
-     - YAML files as persistent node storage
-   * - ``node.ext.zodb``
-     - ZODB persistent object storage integration
++------------------------+----------------------------------------------------+
+| Package                | Description                                        |
++========================+====================================================+
+| ``node.ext.directory`` | File system directories as traversable tree        |
+|                        | structures                                         |
++------------------------+----------------------------------------------------+
+| ``node.ext.fs``        | File system nodes with content access              |
++------------------------+----------------------------------------------------+
+| ``node.ext.ldap``      | LDAP directories as node trees with full CRUD      |
+|                        | operations                                         |
++------------------------+----------------------------------------------------+
+| ``node.ext.ugm``       | Abstract user/group management with pluggable      |
+|                        | backends                                           |
++------------------------+----------------------------------------------------+
+| ``node.ext.yaml``      | YAML files as persistent node storage              |
++------------------------+----------------------------------------------------+
+| ``node.ext.zodb``      | ZODB persistent object storage integration         |
++------------------------+----------------------------------------------------+
 
 These extensions allow applications to work with different storage backends
 using the same node API.
@@ -402,19 +385,13 @@ Blueprints are registered components with extractors, renderers, and preprocesso
 
 **Dual Pipeline Architecture**
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 20 60
-
-   * - Pipeline
-     - Direction
-     - Purpose
-   * - **Extraction**
-     - Request → Data
-     - Extract values, validate
-   * - **Rendering**
-     - Data → HTML
-     - Generate HTML
++----------------+----------------+----------------------------------+
+| Pipeline       | Direction      | Purpose                          |
++================+================+==================================+
+| **Extraction** | Request → Data | Extract values, validate         |
++----------------+----------------+----------------------------------+
+| **Rendering**  | Data → HTML    | Generate HTML                    |
++----------------+----------------+----------------------------------+
 
 ::
 
@@ -444,21 +421,21 @@ Widget and RuntimeData use node behaviors:
 Main Classes
 ~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 75
-
-   * - ``Widget``
-     - Configured widget node with chains
-   * - ``RuntimeData``
-     - Processing state during extract/render
-   * - ``Factory``
-     - Registry and builder for widgets
-   * - ``ExtractionError``
-     - Validation error with abort flag
-   * - ``Controller``
-     - High-level form handling
-   * - ``Tag``
-     - HTML generation without templates
++---------------------+-----------------------------------------------+
+| Class               | Description                                   |
++=====================+===============================================+
+| ``Widget``          | Configured widget node with chains            |
++---------------------+-----------------------------------------------+
+| ``RuntimeData``     | Processing state during extract/render        |
++---------------------+-----------------------------------------------+
+| ``Factory``         | Registry and builder for widgets              |
++---------------------+-----------------------------------------------+
+| ``ExtractionError`` | Validation error with abort flag              |
++---------------------+-----------------------------------------------+
+| ``Controller``      | High-level form handling                      |
++---------------------+-----------------------------------------------+
+| ``Tag``             | HTML generation without templates             |
++---------------------+-----------------------------------------------+
 
 Usage Example
 ~~~~~~~~~~~~~
@@ -544,21 +521,22 @@ Extension Mechanisms
 Design Patterns
 ~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 30 70
-
-   * - **Factory**
-     - Central widget creation
-   * - **Chain of Responsibility**
-     - Extractor/renderer pipelines
-   * - **Composite**
-     - Widget tree via node
-   * - **Registry**
-     - Blueprint registry in Factory
-   * - **Strategy**
-     - Interchangeable persistence writers
-   * - **Decorator**
-     - ``@managedprops`` for property documentation
++-----------------------------+-----------------------------------------+
+| Pattern                     | Usage                                   |
++=============================+=========================================+
+| **Factory**                 | Central widget creation                 |
++-----------------------------+-----------------------------------------+
+| **Chain of Responsibility** | Extractor/renderer pipelines            |
++-----------------------------+-----------------------------------------+
+| **Composite**               | Widget tree via node                    |
++-----------------------------+-----------------------------------------+
+| **Registry**                | Blueprint registry in Factory           |
++-----------------------------+-----------------------------------------+
+| **Strategy**                | Interchangeable persistence writers     |
++-----------------------------+-----------------------------------------+
+| **Decorator**               | ``@managedprops`` for property          |
+|                             | documentation                           |
++-----------------------------+-----------------------------------------+
 
 
 yafowil.widget.* - Widget Extensions
@@ -566,46 +544,43 @@ yafowil.widget.* - Widget Extensions
 
 The ``yafowil.widget.*`` packages provide specialized form widgets:
 
-.. list-table::
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Package
-     - Description
-   * - ``yafowil.widget.ace``
-     - Ace code editor integration
-   * - ``yafowil.widget.array``
-     - Dynamic array/list fields
-   * - ``yafowil.widget.autocomplete``
-     - Autocomplete text input
-   * - ``yafowil.widget.chosen``
-     - Chosen.js select enhancement
-   * - ``yafowil.widget.color``
-     - Color picker widget
-   * - ``yafowil.widget.cron``
-     - Cron expression editor
-   * - ``yafowil.widget.datetime``
-     - Date and time pickers
-   * - ``yafowil.widget.dict``
-     - Key-value dictionary fields
-   * - ``yafowil.widget.dynatree``
-     - Tree selection widget
-   * - ``yafowil.widget.image``
-     - Image upload and preview
-   * - ``yafowil.widget.location``
-     - Location/address picker with maps
-   * - ``yafowil.widget.multiselect``
-     - Multi-select list widget
-   * - ``yafowil.widget.richtext``
-     - Rich text editor integration
-   * - ``yafowil.widget.select2``
-     - Select2.js integration
-   * - ``yafowil.widget.slider``
-     - Range slider widget
-   * - ``yafowil.widget.tiptap``
-     - Tiptap rich text editor
-   * - ``yafowil.widget.wysihtml5``
-     - WYSIHTML5 editor integration
++-------------------------------+------------------------------------------+
+| Package                       | Description                              |
++===============================+==========================================+
+| ``yafowil.widget.ace``        | Ace code editor integration              |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.array``      | Dynamic array/list fields                |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.autocomplete``| Autocomplete text input                 |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.chosen``     | Chosen.js select enhancement            |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.color``      | Color picker widget                      |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.cron``       | Cron expression editor                   |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.datetime``   | Date and time pickers                    |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.dict``       | Key-value dictionary fields              |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.dynatree``   | Tree selection widget                    |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.image``      | Image upload and preview                 |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.location``   | Location/address picker with maps        |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.multiselect``| Multi-select list widget                 |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.richtext``   | Rich text editor integration             |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.select2``    | Select2.js integration                   |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.slider``     | Range slider widget                      |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.tiptap``     | Tiptap rich text editor                  |
++-------------------------------+------------------------------------------+
+| ``yafowil.widget.wysihtml5``  | WYSIHTML5 editor integration             |
++-------------------------------+------------------------------------------+
 
 Each widget package registers its blueprints via the yafowil plugin system,
 making them automatically available after installation.
@@ -699,21 +674,21 @@ Tiles are composable view components:
 
 **Main Tiles**
 
-.. list-table::
-   :widths: 20 80
-
-   * - ``layout``
-     - Main layout container
-   * - ``mainmenu``
-     - Navigation menu from node hierarchy
-   * - ``pathbar``
-     - Breadcrumb navigation
-   * - ``content``
-     - Main content area
-   * - ``listing``
-     - Child listing with sorting/batching
-   * - ``sharing``
-     - ACL editor table
++--------------+----------------------------------------------+
+| Tile         | Description                                  |
++==============+==============================================+
+| ``layout``   | Main layout container                        |
++--------------+----------------------------------------------+
+| ``mainmenu`` | Navigation menu from node hierarchy          |
++--------------+----------------------------------------------+
+| ``pathbar``  | Breadcrumb navigation                        |
++--------------+----------------------------------------------+
+| ``content``  | Main content area                            |
++--------------+----------------------------------------------+
+| ``listing``  | Child listing with sorting/batching          |
++--------------+----------------------------------------------+
+| ``sharing``  | ACL editor table                             |
++--------------+----------------------------------------------+
 
 **Security Model**
 
@@ -754,41 +729,42 @@ Main Classes
 
 **Model Classes (model.py)**
 
-.. list-table::
-   :widths: 25 75
-
-   * - ``AppNode``
-     - Behavior for IApplicationNode interface
-   * - ``BaseNode``
-     - Node with storage, lifecycle, and common behaviors
-   * - ``FactoryNode``
-     - Node with dynamic children via factories
-   * - ``AppRoot``
-     - Root node of the application
-   * - ``AppSettings``
-     - Container for plugin settings
-   * - ``AdapterNode``
-     - Adapts external models into node hierarchy
-   * - ``Properties``
-     - Dynamic node properties container
-   * - ``Metadata``
-     - Display metadata (title, description, icon)
-   * - ``LayoutConfig``
-     - Configuration for page layout
++------------------+--------------------------------------------------+
+| Class            | Description                                      |
++==================+==================================================+
+| ``AppNode``      | Behavior for IApplicationNode interface          |
++------------------+--------------------------------------------------+
+| ``BaseNode``     | Node with storage, lifecycle, and common         |
+|                  | behaviors                                        |
++------------------+--------------------------------------------------+
+| ``FactoryNode``  | Node with dynamic children via factories         |
++------------------+--------------------------------------------------+
+| ``AppRoot``      | Root node of the application                     |
++------------------+--------------------------------------------------+
+| ``AppSettings``  | Container for plugin settings                    |
++------------------+--------------------------------------------------+
+| ``AdapterNode``  | Adapts external models into node hierarchy       |
++------------------+--------------------------------------------------+
+| ``Properties``   | Dynamic node properties container                |
++------------------+--------------------------------------------------+
+| ``Metadata``     | Display metadata (title, description, icon)      |
++------------------+--------------------------------------------------+
+| ``LayoutConfig`` | Configuration for page layout                    |
++------------------+--------------------------------------------------+
 
 **Security Classes (security.py)**
 
-.. list-table::
-   :widths: 25 75
-
-   * - ``OwnerSupport``
-     - Behavior for owner tracking
-   * - ``PrincipalACL``
-     - Behavior for principal-specific ACLs
-   * - ``AdapterACL``
-     - ACL derivation from registered adapters
-   * - ``ACLRegistry``
-     - Registry for ACL lookup
++-----------------+--------------------------------------------------+
+| Class           | Description                                      |
++=================+==================================================+
+| ``OwnerSupport``| Behavior for owner tracking                      |
++-----------------+--------------------------------------------------+
+| ``PrincipalACL``| Behavior for principal-specific ACLs             |
++-----------------+--------------------------------------------------+
+| ``AdapterACL``  | ACL derivation from registered adapters          |
++-----------------+--------------------------------------------------+
+| ``ACLRegistry`` | Registry for ACL lookup                          |
++-----------------+--------------------------------------------------+
 
 Plugin Development
 ~~~~~~~~~~~~~~~~~~
@@ -879,25 +855,25 @@ Extension Mechanisms
 Design Patterns
 ~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 30 70
-
-   * - **Composite**
-     - Node tree for content
-   * - **Factory**
-     - Node factories, app factory
-   * - **Registry**
-     - ACL registry, entry registry
-   * - **Adapter**
-     - Zope adapters for traversal, ACLs
-   * - **Template Method**
-     - Tile rendering with overridable methods
-   * - **Strategy**
-     - Interchangeable UGM backends
-   * - **Observer**
-     - Lifecycle events
-   * - **Command**
-     - Action system
++-----------------------------+-----------------------------------------+
+| Pattern                     | Usage                                   |
++=============================+=========================================+
+| **Composite**               | Node tree for content                   |
++-----------------------------+-----------------------------------------+
+| **Factory**                 | Node factories, app factory             |
++-----------------------------+-----------------------------------------+
+| **Registry**                | ACL registry, entry registry            |
++-----------------------------+-----------------------------------------+
+| **Adapter**                 | Zope adapters for traversal, ACLs       |
++-----------------------------+-----------------------------------------+
+| **Template Method**         | Tile rendering with overridable methods |
++-----------------------------+-----------------------------------------+
+| **Strategy**                | Interchangeable UGM backends            |
++-----------------------------+-----------------------------------------+
+| **Observer**                | Lifecycle events                        |
++-----------------------------+-----------------------------------------+
+| **Command**                 | Action system                           |
++-----------------------------+-----------------------------------------+
 
 
 cone.* - Feature Packages
@@ -905,34 +881,31 @@ cone.* - Feature Packages
 
 Additional cone packages provide specialized features:
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 75
-
-   * - Package
-     - Description
-   * - ``cone.tile``
-     - Tile-based UI composition system
-   * - ``cone.ugm``
-     - User/group management UI with LDAP/SQL backends
-   * - ``cone.ldap``
-     - LDAP backend integration for cone.app
-   * - ``cone.sql``
-     - SQL database integration with SQLAlchemy
-   * - ``cone.zodb``
-     - ZODB backend integration for persistent nodes
-   * - ``cone.calendar``
-     - Calendar functionality with event management
-   * - ``cone.charts``
-     - Chart visualizations with various chart types
-   * - ``cone.fileupload``
-     - File upload handling with progress tracking
-   * - ``cone.firebase``
-     - Firebase integration for push notifications
-   * - ``cone.maps``
-     - Map widgets with location data
-   * - ``cone.tokens``
-     - Token management for secure operations
++----------------------+----------------------------------------------------+
+| Package              | Description                                        |
++======================+====================================================+
+| ``cone.tile``        | Tile-based UI composition system                   |
++----------------------+----------------------------------------------------+
+| ``cone.ugm``         | User/group management UI with LDAP/SQL backends    |
++----------------------+----------------------------------------------------+
+| ``cone.ldap``        | LDAP backend integration for cone.app              |
++----------------------+----------------------------------------------------+
+| ``cone.sql``         | SQL database integration with SQLAlchemy           |
++----------------------+----------------------------------------------------+
+| ``cone.zodb``        | ZODB backend integration for persistent nodes      |
++----------------------+----------------------------------------------------+
+| ``cone.calendar``    | Calendar functionality with event management       |
++----------------------+----------------------------------------------------+
+| ``cone.charts``      | Chart visualizations with various chart types      |
++----------------------+----------------------------------------------------+
+| ``cone.fileupload``  | File upload handling with progress tracking        |
++----------------------+----------------------------------------------------+
+| ``cone.firebase``    | Firebase integration for push notifications        |
++----------------------+----------------------------------------------------+
+| ``cone.maps``        | Map widgets with location data                     |
++----------------------+----------------------------------------------------+
+| ``cone.tokens``      | Token management for secure operations             |
++----------------------+----------------------------------------------------+
 
 
 Architecture Summary
@@ -996,30 +969,28 @@ Layer Architecture
 When to Use Which Package
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :header-rows: 1
-   :widths: 50 50
-
-   * - Use Case
-     - Package
-   * - Web application with UI, security, and plugin system
-     - cone.app
-   * - Compose classes with configurable behaviors
-     - plumber
-   * - Model hierarchical data structures (trees)
-     - node
-   * - Build web forms
-     - yafowil
-   * - Expose backend data as tree (LDAP, FS, DB)
-     - node.ext.*
-   * - Bootstrap-styled forms
-     - yafowil.bootstrap
-   * - User/group management
-     - cone.ugm
-   * - SQL backend for cone.app
-     - cone.sql
-   * - ZODB backend for cone.app
-     - cone.zodb
++---------------------------------------------------+--------------------+
+| Use Case                                          | Package            |
++===================================================+====================+
+| Web application with UI, security, and plugin     | cone.app           |
+| system                                            |                    |
++---------------------------------------------------+--------------------+
+| Compose classes with configurable behaviors       | plumber            |
++---------------------------------------------------+--------------------+
+| Model hierarchical data structures (trees)        | node               |
++---------------------------------------------------+--------------------+
+| Build web forms                                   | yafowil            |
++---------------------------------------------------+--------------------+
+| Expose backend data as tree (LDAP, FS, DB)        | node.ext.*         |
++---------------------------------------------------+--------------------+
+| Bootstrap-styled forms                            | yafowil.bootstrap  |
++---------------------------------------------------+--------------------+
+| User/group management                             | cone.ugm           |
++---------------------------------------------------+--------------------+
+| SQL backend for cone.app                          | cone.sql           |
++---------------------------------------------------+--------------------+
+| ZODB backend for cone.app                         | cone.zodb          |
++---------------------------------------------------+--------------------+
 
 Standalone Usage
 ~~~~~~~~~~~~~~~~
