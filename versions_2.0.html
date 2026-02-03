@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Conestack 2.0 &#8212; Conestack</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a075eb5b" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="_static/pygments_dark.css?v=20074c1a" />
+    <link rel="stylesheet" type="text/css" href="_static/css/conestack.css?v=53c11f18" />
+    <script src="_static/documentation_options.js?v=60dbed4a"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Conestack 3.0" href="versions_3.0.html" />
+    <link rel="prev" title="Conestack 1.0" href="versions_1.0.html" />
+<link rel="stylesheet" type="text/css" src="_static/bootstrap/bootstrap.css" />
+<script src="_static/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="_static/js/conestack.js"></script>
+<script src="_static/js/colortoggle.js"></script>
+
+  </head><body>
+
+  <noscript>
+    <style type="text/css">
+      #searchbox,
+      #searchdesc {
+        display: none;
+      }
+      @media (max-width: 768px) {
+        #navbar-toggle {
+          display: none;
+        }
+        #cs-mobile-menu {
+          display: block;
+        }
+        #cs-layout {
+          margin-top: 12rem;
+        }
+        #cs-ext-links {
+          margin-right: 2rem!important;
+        }
+      }
+    </style>
+  </noscript>
+
+  
+  <header class="navbar navbar-expand-md sticky-top" id="header">
+    <nav class="container-xxl flex-wrap flex-md-nowrap p-0" id="cs-nav">
+  <a id="logo" class="navbar-brand p-0 me-2" href="index.html">
+    <img src="_static/conestack.svg"
+         alt="Logo"
+         width="50px"
+         height="50px" />
+    <span>conestack</span>
+  </a>
+
+      
+  <div id="nav-search" class="ms-auto">
+    <div id="searchbox" class="nav-item me-3" role="search" style="display: none;">
+      <form class="search input-group" action="search.html" method="get">
+        <input type="text" class="form-control" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <button type="submit" 
+                class="bi bi-search input-group-text"
+                btn-title="Search documentation"></button>
+      </form>
+    </div>
+  </div>
+      
+  <div id="cs-ext-links"class="me-3">
+    <ul class="navbar-nav flex-row ms-md-auto">
+  <li class="nav-item" data-title="GitHub">
+    <a class="nav-link p-2" href="https://github.com/conestack/conestack" target="_blank" rel="noopener">
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" class="navbar-nav-svg d-inline-block align-text-top" viewBox="0 0 512 499.36" role="img"><title>GitHub</title><path fill="currentColor" fill-rule="evenodd" d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z"></path></svg>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+
+
+      <div id="colortoggler-wrapper">
+        <div id="colortoggler"
+             class="nav-item dropdown align-items-center h-100 p-0 form-check form-switch me-4">
+          <i class="bi-sun-fill me-2"></i>
+          <div class="form-check form-switch m-0 d-inline-block">
+            <input class="form-check-input" type="checkbox" id="colortoggle-switch">
+          </div>
+          <i class="bi-moon-fill"></i>
+        </div>
+      </div>
+
+      <button id="navbar-toggle" class="navbar-toggler p-0 me-4" type="button" data-bs-toggle="collapse" data-bs-target="#cs-mobile-menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="bi" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path></svg>
+      </button>
+
+      <div class="collapse container-fluid m-0 p-3" id="cs-mobile-menu"><nav class="cs-mobile-toc">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package_validation.html">Package Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions.html">Version Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions_1.0.html">Conestack 1.0</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Conestack 2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions_3.0.html">Conestack 3.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions_outdated.html">Outdated Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version_mapping.html">Version Mapping</a></li>
+</ul>
+
+</nav>
+      </div>
+    </nav>
+  </header>
+  
+
+  <div class="container-xxl my-md-4" id="cs-layout">
+    
+  <aside id="cs-sidebar" class="ms-4 sphinxsidebar"><nav class="cs-nav-toc">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#about-conestack">About Conestack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#package-families">Package Families</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-monorepo">The Monorepo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#working-with-the-repository">Working with the Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#working-with-documentation">Working with Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#python-version-support">Python Version Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#further-reading">Further Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#plumber-behavior-composition">plumber - Behavior Composition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#node-tree-data-structures">node - Tree Data Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#node-ext-backend-extensions">node.ext.* - Backend Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#yafowil-form-library">yafowil - Form Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#yafowil-widget-widget-extensions">yafowil.widget.* - Widget Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#cone-app-web-application-framework">cone.app - Web Application Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#cone-feature-packages">cone.* - Feature Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-summary">Architecture Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="package_validation.html">Package Validation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#validation-script">Validation Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#make-targets">Make Targets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#test-blacklist">Test Blacklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#sequential-test-packages">Sequential Test Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#test-execution-model">Test Execution Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#artifact-comparison">Artifact Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="package_validation.html#key-design-points">Key Design Points</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Process</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#automated-release">Automated Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#manual-release-single-package">Manual Release (Single Package)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#release-order">Release Order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#detection-logic">Detection Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#post-release-verification">Post-Release Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions.html">Version Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#version-history">Version History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#bootstrap-transition">Bootstrap Transition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#python-version-support">Python Version Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#package-status">Package Status</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions_1.0.html">Conestack 1.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versions_1.0.html#not-yet-supported">Not Yet Supported</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Conestack 2.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#new-packages">New Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#removed-packages">Removed Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-changes">Version Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions_3.0.html">Conestack 3.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versions_3.0.html#version-changes">Version Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions_3.0.html#unchanged-packages">Unchanged Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions_outdated.html">Outdated Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version_mapping.html">Version Mapping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#core-packages">Core Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#node-extensions">Node Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#cone-framework">Cone Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#yafowil-core">YAFOWIL Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#yafowil-widgets">YAFOWIL Widgets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#supporting-packages">Supporting Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#status-legend">Status Legend</a></li>
+</ul>
+</li>
+</ul>
+
+</nav>
+    
+  </aside>
+    
+
+    
+      <main class="document cs-main order-1" role="main">
+    
+      <div class="ps-lg-4 mt-3 cs-content">
+        
+  <section id="conestack-2-0">
+<h1>Conestack 2.0<a class="headerlink" href="#conestack-2-0" title="Link to this heading">#</a></h1>
+<p>This is the 2.0 version set.</p>
+<p>Packages work from Python 3.10 up to Python 3.14.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cone.*</span></code> packages use Bootstrap 3 for theming.</p>
+<p><code class="docutils literal notranslate"><span class="pre">yafowil.*</span></code> packages support themes for Bootstrap 3 and 5.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some packages in Conestack 2.0 have upper version bounds (e.g., <code class="docutils literal notranslate"><span class="pre">&lt;2.0.0</span></code>)
+on their dependencies. These bounds mark the transition point from Bootstrap 3
+(Conestack 2.0) to Bootstrap 5 (Conestack 3.0). For example, <code class="docutils literal notranslate"><span class="pre">cone.app</span></code>
+requires <code class="docutils literal notranslate"><span class="pre">treibstoff&lt;2.0.0</span></code> to ensure Bootstrap 3 compatibility.</p>
+</div>
+<section id="new-packages">
+<h2>New Packages<a class="headerlink" href="#new-packages" title="Link to this heading">#</a></h2>
+<p>The following packages are new in Conestack 2.0:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cone.charts</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>cone.three</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>cone.tokens</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>treibstoff</p></td>
+<td><p>1.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>webresource</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.widget.color</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.widget.tiptap</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="removed-packages">
+<h2>Removed Packages<a class="headerlink" href="#removed-packages" title="Link to this heading">#</a></h2>
+<p>The following packages have been removed or archived:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>bdajax</p></td>
+<td><p>replaced by treibstoff</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.werkzeug</p></td>
+<td><p>ARCHIVED</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="version-changes">
+<h2>Version Changes<a class="headerlink" href="#version-changes" title="Link to this heading">#</a></h2>
+<p>All packages have been updated.</p>
+<p>Core packages:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>1.0</p></th>
+<th class="head"><p>2.0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>node</p></td>
+<td><p>1.2.3</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>odict</p></td>
+<td><p>1.9.0</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>plumber</p></td>
+<td><p>1.7</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+</tbody>
+</table>
+<p>Node extensions:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>1.0</p></th>
+<th class="head"><p>2.0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>node.ext.directory</p></td>
+<td><p>0.8.2</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>node.ext.fs</p></td>
+<td><p>1.2</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>node.ext.ldap</p></td>
+<td><p>1.3.0</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>node.ext.ugm</p></td>
+<td><p>1.2</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>node.ext.yaml</p></td>
+<td><p>0.4</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>node.ext.zodb</p></td>
+<td><p>1.7</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+</tbody>
+</table>
+<p>Cone framework:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>1.0</p></th>
+<th class="head"><p>2.0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cone.app</p></td>
+<td><p>1.0.8</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>cone.calendar</p></td>
+<td><p>0.4</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>cone.fileupload</p></td>
+<td><p>0.8</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>cone.firebase</p></td>
+<td><p>0.1</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>cone.ldap</p></td>
+<td><p>0.3</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>cone.maps</p></td>
+<td><p>0.2</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-even"><td><p>cone.sql</p></td>
+<td><p>0.8</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>cone.tile</p></td>
+<td><p>1.2</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>cone.ugm</p></td>
+<td><p>1.0</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>cone.zodb</p></td>
+<td><p>1.0</p></td>
+<td><p>1.1.0</p></td>
+</tr>
+</tbody>
+</table>
+<p>YAFOWIL:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>1.0</p></th>
+<th class="head"><p>2.0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>yafowil</p></td>
+<td><p>3.1.2</p></td>
+<td><p>4.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.bootstrap</p></td>
+<td><p>1.3.3</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.demo</p></td>
+<td><p>1.3</p></td>
+<td><p>4.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.documentation</p></td>
+<td><p>2.4</p></td>
+<td><p>4.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.lingua</p></td>
+<td><p>1.0.1</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.webob</p></td>
+<td><p>1.5</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.yaml</p></td>
+<td><p>2.1</p></td>
+<td><p>3.0.0</p></td>
+</tr>
+</tbody>
+</table>
+<p>YAFOWIL widgets:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>1.0</p></th>
+<th class="head"><p>2.0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>yafowil.widget.ace</p></td>
+<td><p>1.3</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.widget.array</p></td>
+<td><p>1.8</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.widget.autocomplete</p></td>
+<td><p>1.8</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.widget.chosen</p></td>
+<td><p>1.4</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.widget.cron</p></td>
+<td><p>1.3</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.widget.datetime</p></td>
+<td><p>1.14</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.widget.dict</p></td>
+<td><p>1.9</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.widget.dynatree</p></td>
+<td><p>1.7</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.widget.image</p></td>
+<td><p>1.7</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.widget.location</p></td>
+<td><p>1.3</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.widget.multiselect</p></td>
+<td><p>1.4</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.widget.richtext</p></td>
+<td><p>1.6</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.widget.select2</p></td>
+<td><p>1.5</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>yafowil.widget.slider</p></td>
+<td><p>1.4</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>yafowil.widget.wysihtml5</p></td>
+<td><p>1.5</p></td>
+<td><p>2.0.0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+      </div>
+
+    
+  <div class="cs-local-toc mx-4 mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+    <strong class="d-block h6 mb-2 pb-2 border-bottom">On this page</strong>
+    <nav id="TableOfContents">
+      <ul>
+<li><a class="reference internal" href="#new-packages">New Packages</a></li>
+<li><a class="reference internal" href="#removed-packages">Removed Packages</a></li>
+<li><a class="reference internal" href="#version-changes">Version Changes</a></li>
+</ul>
+
+    </nav>
+  </div>
+    
+    </main>
+  </div><div class="container footer" role="contentinfo">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center pt-2 my-4 border-top"><ul class="pb-2 mb-3 nav container border-bottom">
+  <li class="nav-item col-md-6 col">
+    <a href="versions_1.0.html"
+       title="previous chapter"
+       class="nav-link px-2 text-muted previous-chapter">Conestack 1.0</a>
+  </li>
+  <li class="nav-item col-md-6 col text-end">
+    <a href="versions_3.0.html"
+       title="next chapter"
+       class="nav-link px-2 text-muted next-chapter">Conestack 3.0</a>
+  </li>
+</ul>
+      <div class="container text-center text-muted pt-2 pb-2">
+          &#169; Copyright 2021-2025, Conestack Contributors.
+      </div>
+      <div class="container text-center text-muted pt-2 pb-2">
+        Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+      </div>
+  </footer>
+</div>
+
+  </body>
+</html>

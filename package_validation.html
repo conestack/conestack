@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Package Validation &#8212; Conestack</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a075eb5b" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="_static/pygments_dark.css?v=20074c1a" />
+    <link rel="stylesheet" type="text/css" href="_static/css/conestack.css?v=53c11f18" />
+    <script src="_static/documentation_options.js?v=60dbed4a"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Release Process" href="release.html" />
+    <link rel="prev" title="Architecture" href="architecture.html" />
+<link rel="stylesheet" type="text/css" src="_static/bootstrap/bootstrap.css" />
+<script src="_static/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="_static/js/conestack.js"></script>
+<script src="_static/js/colortoggle.js"></script>
+
+  </head><body>
+
+  <noscript>
+    <style type="text/css">
+      #searchbox,
+      #searchdesc {
+        display: none;
+      }
+      @media (max-width: 768px) {
+        #navbar-toggle {
+          display: none;
+        }
+        #cs-mobile-menu {
+          display: block;
+        }
+        #cs-layout {
+          margin-top: 12rem;
+        }
+        #cs-ext-links {
+          margin-right: 2rem!important;
+        }
+      }
+    </style>
+  </noscript>
+
+  
+  <header class="navbar navbar-expand-md sticky-top" id="header">
+    <nav class="container-xxl flex-wrap flex-md-nowrap p-0" id="cs-nav">
+  <a id="logo" class="navbar-brand p-0 me-2" href="index.html">
+    <img src="_static/conestack.svg"
+         alt="Logo"
+         width="50px"
+         height="50px" />
+    <span>conestack</span>
+  </a>
+
+      
+  <div id="nav-search" class="ms-auto">
+    <div id="searchbox" class="nav-item me-3" role="search" style="display: none;">
+      <form class="search input-group" action="search.html" method="get">
+        <input type="text" class="form-control" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <button type="submit" 
+                class="bi bi-search input-group-text"
+                btn-title="Search documentation"></button>
+      </form>
+    </div>
+  </div>
+      
+  <div id="cs-ext-links"class="me-3">
+    <ul class="navbar-nav flex-row ms-md-auto">
+  <li class="nav-item" data-title="GitHub">
+    <a class="nav-link p-2" href="https://github.com/conestack/conestack" target="_blank" rel="noopener">
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" class="navbar-nav-svg d-inline-block align-text-top" viewBox="0 0 512 499.36" role="img"><title>GitHub</title><path fill="currentColor" fill-rule="evenodd" d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z"></path></svg>
+    </a>
+  </li>
+
+    </ul>
+  </div>
+
+
+      <div id="colortoggler-wrapper">
+        <div id="colortoggler"
+             class="nav-item dropdown align-items-center h-100 p-0 form-check form-switch me-4">
+          <i class="bi-sun-fill me-2"></i>
+          <div class="form-check form-switch m-0 d-inline-block">
+            <input class="form-check-input" type="checkbox" id="colortoggle-switch">
+          </div>
+          <i class="bi-moon-fill"></i>
+        </div>
+      </div>
+
+      <button id="navbar-toggle" class="navbar-toggler p-0 me-4" type="button" data-bs-toggle="collapse" data-bs-target="#cs-mobile-menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="bi" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path></svg>
+      </button>
+
+      <div class="collapse container-fluid m-0 p-3" id="cs-mobile-menu"><nav class="cs-mobile-toc">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Package Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions.html">Version Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions_1.0.html">Conestack 1.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions_2.0.html">Conestack 2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions_3.0.html">Conestack 3.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions_outdated.html">Outdated Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version_mapping.html">Version Mapping</a></li>
+</ul>
+
+</nav>
+      </div>
+    </nav>
+  </header>
+  
+
+  <div class="container-xxl my-md-4" id="cs-layout">
+    
+  <aside id="cs-sidebar" class="ms-4 sphinxsidebar"><nav class="cs-nav-toc">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#about-conestack">About Conestack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#package-families">Package Families</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-monorepo">The Monorepo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#working-with-the-repository">Working with the Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#working-with-documentation">Working with Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#python-version-support">Python Version Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#further-reading">Further Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#plumber-behavior-composition">plumber - Behavior Composition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#node-tree-data-structures">node - Tree Data Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#node-ext-backend-extensions">node.ext.* - Backend Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#yafowil-form-library">yafowil - Form Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#yafowil-widget-widget-extensions">yafowil.widget.* - Widget Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#cone-app-web-application-framework">cone.app - Web Application Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#cone-feature-packages">cone.* - Feature Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-summary">Architecture Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Package Validation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#validation-script">Validation Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-targets">Make Targets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-blacklist">Test Blacklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sequential-test-packages">Sequential Test Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-execution-model">Test Execution Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#artifact-comparison">Artifact Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-design-points">Key Design Points</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Process</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#automated-release">Automated Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#manual-release-single-package">Manual Release (Single Package)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#release-order">Release Order</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#detection-logic">Detection Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#post-release-verification">Post-Release Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions.html">Version Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#version-history">Version History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#bootstrap-transition">Bootstrap Transition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#python-version-support">Python Version Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions.html#package-status">Package Status</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions_1.0.html">Conestack 1.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versions_1.0.html#not-yet-supported">Not Yet Supported</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions_2.0.html">Conestack 2.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versions_2.0.html#new-packages">New Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions_2.0.html#removed-packages">Removed Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions_2.0.html#version-changes">Version Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions_3.0.html">Conestack 3.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="versions_3.0.html#version-changes">Version Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versions_3.0.html#unchanged-packages">Unchanged Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions_outdated.html">Outdated Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version_mapping.html">Version Mapping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#core-packages">Core Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#node-extensions">Node Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#cone-framework">Cone Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#yafowil-core">YAFOWIL Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#yafowil-widgets">YAFOWIL Widgets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#supporting-packages">Supporting Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_mapping.html#status-legend">Status Legend</a></li>
+</ul>
+</li>
+</ul>
+
+</nav>
+    
+  </aside>
+    
+
+    
+      <main class="document cs-main order-1" role="main">
+    
+      <div class="ps-lg-4 mt-3 cs-content">
+        
+  <section id="package-validation">
+<h1>Package Validation<a class="headerlink" href="#package-validation" title="Link to this heading">#</a></h1>
+<p>The conestack monorepo includes a package validation system that ensures all packages
+are ready for release to PyPI. The validation tests actual built artifacts (wheels and
+sdists), not source code, simulating what users will receive when installing from PyPI.</p>
+<section id="purpose">
+<h2>Purpose<a class="headerlink" href="#purpose" title="Link to this heading">#</a></h2>
+<p>The validation system serves several purposes:</p>
+<ol class="arabic simple">
+<li><p><strong>Build Verification</strong>: Ensures packages build correctly as wheels and source distributions</p></li>
+<li><p><strong>Quality Checks</strong>: Validates package metadata and PyPI compliance using pyroma and twine</p></li>
+<li><p><strong>Artifact Testing</strong>: Tests the actual release artifacts, not source code</p></li>
+<li><p><strong>Dependency Resolution</strong>: Validates that packages work together using pre-built artifacts</p></li>
+<li><p><strong>Release Readiness</strong>: Confirms packages are ready for publication to PyPI</p></li>
+</ol>
+</section>
+<section id="validation-script">
+<h2>Validation Script<a class="headerlink" href="#validation-script" title="Link to this heading">#</a></h2>
+<p>The validation is performed by <code class="docutils literal notranslate"><span class="pre">scripts/validate_package.py</span></code>, which supports
+modular phase-based validation.</p>
+<section id="phases">
+<h3>Phases<a class="headerlink" href="#phases" title="Link to this heading">#</a></h3>
+<p>The script supports the following phases:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">--env</span></code></dt><dd><p>Create a virtual environment and install build/validation tools (build, pyroma, twine).
+The venv is created at <code class="docutils literal notranslate"><span class="pre">sources/&lt;package&gt;/venv/</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--build</span></code></dt><dd><p>Build wheel and sdist using the venv’s build tool and copy artifacts to the
+root <code class="docutils literal notranslate"><span class="pre">dist/</span></code> directory. This makes packages available for cross-package dependencies.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--check</span></code></dt><dd><p>Run quality validation using twine check and pyroma. Validates PyPI metadata
+compliance and package quality rating.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--test</span></code></dt><dd><p>Install the package from <code class="docutils literal notranslate"><span class="pre">dist/</span></code> (not from sources) and run pytest.
+This validates the actual release artifact that users will receive.
+Supports <code class="docutils literal notranslate"><span class="pre">--install-from</span> <span class="pre">wheel</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">--install-from</span> <span class="pre">sdist</span></code>.</p>
+<p><strong>Important</strong>: The package code is installed from the built artifact, but
+tests are executed from the source checkout directory. See
+<a class="reference internal" href="#test-execution-model">Test Execution Model</a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--clean</span></code></dt><dd><p>Remove the package’s venv and local dist directory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--all</span></code></dt><dd><p>Run all phases in sequence: env → build → check → test → clean.</p>
+</dd>
+</dl>
+</section>
+<section id="usage-examples">
+<h3>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Full validation workflow for a single package</span>
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>node<span class="w"> </span>--all
+
+<span class="c1"># Manual step-by-step validation</span>
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>node<span class="w"> </span>--env
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>node<span class="w"> </span>--build
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>node<span class="w"> </span>--check
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>node<span class="w"> </span>--test
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>node<span class="w"> </span>--clean
+
+<span class="c1"># Test using sdist instead of wheel</span>
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>node<span class="w"> </span>--test<span class="w"> </span>--install-from<span class="w"> </span>sdist
+
+<span class="c1"># Full validation with sdist testing</span>
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>node<span class="w"> </span>--all<span class="w"> </span>--install-from<span class="w"> </span>sdist
+
+<span class="c1"># Verbose output</span>
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>cone.app<span class="w"> </span>--all<span class="w"> </span>-v
+
+<span class="c1"># Custom pyroma threshold (default: 8)</span>
+python<span class="w"> </span>scripts/validate_package.py<span class="w"> </span>plumber<span class="w"> </span>--all<span class="w"> </span>--pyroma-threshold<span class="w"> </span><span class="m">9</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-options">
+<h3>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--pyroma-threshold</span> <span class="pre">N</span></code></dt><dd><p>Minimum pyroma quality score (default: 8, max: 10)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--install-from</span> <span class="pre">TYPE</span></code></dt><dd><p>Install from <code class="docutils literal notranslate"><span class="pre">wheel</span></code> or <code class="docutils literal notranslate"><span class="pre">sdist</span></code> for testing (default: wheel)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">-v,</span> <span class="pre">--verbose</span></code></dt><dd><p>Show detailed output including command execution</p>
+</dd>
+</dl>
+</section>
+<section id="exit-codes">
+<h3>Exit Codes<a class="headerlink" href="#exit-codes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>0</strong>: Phase completed successfully</p></li>
+<li><p><strong>1</strong>: Phase failed (build error, test failure, quality below threshold)</p></li>
+<li><p><strong>2</strong>: Setup error (missing venv, missing dist, invalid package)</p></li>
+</ul>
+</section>
+</section>
+<section id="make-targets">
+<h2>Make Targets<a class="headerlink" href="#make-targets" title="Link to this heading">#</a></h2>
+<p>The following make targets are available for batch validation of all packages:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">validate-env</span></code></dt><dd><p>Create venvs for all packages.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">validate-build</span></code></dt><dd><p>Build all packages and copy artifacts to <code class="docutils literal notranslate"><span class="pre">dist/</span></code>.
+Also generates <code class="docutils literal notranslate"><span class="pre">constraints-validate.txt</span></code> for version pinning.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">validate-check</span></code></dt><dd><p>Run pyroma and twine check on all packages.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">validate-test-wheel</span></code></dt><dd><p>Test all packages by installing from wheels.
+Excludes packages in the test blacklist.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">validate-test-sdist</span></code></dt><dd><p>Test all packages by installing from sdists.
+Excludes packages in the test blacklist.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">validate-compare</span></code></dt><dd><p>Compare wheel and sdist contents for all packages.
+Reports files that are in one artifact but not the other.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">validate-clean</span></code></dt><dd><p>Clean all validation artifacts (venvs, dist directories, logs).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">validate-all</span></code></dt><dd><p>Run the complete validation QA chain in sequence:
+env → build → compare → check → test-wheel → test-sdist → clean.
+Stops on first failure.</p>
+</dd>
+</dl>
+<section id="typical-workflow">
+<h3>Typical Workflow<a class="headerlink" href="#typical-workflow" title="Link to this heading">#</a></h3>
+<p>For a complete validation of all packages before release:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the complete QA chain (recommended)</span>
+make<span class="w"> </span>validate-all
+</pre></div>
+</div>
+<p>Or run individual steps:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Create venvs for all packages</span>
+make<span class="w"> </span>validate-env
+
+<span class="c1"># 2. Build all packages</span>
+make<span class="w"> </span>validate-build
+
+<span class="c1"># 3. Compare artifact contents</span>
+make<span class="w"> </span>validate-compare
+
+<span class="c1"># 4. Check package quality</span>
+make<span class="w"> </span>validate-check
+
+<span class="c1"># 5. Test from wheels</span>
+make<span class="w"> </span>validate-test-wheel
+
+<span class="c1"># 6. Test from sdists</span>
+make<span class="w"> </span>validate-test-sdist
+
+<span class="c1"># 7. Clean up</span>
+make<span class="w"> </span>validate-clean
+</pre></div>
+</div>
+</section>
+</section>
+<section id="test-blacklist">
+<h2>Test Blacklist<a class="headerlink" href="#test-blacklist" title="Link to this heading">#</a></h2>
+<p>Some packages are excluded from test validation (defined in <code class="docutils literal notranslate"><span class="pre">include.mk</span></code>):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cone.three</span></code> - No tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">treibstoff</span></code> - JavaScript package, tests run differently</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yafowil-example-helloworld</span></code> - Example package</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yafowil.demo</span></code> - Demo application</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yafowil.documentation</span></code> - Documentation package</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yafowil.webob</span></code> - No test dependencies defined</p></li>
+</ul>
+<p>These packages still go through env, build, and check phases.</p>
+</section>
+<section id="sequential-test-packages">
+<h2>Sequential Test Packages<a class="headerlink" href="#sequential-test-packages" title="Link to this heading">#</a></h2>
+<p>The following packages require a local OpenLDAP server for testing and must run
+sequentially (not in parallel):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cone.ldap</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">node.ext.ldap</span></code></p></li>
+</ul>
+<p>These are defined in <code class="docutils literal notranslate"><span class="pre">VALIDATE_SEQUENTIAL_TESTS</span></code> in <code class="docutils literal notranslate"><span class="pre">include.mk</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">validate-test-wheel</span></code> and <code class="docutils literal notranslate"><span class="pre">validate-test-sdist</span></code> targets automatically handle
+this by first running all other packages in parallel, then running sequential packages
+one at a time.</p>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">#</a></h2>
+<p>The test phase sets the following environment variables (matching <code class="docutils literal notranslate"><span class="pre">mx.ini</span></code> configuration):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TESTRUN_MARKER=1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LDAP_ADD_BIN=openldap/bin/ldapadd</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LDAP_DELETE_BIN=openldap/bin/ldapdelete</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SLAPD_BIN=openldap/libexec/slapd</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SLAPD_URIS=ldap://127.0.0.1:12345</span></code></p></li>
+</ul>
+<p>These are required for packages that have LDAP-related tests.</p>
+</section>
+<section id="test-execution-model">
+<h2>Test Execution Model<a class="headerlink" href="#test-execution-model" title="Link to this heading">#</a></h2>
+<p>The validation system uses a hybrid approach for testing:</p>
+<ul class="simple">
+<li><p><strong>Package code</strong>: Installed from the built artifact (wheel or sdist) into the venv</p></li>
+<li><p><strong>Test code</strong>: Executed from the source checkout directory (<code class="docutils literal notranslate"><span class="pre">sources/&lt;package&gt;/</span></code>)</p></li>
+</ul>
+<p>This design is intentional:</p>
+<ol class="arabic simple">
+<li><p>It validates that the actual release artifact works correctly</p></li>
+<li><p>It allows using the latest test code without rebuilding</p></li>
+<li><p>It prepares for a future change where tests will be moved to package root
+folders (outside <code class="docutils literal notranslate"><span class="pre">src/</span></code>) and excluded from wheel/sdist builds</p></li>
+</ol>
+<p>When pytest runs, it imports the package from the venv (the installed artifact),
+but discovers and runs test files from the source checkout. This ensures:</p>
+<ul class="simple">
+<li><p>The installed package API is what gets tested</p></li>
+<li><p>Test fixtures and utilities from the source tree are available</p></li>
+<li><p>Tests don’t need to be included in release artifacts</p></li>
+</ul>
+</section>
+<section id="artifact-comparison">
+<h2>Artifact Comparison<a class="headerlink" href="#artifact-comparison" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">scripts/compare_artifacts.py</span></code> script compares wheel and sdist contents
+for all packages in <code class="docutils literal notranslate"><span class="pre">dist/</span></code>. It helps identify:</p>
+<ul class="simple">
+<li><p>Files in wheel but not in sdist (unexpected)</p></li>
+<li><p>Files in sdist but not in wheel (may need exclusion)</p></li>
+</ul>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># After building packages</span>
+make<span class="w"> </span>validate-build
+
+<span class="c1"># Compare all artifacts</span>
+make<span class="w"> </span>validate-compare
+</pre></div>
+</div>
+<p>The script automatically filters expected differences:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> files (expected in sdist only)</p></li>
+<li><p>Metadata files (PKG-INFO, pyproject.toml, etc.)</p></li>
+<li><p>Documentation files (README, LICENSE, CHANGES, etc.)</p></li>
+<li><p>Test files (excluded from comparison)</p></li>
+</ul>
+</section>
+<section id="common-issues">
+<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">#</a></h3>
+<p>Files that commonly appear as differences:</p>
+<dl class="simple">
+<dt><strong>cfg/*.xml files</strong></dt><dd><p>Test configuration files in cone.ldap, cone.ugm. Should be excluded
+from sdist via <code class="docutils literal notranslate"><span class="pre">[tool.hatch.build]</span></code> excludes in pyproject.toml.</p>
+</dd>
+<dt><strong>.travis.yml, Makefile, MANIFEST.in</strong></dt><dd><p>Obsolete files that should be removed from the repository or excluded.</p>
+</dd>
+<dt><strong>Nested .gitignore files</strong></dt><dd><p>Sometimes included in wheels when in package subdirectories
+(e.g., static asset directories).</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="key-design-points">
+<h2>Key Design Points<a class="headerlink" href="#key-design-points" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Artifact Testing</strong>: The <code class="docutils literal notranslate"><span class="pre">--test</span></code> phase installs from <code class="docutils literal notranslate"><span class="pre">dist/</span></code> (the built wheel or
+sdist), NOT from sources. This simulates a real PyPI installation.</p></li>
+<li><p><strong>Test Separation</strong>: Tests run from source checkout against the installed package.
+This validates the release artifact while keeping tests in the development tree.</p></li>
+<li><p><strong>Cross-Package Dependencies</strong>: All pip installs use <code class="docutils literal notranslate"><span class="pre">--find-links</span></code> pointing to
+<code class="docutils literal notranslate"><span class="pre">dist/</span></code>, allowing packages to depend on pre-built versions of sibling packages.</p></li>
+<li><p><strong>Constraints File</strong>: The build phase generates <code class="docutils literal notranslate"><span class="pre">constraints-validate.txt</span></code> to ensure
+consistent versions across all package installations.</p></li>
+<li><p><strong>Parallel Execution</strong>: Make targets run package validations in parallel for efficiency.
+Logs are written to <code class="docutils literal notranslate"><span class="pre">/tmp/conestack-dev/validate_&lt;package&gt;.log</span></code>.</p></li>
+<li><p><strong>Development Versions</strong>: Uses pip’s <code class="docutils literal notranslate"><span class="pre">--pre</span></code> and <code class="docutils literal notranslate"><span class="pre">--upgrade</span></code> flags to prefer
+development versions (e.g., <code class="docutils literal notranslate"><span class="pre">2.0.0.dev0</span></code>) over published versions.</p></li>
+</ol>
+</section>
+</section>
+
+
+      </div>
+
+    
+  <div class="cs-local-toc mx-4 mt-4 mb-5 my-md-0 ps-xl-3 mb-lg-5 text-muted">
+    <strong class="d-block h6 mb-2 pb-2 border-bottom">On this page</strong>
+    <nav id="TableOfContents">
+      <ul>
+<li><a class="reference internal" href="#purpose">Purpose</a></li>
+<li><a class="reference internal" href="#validation-script">Validation Script</a><ul>
+<li><a class="reference internal" href="#phases">Phases</a></li>
+<li><a class="reference internal" href="#usage-examples">Usage Examples</a></li>
+<li><a class="reference internal" href="#configuration-options">Configuration Options</a></li>
+<li><a class="reference internal" href="#exit-codes">Exit Codes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#make-targets">Make Targets</a><ul>
+<li><a class="reference internal" href="#typical-workflow">Typical Workflow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-blacklist">Test Blacklist</a></li>
+<li><a class="reference internal" href="#sequential-test-packages">Sequential Test Packages</a></li>
+<li><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li><a class="reference internal" href="#test-execution-model">Test Execution Model</a></li>
+<li><a class="reference internal" href="#artifact-comparison">Artifact Comparison</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#key-design-points">Key Design Points</a></li>
+</ul>
+
+    </nav>
+  </div>
+    
+    </main>
+  </div><div class="container footer" role="contentinfo">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center pt-2 my-4 border-top"><ul class="pb-2 mb-3 nav container border-bottom">
+  <li class="nav-item col-md-6 col">
+    <a href="architecture.html"
+       title="previous chapter"
+       class="nav-link px-2 text-muted previous-chapter">Architecture</a>
+  </li>
+  <li class="nav-item col-md-6 col text-end">
+    <a href="release.html"
+       title="next chapter"
+       class="nav-link px-2 text-muted next-chapter">Release Process</a>
+  </li>
+</ul>
+      <div class="container text-center text-muted pt-2 pb-2">
+          &#169; Copyright 2021-2025, Conestack Contributors.
+      </div>
+      <div class="container text-center text-muted pt-2 pb-2">
+        Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+      </div>
+  </footer>
+</div>
+
+  </body>
+</html>
