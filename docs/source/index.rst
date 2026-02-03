@@ -11,6 +11,7 @@ Conestack Documentation
    :caption: Contents:
 
    Introduction <introduction>
+   Architecture <architecture>
    Package Validation <package_validation>
    Release Process <release>
    Version Overview <versions>

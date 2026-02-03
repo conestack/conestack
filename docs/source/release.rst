@@ -119,31 +119,21 @@ Release Order
 
 Packages are released in dependency order by group:
 
-.. list-table::
-   :header-rows: 1
-   :widths: 10 30 60
-
-   * - Order
-     - Group
-     - Packages
-   * - 1
-     - Base packages
-     - odict, plumber, webresource, treibstoff
-   * - 2
-     - Node packages
-     - node, node.ext.*
-   * - 3
-     - YAFOWIL packages
-     - yafowil, yafowil.*, yafowil.widget.*
-   * - 4
-     - Cone tile
-     - cone.tile
-   * - 5
-     - Cone app
-     - cone.app
-   * - 6
-     - Cone packages
-     - cone.*
++-------+------------------+------------------------------------------+
+| Order | Group            | Packages                                 |
++=======+==================+==========================================+
+| 1     | Base packages    | odict, plumber, webresource, treibstoff  |
++-------+------------------+------------------------------------------+
+| 2     | Node packages    | node, node.ext.*                         |
++-------+------------------+------------------------------------------+
+| 3     | YAFOWIL packages | yafowil, yafowil.*, yafowil.widget.*     |
++-------+------------------+------------------------------------------+
+| 4     | Cone tile        | cone.tile                                |
++-------+------------------+------------------------------------------+
+| 5     | Cone app         | cone.app                                 |
++-------+------------------+------------------------------------------+
+| 6     | Cone packages    | cone.*                                   |
++-------+------------------+------------------------------------------+
 
 Detection Logic
 ---------------
