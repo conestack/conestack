@@ -17,7 +17,19 @@ Required Tools
 
 .. code-block:: bash
 
-    ./venv/bin/pip install zest.releaser[recommended]
+    ./venv/bin/pip install zest.releaser
+
+.. note::
+
+   Do **not** install ``zest.releaser[recommended]``. The ``recommended``
+   extra pulls in ``check-manifest``, which registers a
+   ``zest.releaser.prereleaser.before`` entry point. Since the Conestack
+   packages do not ship ``MANIFEST.in`` files, that hook reports problems
+   and aborts ``fullrelease --no-input`` (the mode used by
+   ``scripts/release_packages.py``). If ``check-manifest`` is already
+   installed, remove it::
+
+       ./venv/bin/pip uninstall -y check-manifest
 
 PyPI Configuration
 ~~~~~~~~~~~~~~~~~~
