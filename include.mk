@@ -63,10 +63,18 @@ VALIDATE_TEST_BLACKLIST = \
     yafowil.documentation \
     yafowil.webob
 
+# Packages not released to PyPI, excluded from pyroma and twine checks
+VALIDATE_CHECK_BLACKLIST = \
+    yafowil-example-helloworld
+
 # Packages requiring local OpenLDAP server (must run sequentially)
 VALIDATE_SEQUENTIAL_TESTS = \
     cone.ldap \
     node.ext.ldap
+
+# Packages that run pyroma and twine checks (excluding blacklist)
+VALIDATE_WITH_CHECK = $(filter-out $(VALIDATE_CHECK_BLACKLIST), \
+    $(VALIDATE_ALL_PACKAGES))
 
 # Packages that run tests (excluding blacklist)
 VALIDATE_WITH_TESTS = $(filter-out $(VALIDATE_TEST_BLACKLIST), \
@@ -144,7 +152,7 @@ validate-build: $(PACKAGES_TARGET)
 .PHONY: validate-check
 validate-check: $(PACKAGES_TARGET)
 	@echo "Checking all packages (pyroma + twine)..."
-	$(call validate-packages-parallel,$(VALIDATE_ALL_PACKAGES),--check)
+	$(call validate-packages-parallel,$(VALIDATE_WITH_CHECK),--check)
 
 .PHONY: validate-test-wheel
 validate-test-wheel: $(PACKAGES_TARGET)

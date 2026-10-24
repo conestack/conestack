@@ -160,6 +160,10 @@ Packages are skipped if:
 - No CHANGES.rst file exists
 - The unreleased section contains "No changes yet"
 
+With ``--list``, the latest released version in CHANGES.rst is also checked
+against PyPI. Versions which were released (dated and tagged) but never
+uploaded are listed as "Released but not on PyPI".
+
 Post-Release Verification
 -------------------------
 

@@ -39,7 +39,8 @@ The script supports the following phases:
 
 ``--check``
     Run quality validation using twine check and pyroma. Validates PyPI metadata
-    compliance and package quality rating.
+    compliance and package quality rating. Fails if the pyroma rating is below
+    ``--pyroma-threshold``.
 
 ``--test``
     Install the package from ``dist/`` (not from sources) and run pytest.
@@ -120,6 +121,7 @@ The following make targets are available for batch validation of all packages:
 
 ``make validate-check``
     Run pyroma and twine check on all packages.
+    Excludes packages in the check blacklist.
 
 ``make validate-test-wheel``
     Test all packages by installing from wheels.
@@ -190,7 +192,17 @@ Some packages are excluded from test validation (defined in ``include.mk``):
 - ``yafowil.documentation`` - Documentation package
 - ``yafowil.webob`` - No test dependencies defined
 
-These packages still go through env, build, and check phases.
+These packages still go through env, build, and check phases, unless they are
+in the check blacklist.
+
+
+Check Blacklist
+---------------
+
+Packages not released to PyPI are excluded from the check phase (defined in
+``VALIDATE_CHECK_BLACKLIST`` in ``include.mk``):
+
+- ``yafowil-example-helloworld`` - Example package
 
 
 Sequential Test Packages

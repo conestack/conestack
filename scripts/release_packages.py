@@ -24,12 +24,17 @@ DETECTION
 
 A package needs release when CHANGES.rst contains an "(unreleased)" section
 with actual change entries (not "No changes yet").
+
+With --list, the latest released version from CHANGES.rst is also checked
+against PyPI to find releases which were tagged but never uploaded.
 """
 
 import argparse
 import re
 import subprocess
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 from zest.releaser.baserelease import NOTHING_CHANGED_YET
@@ -134,9 +139,9 @@ def parse_changes_rst(package_dir):
     content = changes_file.read_text()
 
     # Match version header with (unreleased)
-    # Pattern: "X.Y.Z (unreleased)" followed by dashes
+    # Pattern: "X.Y[.Z][pre-release] (unreleased)" followed by dashes
     pattern = (
-        r"^(\d+\.\d+(?:\.\d+)?)\s+\(unreleased\)\s*\n"
+        r"^(\d+\.\d+\S*)\s+\(unreleased\)\s*\n"
         r"-+\s*\n"
         r"(.*?)(?=\n\d+\.\d+|\Z)"
     )
@@ -157,6 +162,48 @@ def parse_changes_rst(package_dir):
         return version, False, "Unreleased section is empty"
 
     return version, True, "Has unreleased changes"
+
+
+def latest_released_version(package_dir):
+    """Get the version of the topmost dated section in CHANGES.rst.
+
+    :return: Version string or None if no released section exists.
+    """
+    changes_file = package_dir / "CHANGES.rst"
+    if not changes_file.exists():
+        return None
+
+    pattern = r"^(\d+\.\d+\S*)\s+\(\d{4}-\d{2}-\d{2}\)\s*\n-+"
+    match = re.search(pattern, changes_file.read_text(), re.MULTILINE)
+    return match.group(1) if match else None
+
+
+def is_on_pypi(package, version):
+    """Check if a package version is available on PyPI.
+
+    :return: True if the version exists on PyPI, False otherwise.
+    """
+    url = f"https://pypi.org/pypi/{package}/{version}/json"
+    try:
+        with urllib.request.urlopen(url, timeout=10):
+            return True
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return False
+        raise
+
+
+def find_not_uploaded(packages):
+    """Find packages whose latest released version is missing on PyPI.
+
+    :return: List of (package, version) tuples.
+    """
+    not_uploaded = []
+    for package in packages:
+        version = latest_released_version(get_package_dir(package))
+        if version and not is_on_pypi(package, version):
+            not_uploaded.append((package, version))
+    return not_uploaded
 
 
 def needs_release(package):
@@ -325,6 +372,12 @@ def main():
             print()
             print("Packages needing release:")
             for package, version in to_release:
+                print(f"  - {package} ({version})")
+        not_uploaded = find_not_uploaded(packages)
+        if not_uploaded:
+            print()
+            print("Released but not on PyPI:")
+            for package, version in not_uploaded:
                 print(f"  - {package} ({version})")
         return 0
 

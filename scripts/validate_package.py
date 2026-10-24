@@ -188,6 +188,7 @@ Generated for the Conestack monorepo package validation workflow.
 
 import argparse
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -479,37 +480,28 @@ def phase_check(package, repo_root, pyroma_threshold=8, verbose=False):
 
     print_success("PyPI metadata validation passed (twine)")
 
-    # Run pyroma
+    # pyroma exits non-zero if the rating is below --min or if it fails to run
     print_info(f"Running pyroma (threshold: {pyroma_threshold}/10)", verbose)
     try:
         output = run_command(
-            [str(venv_python), "-m", "pyroma", "."], cwd=package_dir, verbose=verbose
+            [
+                str(venv_python),
+                "-m",
+                "pyroma",
+                "--min",
+                str(pyroma_threshold),
+                ".",
+            ],
+            cwd=package_dir,
+            verbose=verbose,
         )
-
-        # Parse pyroma score from output
-        score = None
-        for line in output.split("\n"):
-            if "rating:" in line.lower() and "/10" in line:
-                try:
-                    score = int(line.split(":")[1].split("/10")[0].strip())
-                except (ValueError, IndexError):
-                    pass
-
-        if score is not None:
-            print_success(f"Pyroma score: {score}/10")
-            if score < pyroma_threshold:
-                print_error(f"Pyroma score {score} below threshold {pyroma_threshold}")
-                return 1
-        else:
-            print_success("Pyroma check completed (score not parsed)")
-
     except ValidationError as e:
-        # If pyroma fails, show warning but continue
-        print(
-            f"{Colors.WARNING}Warning: Pyroma check had issues but continuing...{Colors.ENDC}"
-        )
-        if verbose:
-            print(str(e))
+        print_error(f"Pyroma check failed (threshold: {pyroma_threshold}/10): {e}")
+        return 1
+
+    match = re.search(r"Final rating: (\d+)/10", output)
+    score = match.group(1) if match else "?"
+    print_success(f"Pyroma score: {score}/10")
 
     print_success("Quality checks passed")
     return 0
