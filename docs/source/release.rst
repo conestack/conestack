@@ -167,7 +167,22 @@ uploaded are listed as "Released but not on PyPI".
 Post-Release Verification
 -------------------------
 
-After release, verify packages on PyPI:
+After each release, the script checks that the released version is available
+on PyPI and reports the package as failed otherwise.
+
+.. note::
+
+    zest.releaser does not upload packages which do not exist on PyPI yet
+    when running with ``--no-input``. The first release of a new package is
+    tagged and pushed, but must be uploaded manually from the tag:
+
+    .. code-block:: bash
+
+        git clone --depth 1 --branch <version> <repository> /tmp/<package>
+        ./venv/bin/python -m build /tmp/<package> --outdir /tmp/<package>-dist
+        ./venv/bin/twine upload /tmp/<package>-dist/*
+
+To verify packages on PyPI manually:
 
 .. code-block:: bash
 

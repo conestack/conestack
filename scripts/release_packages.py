@@ -27,6 +27,10 @@ with actual change entries (not "No changes yet").
 
 With --list, the latest released version from CHANGES.rst is also checked
 against PyPI to find releases which were tagged but never uploaded.
+
+After each release, the released version is checked against PyPI. A package
+missing there counts as failed, it must be uploaded manually. zest.releaser
+skips the upload of packages which do not exist on PyPI yet.
 """
 
 import argparse
@@ -398,12 +402,18 @@ def main():
     for package, version in to_release:
         print(f"Releasing {package} ({version})...")
 
-        if release_package(package, args.dry_run, args.no_upload, args.verbose):
-            released.append(package)
-            print("  OK")
-        else:
+        upload_expected = not (args.dry_run or args.no_upload)
+        if not release_package(package, args.dry_run, args.no_upload, args.verbose):
             failed.append(package)
             print("  FAILED")
+        elif upload_expected and not is_on_pypi(package, version):
+            # zest.releaser with --no-input skips the upload of packages
+            # which do not exist on PyPI yet and still exits successfully
+            failed.append(package)
+            print(f"  FAILED: Released, but {version} is not on PyPI")
+        else:
+            released.append(package)
+            print("  OK")
 
         print()
 
