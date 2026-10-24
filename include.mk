@@ -206,3 +206,31 @@ validate-all:
 	@echo "============================================================"
 	@echo "Complete validation QA chain finished successfully"
 	@echo "============================================================"
+
+##############################################################################
+# Node.js packages of source packages
+##############################################################################
+
+# The root `wtr.config.mjs` runs the tests of all source packages providing a
+# web test runner config. These tests use the Node.js packages installed in
+# their source package.
+SOURCES_NODEJS_TARGET:=$(SENTINEL_FOLDER)/sources-nodejs.sentinel
+$(SOURCES_NODEJS_TARGET): $(SOURCES_TARGET) $(wildcard sources/*/pnpm-lock.yaml)
+	@for config in sources/*/wtr.config.mjs sources/*/js/wtr.config.mjs; do \
+		test -e $$config || continue; \
+		package=$$(echo $$config | cut -d/ -f2); \
+		echo "Install Node.js packages of $$package"; \
+		(cd sources/$$package && pnpm install --frozen-lockfile) || exit 1; \
+	done
+	@touch $(SOURCES_NODEJS_TARGET)
+
+.PHONY: sources-nodejs
+sources-nodejs: $(SOURCES_NODEJS_TARGET)
+
+.PHONY: sources-nodejs-dirty
+sources-nodejs-dirty:
+	@rm -f $(SOURCES_NODEJS_TARGET)
+
+DIRTY_TARGETS+=sources-nodejs-dirty
+
+wtr: $(SOURCES_NODEJS_TARGET)

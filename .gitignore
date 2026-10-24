@@ -5,9 +5,11 @@
 /.vscode/
 /constraints-mxdev.txt
 /constraints-validate.txt
+/coverage/
 /dist/
 /docs/html/
 /htmlcov/
+/node_modules/
 /openldap/
 /plans/
 /pyvenv.cfg
