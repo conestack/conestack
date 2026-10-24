@@ -47,3 +47,28 @@ jobs:
 
       - name: Run tests an collect code coverage
         run: make coverage
+
+  test_js:
+    name: JS Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Corepack
+        run: |
+          npm install --global corepack@latest
+          corepack enable
+
+      - name: Run JS tests and collect code coverage
+        run: make wtr PLAYWRIGHT_INSTALL_OPTIONS=--with-deps

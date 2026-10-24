@@ -75,6 +75,28 @@ make coverage
 - Some packages use pytest-style tests with pytest fixtures
 - **Never mix styles within a single package**
 
+### JS Testing
+
+```bash
+# Run the JS tests of all packages with coverage
+make wtr
+
+# Run the JS tests of one package
+make wtr WTR_OPTIONS="--coverage --group cone.app"
+```
+
+**web-test-runner** with **QUnit** runs the JS tests in Chromium via Playwright.
+Each package with JS has its own `js/wtr.config.mjs` (treibstoff: `wtr.config.mjs`),
+which exports its `importMap`. The root `wtr.config.mjs` runs all of them, one
+group per package, each with its own import map and `node_modules`.
+
+`make wtr` installs the root Node.js packages, the Node.js packages of all source
+packages (`make sources-nodejs`, re-run with `make sources-nodejs-dirty`) and the
+Playwright Chromium. It requires Node.js >= 22.15 and pnpm (`corepack enable`).
+
+JS code is linted and formatted with **biome** per package: `make check` and
+`make format` in the package directory run `biome check` and `biome check --write`.
+
 ### Building Documentation
 
 ```bash

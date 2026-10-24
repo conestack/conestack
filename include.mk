@@ -234,3 +234,19 @@ sources-nodejs-dirty:
 DIRTY_TARGETS+=sources-nodejs-dirty
 
 wtr: $(SOURCES_NODEJS_TARGET)
+
+##############################################################################
+# Playwright browser for the web test runner
+##############################################################################
+
+# The web test runner configs launch Chromium via Playwright. ``playwright
+# install`` downloads the browser matching the installed Playwright version
+# and returns immediately if it is present already. Use ``--with-deps`` to
+# also install the system dependencies, e.g. in CI.
+PLAYWRIGHT_INSTALL_OPTIONS?=
+
+.PHONY: playwright-install
+playwright-install: $(NODEJS_TARGET)
+	@playwright install $(PLAYWRIGHT_INSTALL_OPTIONS) chromium
+
+wtr: playwright-install
