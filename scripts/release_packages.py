@@ -115,6 +115,14 @@ PACKAGE_GROUPS = [
             "cone.zodb",
         ],
     ),
+    # Group 5: Cone packages
+    (
+        "BDA packages",
+        [
+            "bda.cache",
+            "bda.intellidatetime",
+        ],
+    ),
 ]
 
 # Flat list of all packages in release order
