@@ -115,7 +115,7 @@ PACKAGE_GROUPS = [
             "cone.zodb",
         ],
     ),
-    # Group 5: Cone packages
+    # Group 5: BDA packages
     (
         "BDA packages",
         [

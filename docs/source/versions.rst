@@ -8,6 +8,10 @@ The Conestack project maintains multiple version sets to support different
 Python versions and feature sets. Each version set represents a known good
 combination of package versions that work together.
 
+Conestack 2.0 and 3.0 differ only in the packages depending on the Bootstrap
+version, all other packages are shared. Their versions are given as
+``major.minor.x``, use the latest patch release.
+
 Version History
 ---------------
 
