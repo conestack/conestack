@@ -4,6 +4,8 @@
 
 # All packages from mx.ini (alphabetically sorted, one per line)
 VALIDATE_ALL_PACKAGES = \
+    bda.cache \
+    bda.intellidatetime \
     cone.app \
     cone.calendar \
     cone.charts \
