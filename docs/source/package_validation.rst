@@ -47,8 +47,9 @@ The script supports the following phases:
     This validates the actual release artifact that users will receive.
     Supports ``--install-from wheel`` (default) or ``--install-from sdist``.
 
-    **Important**: The tests run against the installed artifact, not against the
-    source checkout. See `Test Execution Model`_ for details.
+    **Important**: The tests of the source checkout run against the installed
+    artifact, the checkout itself is not importable. See `Test Execution Model`_ for
+    details.
 
 ``--clean``
     Remove the package's venv and local dist directory.
@@ -238,14 +239,18 @@ Test Execution Model
 --------------------
 
 The package code under test always comes from the built artifact (wheel or sdist)
-installed into the venv. The tests run with the ``pytest.ini`` of the repository
-root and a temporary directory as working directory and pytest rootdir, so the
-source checkout is not importable:
+installed into the venv, the test code comes from the source checkout. The tests run
+with the ``pytest.ini`` of the repository root and a temporary directory as working
+directory and pytest rootdir, so the source checkout is not importable:
 
-- **Tests inside the package** (``src/<package>/tests``, most packages): The wheel
-  ships them, they run from ``site-packages``.
+- **Tests inside the package** (``src/<package>/tests``, most packages): They get
+  copied into the installed package in the venv, replacing the ones the artifact
+  ships, and run from there. So they keep their real module names.
 - **Tests in a top-level** ``tests/`` **directory** (``odict``, ``plumber``,
   ``webresource``): They get copied to the temporary directory and run there.
+
+This only changes the validation venv, the regular development setup is not affected.
+Changed tests take effect without a rebuild, changed package code does not.
 
 Running the tests in the source checkout would test the checkout:
 
@@ -257,8 +262,12 @@ Running the tests in the source checkout would test the checkout:
 - ``python -m pytest`` puts the working directory on ``sys.path``, which shadows
   the artifact of a package living in the repository root, like ``webresource``.
 
-An artifact missing a module therefore fails the validation. Tests inside the
-package must stay part of the wheel for this to work.
+An artifact missing a module therefore fails the validation.
+
+Only the tests of the package under test come from the checkout. Test helpers imported
+from another package (``node.tests``, ``yafowil.tests``, ``cone.tile.tests``,
+``cone.ugm.tests``) come from the artifact of that package, so these packages must keep
+shipping them.
 
 
 Artifact Comparison
@@ -311,8 +320,8 @@ Key Design Points
 1. **Artifact Testing**: The ``--test`` phase installs from ``dist/`` (the built wheel or
    sdist), NOT from sources. This simulates a real PyPI installation.
 
-2. **No Shadowing**: Tests run against the installed package, the source checkout must
-   not shadow it. See `Test Execution Model`_.
+2. **No Shadowing**: The tests of the source checkout run against the installed package,
+   the source checkout must not shadow it. See `Test Execution Model`_.
 
 3. **Cross-Package Dependencies**: All pip installs use ``--find-links`` pointing to
    ``dist/``, allowing packages to depend on pre-built versions of sibling packages.

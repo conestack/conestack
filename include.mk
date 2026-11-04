@@ -29,6 +29,7 @@ VALIDATE_ALL_PACKAGES = \
     odict \
     plumber \
     treibstoff \
+    truhe \
     webresource \
     yafowil \
     yafowil.bootstrap \

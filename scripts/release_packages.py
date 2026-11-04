@@ -53,6 +53,7 @@ PACKAGE_GROUPS = [
             "plumber",
             "webresource",
             "treibstoff",
+            "truhe",
         ],
     ),
     # Group 2: Node packages

@@ -106,7 +106,7 @@ VALIDATION PHASES
    - Installs package FROM root/dist (wheel or sdist, NOT from sources)
    - Uses --find-links to resolve dependencies from root/dist
    - Installs test dependencies via package[test]
-   - Runs the tests against the installed package
+   - Runs the tests of the source checkout against the installed package
    - Validates the actual release artifact
    - Requires: --env and --build
 
@@ -150,15 +150,18 @@ KEY DESIGN POINTS
    sdist), NOT from sources. This simulates a real PyPI installation and
    validates the actual release artifact that users will receive.
 
-2. Package code under test comes from the installed artifact. The tests run with
-   the pytest.ini of the repository root and a neutral directory as cwd and
-   rootdir, the source checkout is not importable:
-   - Tests inside the package (src/<package>/tests) are shipped in the wheel and
-     run from site-packages. The config of the package must not apply, its
+2. Package code under test comes from the installed artifact, test code comes from
+   the source checkout. The tests run with the pytest.ini of the repository root
+   and a neutral directory as cwd and rootdir, the source checkout is not importable:
+   - Tests inside the package (src/<package>/tests) get copied into the installed
+     package in the venv, replacing the ones the artifact ships. So they keep their
+     real module names. The config of the package must not apply, its
      ``pythonpath = "src"`` would shadow the artifact.
    - Tests in a top-level tests/ directory get copied to the neutral directory.
      Running them in the source checkout would shadow the artifact of a package
      living in the repository root, ``python -m pytest`` puts the cwd on sys.path.
+   This holds for the package under test only. Test helpers imported from another
+   package (e.g. node.tests) come from the artifact of that package.
 
 3. All pip installs use --find-links pointing to root/dist, allowing packages
    to depend on pre-built versions of sibling packages. This enables validation
@@ -508,25 +511,36 @@ def phase_check(package, repo_root, pyroma_threshold=8, verbose=False):
     return 0
 
 
-def installed_tests_dir(venv_path, package):
-    """Return the tests directory the installed artifact ships.
+def install_source_tests(venv_path, package, source_tests):
+    """Replace the tests of the installed package by the ones of the source checkout.
+
+    Only the tests change, the package code stays the one of the artifact. Inside the
+    installed package, the tests get imported by their real module names.
 
     :param venv_path: Path to the venv the package is installed in
     :param package: Package name
-    :return: Path to the tests directory, ``None`` if the artifact ships none
+    :param source_tests: Path to the tests directory in the source checkout
+    :return: Path to the tests directory in the installed package
+    :raises ValidationError: If the package is not installed in the venv
     """
     for site_packages in venv_path.glob("lib/python*/site-packages"):
-        tests_dir = site_packages / package.replace(".", "/") / "tests"
-        if tests_dir.is_dir():
+        package_path = site_packages / package.replace(".", "/")
+        if package_path.is_dir():
+            tests_dir = package_path / "tests"
+            shutil.rmtree(tests_dir, ignore_errors=True)
+            shutil.copytree(
+                source_tests, tests_dir, ignore=shutil.ignore_patterns("__pycache__")
+            )
             return tests_dir
-    return None
+    raise ValidationError(f"{package} is not installed in {venv_path}")
 
 
 def run_tests(package, repo_root, test_env, verbose=False):
-    """Run the tests against the installed package, from a neutral directory.
+    """Run the tests of the source checkout against the installed package.
 
-    The source checkout must not be importable, it would shadow the artifact.
-    Tests the artifact does not ship get copied to the neutral directory.
+    The tests run from a neutral directory, the source checkout must not be
+    importable, it would shadow the artifact. Tests inside the package get copied into
+    the installed package, tests in a top-level directory to the neutral directory.
 
     :param package: Package name
     :param repo_root: Path to repository root
@@ -536,12 +550,15 @@ def run_tests(package, repo_root, test_env, verbose=False):
     """
     package_dir = repo_root / "sources" / package
     venv_path = package_dir / VALIDATE_VENV_DIR
+    tests_inside = package_dir / "src" / package.replace(".", "/") / "tests"
     with tempfile.TemporaryDirectory() as neutral_dir:
-        tests_dir = installed_tests_dir(venv_path, package)
-        if tests_dir is None:
-            if not (package_dir / "tests").is_dir():
-                raise ValidationError(f"No tests found for {package}")
+        # Checks for modules, a leftover empty directory does not count as tests
+        if any(tests_inside.rglob("*.py")):
+            tests_dir = install_source_tests(venv_path, package, tests_inside)
+        elif (package_dir / "tests").is_dir():
             tests_dir = shutil.copytree(package_dir / "tests", Path(neutral_dir) / "tests")
+        else:
+            raise ValidationError(f"No tests found for {package}")
         run_command(
             [
                 str(venv_path / "bin" / "python"),

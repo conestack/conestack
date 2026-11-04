@@ -314,7 +314,7 @@ make validate-clean        # Clean validation artifacts
 ### Key Validation Concepts
 
 - **Artifact Testing**: Packages are installed from built wheels/sdists, not from source
-- **No Shadowing**: Tests run against the installed package, the source checkout must not shadow it. Tests inside a package run from `site-packages`, so they must stay part of the wheel
+- **No Shadowing**: `make test` runs against the code in `sources/`. The validation runs the tests of the source checkout against the wheel installed in the isolated venv, the checkout must not shadow it. Tests inside a package get copied into the installed package in the venv, so they keep their real module names. Test helpers imported from another package (`node.tests`, `yafowil.tests`, `cone.tile.tests`, `cone.ugm.tests`) come from the artifact of that package, so these must keep shipping them
 - **Sequential Tests**: LDAP packages (cone.ldap, node.ext.ldap) run sequentially due to shared OpenLDAP server
 
 See `docs/source/package_validation.rst` for comprehensive documentation.
