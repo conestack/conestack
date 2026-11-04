@@ -314,7 +314,7 @@ make validate-clean        # Clean validation artifacts
 ### Key Validation Concepts
 
 - **Artifact Testing**: Packages are installed from built wheels/sdists, not from source
-- **Test Separation**: Tests run from source checkout against the installed package
+- **No Shadowing**: Tests run against the installed package, the source checkout must not shadow it. Tests inside a package run from `site-packages`, so they must stay part of the wheel
 - **Sequential Tests**: LDAP packages (cone.ldap, node.ext.ldap) run sequentially due to shared OpenLDAP server
 
 See `docs/source/package_validation.rst` for comprehensive documentation.

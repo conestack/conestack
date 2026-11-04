@@ -106,15 +106,13 @@ VALIDATION PHASES
    - Installs package FROM root/dist (wheel or sdist, NOT from sources)
    - Uses --find-links to resolve dependencies from root/dist
    - Installs test dependencies via package[test]
-   - Runs pytest from the source checkout directory
+   - Runs the tests against the installed package
    - Validates the actual release artifact
    - Requires: --env and --build
 
-   IMPORTANT: The package code is installed from the built artifact (wheel/sdist),
-   but tests are executed from the source checkout (sources/<package>/). This is
-   intentional - tests are planned to be moved to the package root folder and
-   excluded from releases in future versions. This approach validates that the
-   installed package works correctly while using the latest test code.
+   IMPORTANT: The tests run from a neutral directory. Running them in the source
+   checkout would test the checkout, an artifact missing a module would pass.
+   See KEY DESIGN POINTS.
 
 5. --clean: Cleanup
    - Removes sources/<package>/venv/
@@ -152,13 +150,15 @@ KEY DESIGN POINTS
    sdist), NOT from sources. This simulates a real PyPI installation and
    validates the actual release artifact that users will receive.
 
-2. Tests are executed from the source checkout directory (sources/<package>/),
-   not from the installed package. This is by design:
-   - Package code under test comes from the installed artifact
-   - Test code comes from the source checkout
-   - This allows tests to be excluded from releases in the future
-   - Tests will be moved to package root folders (outside src/) and excluded
-     from wheel/sdist builds
+2. Package code under test comes from the installed artifact. The tests run with
+   the pytest.ini of the repository root and a neutral directory as cwd and
+   rootdir, the source checkout is not importable:
+   - Tests inside the package (src/<package>/tests) are shipped in the wheel and
+     run from site-packages. The config of the package must not apply, its
+     ``pythonpath = "src"`` would shadow the artifact.
+   - Tests in a top-level tests/ directory get copied to the neutral directory.
+     Running them in the source checkout would shadow the artifact of a package
+     living in the repository root, ``python -m pytest`` puts the cwd on sys.path.
 
 3. All pip installs use --find-links pointing to root/dist, allowing packages
    to depend on pre-built versions of sibling packages. This enables validation
@@ -192,6 +192,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 # Constant for venv directory name
@@ -507,12 +508,64 @@ def phase_check(package, repo_root, pyroma_threshold=8, verbose=False):
     return 0
 
 
+def installed_tests_dir(venv_path, package):
+    """Return the tests directory the installed artifact ships.
+
+    :param venv_path: Path to the venv the package is installed in
+    :param package: Package name
+    :return: Path to the tests directory, ``None`` if the artifact ships none
+    """
+    for site_packages in venv_path.glob("lib/python*/site-packages"):
+        tests_dir = site_packages / package.replace(".", "/") / "tests"
+        if tests_dir.is_dir():
+            return tests_dir
+    return None
+
+
+def run_tests(package, repo_root, test_env, verbose=False):
+    """Run the tests against the installed package, from a neutral directory.
+
+    The source checkout must not be importable, it would shadow the artifact.
+    Tests the artifact does not ship get copied to the neutral directory.
+
+    :param package: Package name
+    :param repo_root: Path to repository root
+    :param test_env: Environment of the test run
+    :param verbose: Show detailed output
+    :raises ValidationError: If there are no tests or they fail
+    """
+    package_dir = repo_root / "sources" / package
+    venv_path = package_dir / VALIDATE_VENV_DIR
+    with tempfile.TemporaryDirectory() as neutral_dir:
+        tests_dir = installed_tests_dir(venv_path, package)
+        if tests_dir is None:
+            if not (package_dir / "tests").is_dir():
+                raise ValidationError(f"No tests found for {package}")
+            tests_dir = shutil.copytree(package_dir / "tests", Path(neutral_dir) / "tests")
+        run_command(
+            [
+                str(venv_path / "bin" / "python"),
+                "-m",
+                "pytest",
+                "-v",
+                "-c",
+                str(repo_root / "pytest.ini"),
+                "--rootdir",
+                neutral_dir,
+                str(tests_dir),
+            ],
+            cwd=neutral_dir,
+            env=test_env,
+            verbose=verbose,
+        )
+
+
 def phase_test(package, repo_root, env_vars, install_from="wheel", verbose=False):
     """Install package from root/dist and run pytest.
 
     Installs the package from root/dist (NOT from sources) to simulate
-    a real PyPI installation, then runs tests. This validates the actual
-    release artifact. Requires that --env and --build have been run first.
+    a real PyPI installation, then runs the tests against it. This validates the
+    actual release artifact. Requires that --env and --build have been run first.
 
     :param package: Package name
     :param repo_root: Path to repository root
@@ -587,15 +640,9 @@ def phase_test(package, repo_root, env_vars, install_from="wheel", verbose=False
     test_env = os.environ.copy()
     test_env.update(env_vars)
 
-    # Run pytest from the package directory
     print_info("Running pytest", verbose)
     try:
-        run_command(
-            [str(venv_python), "-m", "pytest", "-v"],
-            cwd=package_dir,
-            env=test_env,
-            verbose=verbose,
-        )
+        run_tests(package, repo_root, test_env, verbose=verbose)
     except ValidationError as e:
         print_error(f"Tests failed: {e}")
         return 1
