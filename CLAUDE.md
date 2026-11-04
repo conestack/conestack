@@ -151,6 +151,11 @@ The test runner sets these environment variables (defined in mx.ini):
 - `SLAPD_BIN=openldap/libexec/slapd`
 - `SLAPD_URIS=ldap://127.0.0.1:12345`
 
+**Run tests with `make test`.** A direct `pytest` call without `TESTRUN_MARKER=1` fails
+tests without any fault in the code, e.g. with `ExtractionError` message mismatches. For
+a quick run of a single package: `TESTRUN_MARKER=1 ./venv/bin/pytest sources/<package>/src`
+(LDAP packages need the other variables too).
+
 ## Package Structure Convention
 
 Most packages follow a consistent structure:
