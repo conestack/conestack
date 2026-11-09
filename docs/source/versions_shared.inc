@@ -11,15 +11,15 @@ The following packages are shared by Conestack 2.0 and 3.0. See
 +-----------------------------+---------+
 | cone.maps                   | 1.1.x   |
 +-----------------------------+---------+
-| cone.sql                    | 1.2.x   |
+| cone.sql                    | 1.3.x   |
 +-----------------------------+---------+
 | cone.three                  | 0.1.x   |
 +-----------------------------+---------+
-| cone.tile                   | 2.1.x   |
+| cone.tile                   | 2.2.x   |
 +-----------------------------+---------+
 | cone.zodb                   | 1.1.x   |
 +-----------------------------+---------+
-| node                        | 2.1.x   |
+| node                        | 2.2.x   |
 +-----------------------------+---------+
 | node.ext.directory          | 2.0.x   |
 +-----------------------------+---------+
@@ -27,7 +27,7 @@ The following packages are shared by Conestack 2.0 and 3.0. See
 +-----------------------------+---------+
 | node.ext.ldap               | 2.0.x   |
 +-----------------------------+---------+
-| node.ext.ugm                | 2.0.x   |
+| node.ext.ugm                | 2.1.x   |
 +-----------------------------+---------+
 | node.ext.yaml               | 2.0.x   |
 +-----------------------------+---------+
@@ -35,11 +35,11 @@ The following packages are shared by Conestack 2.0 and 3.0. See
 +-----------------------------+---------+
 | odict                       | 2.0.x   |
 +-----------------------------+---------+
-| plumber                     | 2.0.x   |
+| plumber                     | 3.0.x   |
 +-----------------------------+---------+
 | webresource                 | 2.0.x   |
 +-----------------------------+---------+
-| yafowil                     | 4.1.x   |
+| yafowil                     | 4.2.x   |
 +-----------------------------+---------+
 | yafowil.bootstrap           | 2.0.x   |
 +-----------------------------+---------+
@@ -51,13 +51,13 @@ The following packages are shared by Conestack 2.0 and 3.0. See
 +-----------------------------+---------+
 | yafowil.webob               | 2.0.x   |
 +-----------------------------+---------+
-| yafowil.widget.ace          | 2.0.x   |
+| yafowil.widget.ace          | 2.1.x   |
 +-----------------------------+---------+
 | yafowil.widget.array        | 2.0.x   |
 +-----------------------------+---------+
-| yafowil.widget.autocomplete | 2.1.x   |
+| yafowil.widget.autocomplete | 2.2.x   |
 +-----------------------------+---------+
-| yafowil.widget.chosen       | 2.0.x   |
+| yafowil.widget.chosen       | 2.1.x   |
 +-----------------------------+---------+
 | yafowil.widget.color        | 2.0.x   |
 +-----------------------------+---------+
@@ -67,23 +67,23 @@ The following packages are shared by Conestack 2.0 and 3.0. See
 +-----------------------------+---------+
 | yafowil.widget.dict         | 2.0.x   |
 +-----------------------------+---------+
-| yafowil.widget.dynatree     | 2.0.x   |
+| yafowil.widget.dynatree     | 2.1.x   |
 +-----------------------------+---------+
 | yafowil.widget.image        | 2.0.x   |
 +-----------------------------+---------+
-| yafowil.widget.location     | 2.0.x   |
+| yafowil.widget.location     | 2.1.x   |
 +-----------------------------+---------+
-| yafowil.widget.multiselect  | 2.0.x   |
+| yafowil.widget.multiselect  | 2.1.x   |
 +-----------------------------+---------+
-| yafowil.widget.richtext     | 2.0.x   |
+| yafowil.widget.richtext     | 2.1.x   |
 +-----------------------------+---------+
-| yafowil.widget.select2      | 2.0.x   |
+| yafowil.widget.select2      | 2.1.x   |
 +-----------------------------+---------+
 | yafowil.widget.slider       | 2.0.x   |
 +-----------------------------+---------+
-| yafowil.widget.tiptap       | 2.0.x   |
+| yafowil.widget.tiptap       | 2.1.x   |
 +-----------------------------+---------+
-| yafowil.widget.wysihtml5    | 2.0.x   |
+| yafowil.widget.wysihtml5    | 2.1.x   |
 +-----------------------------+---------+
 | yafowil.yaml                | 3.0.x   |
 +-----------------------------+---------+

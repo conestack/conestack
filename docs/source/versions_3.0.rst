@@ -25,21 +25,21 @@ The following packages are specific to Conestack 3.0, they use Bootstrap 5:
 +-----------------+-------+-------+
 | Package         | 2.0   | 3.0   |
 +=================+=======+=======+
-| cone.app        | 1.1.x | 2.1.x |
+| cone.app        | 1.1.x | 2.2.x |
 +-----------------+-------+-------+
-| cone.calendar   | 1.1.x | 2.0.x |
+| cone.calendar   | 1.1.x | 2.1.x |
 +-----------------+-------+-------+
 | cone.charts     | 1.1.x | 2.0.x |
 +-----------------+-------+-------+
-| cone.fileupload | 1.1.x | 2.0.x |
+| cone.fileupload | 1.1.x | 2.1.x |
 +-----------------+-------+-------+
 | cone.ldap       | 1.1.x | 2.0.x |
 +-----------------+-------+-------+
 | cone.tokens     | 1.1.x | 2.0.x |
 +-----------------+-------+-------+
-| cone.ugm        | 1.1.x | 2.0.x |
+| cone.ugm        | 1.1.x | 2.1.x |
 +-----------------+-------+-------+
-| treibstoff      | 1.0.x | 2.0.x |
+| treibstoff      | 1.0.x | 2.1.x |
 +-----------------+-------+-------+
 
 .. include:: versions_shared.inc
